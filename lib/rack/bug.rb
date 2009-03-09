@@ -34,6 +34,8 @@ module Rack
           @builder.use panel_class
         end
         
+        dir = ::File.expand_path(::File.dirname(__FILE__) + "/bug/public")
+        @builder.use Rack::Static, :urls => ["/__rack_bug__"], :root => dir
         @builder.run @app
         return @builder
       end

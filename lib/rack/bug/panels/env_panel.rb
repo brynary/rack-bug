@@ -3,6 +3,10 @@ module Rack
     
     class EnvPanel < Panel
       
+      def name
+        "env"
+      end
+      
       def before(env)
         @env = env
       end

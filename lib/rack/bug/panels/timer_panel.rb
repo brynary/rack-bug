@@ -5,6 +5,10 @@ module Rack
     
     class TimerPanel < Panel
       
+      def name
+        "timer"
+      end
+      
       def before(env)
         @start_time = Time.now
       end
