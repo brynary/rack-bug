@@ -10,7 +10,7 @@
     <% i = 1 %>
     <% @queries.each do |query| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
-        <td><%= query.time %></td>
+        <td><%= query.human_time %></td>
         <td class="syntax"><%= query.sql %></td>
       </tr>
       <% i += 1 %>

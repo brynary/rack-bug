@@ -7,20 +7,26 @@ module Rack
       
       class Query
         attr_reader :sql
+        attr_reader :time
         
         def initialize(sql, time)
           @sql = sql
           @time = time
         end
         
-        def time
-          "%.1fms" % (@time * 1_000)
+        def human_time
+          "%.2fms" % (@time * 1_000)
         end
       end
       
-      def self.record(sql, time)
+      def self.record(sql, &block)
+        start_time = Time.now
+        result = block.call
+        
         Thread.current["rack.test.queries"] ||= []
-        Thread.current["rack.test.queries"] << Query.new(sql, time)
+        Thread.current["rack.test.queries"] << Query.new(sql, Time.now - start_time)
+        
+        return result
       end
       
       def self.reset
@@ -31,12 +37,16 @@ module Rack
         Thread.current["rack.test.queries"] || []
       end
       
+      def self.total_time
+        (queries.inject(0) { |memo, query| memo + query.time}) * 1_000
+      end
+      
       def name
         "sql"
       end
       
       def heading
-        "#{self.class.queries.size} SQL Queries"
+        "#{self.class.queries.size} SQL Queries (%.2fms)" % self.class.total_time
       end
 
       def content

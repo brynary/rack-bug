@@ -18,7 +18,7 @@ module Rack
       end
       
       def heading
-        "#{@memory_increase} KB used, #{@total_memory} KB total"
+        "#{@memory_increase} KB &#916;, #{@total_memory} KB total"
       end
 
       def has_content?

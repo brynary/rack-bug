@@ -35,7 +35,7 @@ module Rack
       end
       
       def heading
-        "#{self.class.cache_calls} Cache Actions: #{self.class.cache_time}ms"
+        "#{self.class.cache_calls} Cache Reads/Writes (%.2fms)" % self.class.cache_time
       end
 
       def content

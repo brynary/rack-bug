@@ -140,7 +140,7 @@
   background: #eee;
 }
 
-#rack_bug .panel_content .close {
+#rack_bug .panel_content .rack_bug_close {
   float: right;
   font-weight: bold;
 }
