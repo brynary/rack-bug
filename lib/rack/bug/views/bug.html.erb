@@ -1,0 +1,13 @@
+<div id="rack_bug">
+  <ul class="panels">
+    <li>Rack::Bug</li>
+    
+    <% @panels.each do |panel| %>
+      <li><%= panel.heading %></li>
+    <% end %>
+  </ul>
+  
+  <% @panels.each do |panel| %>
+    <div><%= panel.content %></div>
+  <% end %>
+</div>
