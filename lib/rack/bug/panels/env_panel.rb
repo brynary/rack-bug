@@ -18,7 +18,6 @@ module Rack
       def content
         @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/env.html.erb")
         @template.result(binding)
-        # render "panels/env.html.erb"
       end
 
     end

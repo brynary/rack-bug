@@ -1,17 +1,17 @@
-<h3>Rack ENV</h3>
+<h3>Resource Usage</h3>
 <table>
   <thead>
     <tr>
-      <th>Variable</th>
+      <th>Key</th>
       <th>Value</th>
     </tr>
   </thead>
   <tbody>
     <% i = 1 %>
-    <% @env.sort_by { |k, v| k.to_s }.each do |key, val| %>
+    <% @measurements.each do |key, val| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
         <td><%=h key %></td>
-        <td class="code"><div><%=h val %></div></td>
+        <td><%=h val %></td>
       </tr>
       <% i += 1 %>
     <% end %>
