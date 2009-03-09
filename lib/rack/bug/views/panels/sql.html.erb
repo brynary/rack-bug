@@ -1,0 +1,19 @@
+<h3>SQL Queries</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Time&nbsp;(ms)</th>
+      <th>Query</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 %>
+    <% @queries.each do |query| %>
+      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+        <td><%= query.time %></td>
+        <td class="syntax"><%= query.sql %></td>
+      </tr>
+      <% i += 1 %>
+    <% end %>
+  </tbody>
+</table>

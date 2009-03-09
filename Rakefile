@@ -1,4 +1,6 @@
 require "rubygems"
+require "rake/gempackagetask"
+require "rake/clean"
 require "spec/rake/spectask"
 require File.expand_path("./lib/rack/bug")
 
@@ -18,3 +20,27 @@ Spec::Rake::SpecTask.new(:rcov) do |t|
   end
 end
 
+spec = Gem::Specification.new do |s|
+  s.name         = "rack-bug"
+  s.version      = Rack::Bug::VERSION
+  s.author       = "Bryan Helmkamp"
+  s.email        = "bryan" + "@" + "brynary.com"
+  s.homepage     = "http://github.com/brynary/rack-bug"
+  s.summary      = "Debugging toolbar for Rack applications implemented as middleware"
+  s.description  = s.summary
+  s.files        = %w[History.txt Rakefile README.rdoc] + Dir["lib/**/*"]
+  
+  # rdoc
+  s.has_rdoc         = true
+  s.extra_rdoc_files = %w(README.rdoc MIT-LICENSE.txt)
+end
+
+Rake::GemPackageTask.new(spec) do |package|
+  package.gem_spec = spec
+end
+
+desc 'Install the package as a gem.'
+task :install => [:clean, :package] do
+  gem = Dir['pkg/*.gem'].first
+  sh "sudo gem install --no-rdoc --no-ri --local #{gem}"
+end

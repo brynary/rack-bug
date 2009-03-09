@@ -7,9 +7,14 @@ end
 require "rack/bug/toolbar"
 require "rack/bug/panels/timer_panel"
 require "rack/bug/panels/env_panel"
+require "rack/bug/panels/sql_panel"
+require "rack/bug/panels/log_panel"
+require "rack/bug/panels/templates_panel"
 
 module Rack
   module Bug
+    
+    VERSION = "0.1.0"
     
     class Middleware
       

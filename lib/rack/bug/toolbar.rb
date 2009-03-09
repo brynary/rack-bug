@@ -28,7 +28,7 @@ module Rack
       end
       
       def panel_classes
-        [TimerPanel, EnvPanel]
+        [TimerPanel, EnvPanel, SQLPanel, LogPanel, TemplatesPanel]
       end
       
       def inject_into(response)

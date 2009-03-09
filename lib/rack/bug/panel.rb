@@ -19,6 +19,10 @@ module Rack
         return [status, headers, body]
       end
       
+      def has_content?
+        true
+      end
+      
       def before(env)
       end
       
