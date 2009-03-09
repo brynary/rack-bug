@@ -10,6 +10,7 @@ require "rack/bug/panels/env_panel"
 require "rack/bug/panels/sql_panel"
 require "rack/bug/panels/log_panel"
 require "rack/bug/panels/templates_panel"
+require "rack/bug/panels/cache_panel"
 
 module Rack
   module Bug

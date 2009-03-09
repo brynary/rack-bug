@@ -1,15 +1,4 @@
-if defined?(ActiveRecord)
-  ActiveRecord::ConnectionAdapters::AbstractAdapter.class_eval do
-    def log_with_rack_bug(sql, name, &block)
-      start_time = Time.now
-      result = log_without_rack_bug(sql, name, &block)
-      Rack::Bug::SQLPanel.record_query(sql, Time.now - start_time)
-      return result
-    end
-    
-    alias_method_chain :log, :rack_bug
-  end
-end
+require "rack/bug/extensions/activerecord_extension"
 
 module Rack
   module Bug
@@ -29,12 +18,12 @@ module Rack
         end
       end
       
-      def self.record_query(sql, time)
+      def self.record(sql, time)
         Thread.current["queries"] ||= []
         Thread.current["queries"] << Query.new(sql, time)
       end
       
-      def self.reset_queries
+      def self.reset
         Thread.current["queries"] = []
       end
       
@@ -47,14 +36,14 @@ module Rack
       end
       
       def heading
-        "SQL"
+        "#{self.class.queries.size} SQL Queries"
       end
 
       def content
         @queries = self.class.queries
         @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/sql.html.erb")
         result = @template.result(binding)
-        self.class.reset_queries
+        self.class.reset
         return result
       end
       
