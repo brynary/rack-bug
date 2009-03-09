@@ -3,3 +3,6 @@ Thanks to:
   Django debug toolbar
   Rails footnotes
   Rack's ShowException middleware
+  Oink
+  
+  

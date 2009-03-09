@@ -12,6 +12,7 @@ require "rack/bug/panels/log_panel"
 require "rack/bug/panels/templates_panel"
 require "rack/bug/panels/cache_panel"
 require "rack/bug/panels/active_record_panel"
+require "rack/bug/panels/memory_panel"
 
 module Rack
   module Bug

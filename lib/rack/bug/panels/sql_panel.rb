@@ -19,16 +19,16 @@ module Rack
       end
       
       def self.record(sql, time)
-        Thread.current["queries"] ||= []
-        Thread.current["queries"] << Query.new(sql, time)
+        Thread.current["rack.test.queries"] ||= []
+        Thread.current["rack.test.queries"] << Query.new(sql, time)
       end
       
       def self.reset
-        Thread.current["queries"] = []
+        Thread.current["rack.test.queries"] = []
       end
       
       def self.queries
-        Thread.current["queries"] || []
+        Thread.current["rack.test.queries"] || []
       end
       
       def name
