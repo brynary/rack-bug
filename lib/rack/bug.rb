@@ -11,6 +11,7 @@ require "rack/bug/panels/sql_panel"
 require "rack/bug/panels/log_panel"
 require "rack/bug/panels/templates_panel"
 require "rack/bug/panels/cache_panel"
+require "rack/bug/panels/active_record_panel"
 
 module Rack
   module Bug
