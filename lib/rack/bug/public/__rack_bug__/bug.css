@@ -1,4 +1,4 @@
-#rack_bug * {
+#rack_bug {
   color: #000;
   float: none;
   margin: 0;
@@ -22,6 +22,19 @@
   top:0;
   left:0;
   right:0;
+}
+
+.rack_bug_error #rack_bug_toolbar {
+  background: #ff0000;
+  color: #fff;
+  border: none;
+}
+
+.rack_bug_error #rack_bug_toolbar p {
+  margin-top: 6px;
+  margin-left: 15px;
+  font-weight: bold;
+  color: #fff;
 }
 
 #rack_bug_toolbar ul {
@@ -103,10 +116,18 @@
 #rack_bug .panel_content p,
 #rack_bug .panel_content table,
 #rack_bug .panel_content ol,
-#rack_bug .panel_content ul,
 #rack_bug .panel_content dl {
   margin: 5px 0 15px;
   background-color: #fff;
+}
+
+#rack_bug .panel_content ul {
+  padding: 10px 30px 10px 30px;
+  background-color: #fff;
+}
+
+#rack_bug .panel_content ul ul {
+  padding: 0;
 }
 
 #rack_bug .panel_content table {
@@ -151,4 +172,15 @@
 
 #rack_bug .panel_content dd {
   margin-left: 10px;
+}
+
+#rack_bug .panel_content table tr.odd td.rack_bug_spinner,
+#rack_bug .panel_content table tr.even td.rack_bug_spinner,
+#rack_bug .panel_content table td.rack_bug_spinner,
+#rack_bug .rack_bug_spinner {
+  background-image: url(/__rack_bug__/spinner.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  text-indent: -3000px;
+  color: transparent;
 }

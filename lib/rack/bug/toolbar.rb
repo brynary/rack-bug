@@ -29,13 +29,14 @@ module Rack
       
       def panel_classes
         [
+          RailsInfoPanel,
           TimerPanel,
           EnvPanel,
           SQLPanel,
-          CachePanel,
           ActiveRecordPanel,
-          LogPanel,
+          CachePanel,
           TemplatesPanel,
+          LogPanel,
           MemoryPanel
         ]
       end
@@ -52,6 +53,9 @@ module Rack
         @panels = @env["rack.bug.panels"].reverse
         @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/bug.html.erb")
         @template.result(binding)
+      # rescue
+      #   @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/error.html.erb")
+      #   @template.result(binding)
       end
       
     end

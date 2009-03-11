@@ -12,22 +12,75 @@
   </colgroup>
   <tr>
     <th>Total Calls</th>
-    <td><%= @cache_calls %></td>
+    <td><%= @stats.calls %></td>
+    
     <th>Total Time</th>
-    <td><%= @cache_time %>ms</td>
+    <td><%= @stats.time %>ms</td>
+    
     <th>Hits</th>
-    <td>{{ cache.hits }}</td>
+    <td><%= @stats.hits %></td>
+    
     <th>Misses</th>
-    <td>{{ cache.misses }}</td>
+    <td><%= @stats.misses %></td>
   </tr>
   <tr>
     <th>gets</th>
-    <td>{{ cache.gets }}</td>
+    <td><%= @stats.gets %></td>
+    
     <th>sets</th>
-    <td>{{ cache.sets }}</td>
+    <td><%= @stats.sets %></td>
+    
     <th>deletes</th>
-    <td>{{ cache.deletes }}</td>
-    <th>get_many</th>
-    <td>{{ cache.get_many }}</td>
+    <td><%= @stats.deletes %></td>
+    
+    <th>get_multis</th>
+    <td><%= @stats.get_multis %></td>
   </tr>
 </table>
+
+<h3>Breakdown</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Time&nbsp;(ms)</th>
+      <th>Type</th>
+      <th>Parameters</th>
+      <th>Function</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% i = 1 %>
+    <% @stats.queries.each do |query| %>
+      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+        <td><%= query.time %></td>
+        <td><%= query.method %></td>
+        <td><%= query.keys %></td>
+        <td></td>
+        <td>
+          <a href="/__rack_bug__/delete_cache?key=<%= query.keys.first %>" class="rb_delete_cache">Delete</a>
+        </td>
+      </tr>
+      <% i += 1 %>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function () {
+    jQuery("#rack_bug .rb_delete_cache").click(function (evt) {
+      jQuery.ajax({
+        url: this.href,
+        beforeSend: function() {
+          jQuery(evt.target).parent("td").addClass("rack_bug_spinner");
+        },
+        success: function () {
+          jQuery(evt.target).parent("td").removeClass("rack_bug_spinner");
+          jQuery(evt.target).replaceWith("Deleted");
+        }
+      });
+
+      return false;
+    });
+  });
+</script>

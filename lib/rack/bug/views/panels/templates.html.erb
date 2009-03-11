@@ -1,7 +1,7 @@
 <h3>Templates</h3>
 
-<dl>
-  <% @templates.each do |template| %>
-    <dt><%= template %></dt>
+<ul>
+  <% @template_trace.root.children.each do |child| %>
+    <%= child.html %>
   <% end %>
-</dl>
+</ul>

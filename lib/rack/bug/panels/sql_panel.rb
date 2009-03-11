@@ -46,7 +46,7 @@ module Rack
       end
       
       def heading
-        "#{self.class.queries.size} SQL Queries (%.2fms)" % self.class.total_time
+        "#{self.class.queries.size} Queries (%.2fms)" % self.class.total_time
       end
 
       def content
