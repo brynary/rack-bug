@@ -6,7 +6,20 @@ module Rack
     class CachePanel < Panel
       
       class Stats
-        Query = Struct.new(:method, :time, :hit, :keys)
+        class Query
+          attr_reader :method, :time, :hit, :keys
+          
+          def initialize(method, time, hit, keys)
+            @method = method
+            @time = time
+            @hit = hit
+            @keys = keys
+          end
+          
+          def display_time
+            "%.2fms" % time
+          end
+        end
         
         attr_reader :calls
         attr_reader :keys
@@ -25,6 +38,10 @@ module Rack
           @calls += 1
           @time += time
           @keys += keys
+        end
+        
+        def display_time
+          "%.2fms" % time
         end
         
         def time
