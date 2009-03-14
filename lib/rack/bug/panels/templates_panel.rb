@@ -36,9 +36,9 @@ module Rack
         
         def time_summary
           if children.any?
-            "%.2f ms, %.2f exclusive" % [time * 1_000, exclusive_time * 1_000]
+            "%.2fms, %.2f exclusive" % [time * 1_000, exclusive_time * 1_000]
           else
-            "%.2f ms" % (time * 1_000)
+            "%.2fms" % (time * 1_000)
           end
         end
         def html
@@ -111,7 +111,7 @@ module Rack
       end
       
       def heading
-        "Templates: %.2f ms" % (self.class.template_trace.total_time * 1_000)
+        "Templates: %.2fms" % (self.class.template_trace.total_time * 1_000)
       end
 
       def content

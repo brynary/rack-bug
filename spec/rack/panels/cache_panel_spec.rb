@@ -26,14 +26,45 @@ module Rack::Bug
         end
         
         it "displays the total memcache time" do
+          response = get "/"
+          response.should have_row("#cache_usage", "Total Time", "0.00ms")
         end
         
-        it "dispays the number of memcache hits"
-        it "displays the number of memcache misses"
-        it "displays the number of memcache gets"
-        it "displays the number of memcache sets"
-        it "displays the number of memcache deletes"
-        it "displays the number of memcache get_multis"
+        it "dispays the number of memcache hits" do
+          CachePanel.record(:get, "user:1") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "Hits", "0")
+        end
+        
+        it "displays the number of memcache misses" do
+          CachePanel.record(:get, "user:1") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "Misses", "1")
+        end
+        
+        it "displays the number of memcache gets" do
+          CachePanel.record(:get, "user:1") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "gets", "1")
+        end
+        
+        it "displays the number of memcache sets" do
+          CachePanel.record(:set, "user:1") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "sets", "1")
+        end
+        
+        it "displays the number of memcache deletes" do
+          CachePanel.record(:delete, "user:1") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "deletes", "1")
+        end
+        
+        it "displays the number of memcache get_multis" do
+          CachePanel.record(:get_multi, "user:1", "user:2") { }
+          response = get "/"
+          response.should have_row("#cache_usage", "get_multis", "1")
+        end
       end
       
       describe "breakdown" do
