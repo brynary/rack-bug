@@ -2,6 +2,7 @@ module Rack
   module Bug
     
     class Toolbar
+      MIME_TYPES = ["text/html", "application/xhtml+xml"]
       
       def initialize(app)
         @app = app
@@ -14,8 +15,14 @@ module Rack
         status, headers, body = builder.call(env)
         response = Rack::Response.new(body, status, headers)
         
-        inject_into(response)
+        inject_into(response) if modify?(env, response)
         return response.to_a
+      end
+      
+      def modify?(env, response)
+        !response.server_error? &&
+        env["X-Requested-With"] != "XMLHttpRequest" &&
+        MIME_TYPES.include?(response.content_type)
       end
       
       def builder

@@ -1,8 +1,16 @@
 require "sinatra"
 
 class SampleApp < Sinatra::Default
+
+  get "/error" do
+    raise "Error!"
+  end
   
   get "/" do
+    if params[:content_type]
+      headers["Content-Type"] = params[:content_type]
+    end
+    
     <<-HTML
       <html>
         <body>
