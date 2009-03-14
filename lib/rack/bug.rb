@@ -21,10 +21,6 @@ module Rack
     
     VERSION = "0.1.0"
     
-    def self.root
-      Pathname.new(::File.dirname(__FILE__) + "/bug").expand_path
-    end
-    
     class Middleware
       
       def initialize(app)

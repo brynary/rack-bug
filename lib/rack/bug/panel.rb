@@ -29,10 +29,6 @@ module Rack
       def after(env, status, headers, body)
       end
       
-      def content
-        nil
-      end
-      
       def render(template)
       end
       

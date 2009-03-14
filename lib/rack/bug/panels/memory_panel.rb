@@ -4,10 +4,6 @@ module Rack
     
     class MemoryPanel < Panel
       
-      def name
-        "memory"
-      end
-      
       def before(env)
         @original_memory = `ps -o rss= -p #{$$}`.to_i
       end

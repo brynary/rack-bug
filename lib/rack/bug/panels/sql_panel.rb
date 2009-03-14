@@ -1,4 +1,4 @@
-require "rack/bug/extensions/activerecord_extension"
+require "rack/bug/extensions/sql_extension"
 
 module Rack
   module Bug
