@@ -25,7 +25,10 @@ Spec::Runner.configure do |config|
   include Webrat::Matchers
   
   def app
-    Rack::Bug::Middleware.new(SampleApp.new)
+    Rack::Builder.new do
+      use Rack::Bug::Middleware
+      run SampleApp.new
+    end
   end
   
   def have_row(container, key, value = nil)

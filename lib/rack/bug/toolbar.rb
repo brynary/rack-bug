@@ -1,11 +1,24 @@
+require "ipaddr"
+
+require "rack/bug/panels/timer_panel"
+require "rack/bug/panels/env_panel"
+require "rack/bug/panels/sql_panel"
+require "rack/bug/panels/log_panel"
+require "rack/bug/panels/templates_panel"
+require "rack/bug/panels/cache_panel"
+require "rack/bug/panels/rails_info_panel"
+require "rack/bug/panels/active_record_panel"
+require "rack/bug/panels/memory_panel"
+
 module Rack
   module Bug
     
     class Toolbar
       MIME_TYPES = ["text/html", "application/xhtml+xml"]
       
-      def initialize(app)
+      def initialize(app, options = {})
         @app = app
+        @options = options
       end
       
       def call(env)
@@ -22,7 +35,8 @@ module Rack
       def modify?(env, response)
         !response.server_error? &&
         env["X-Requested-With"] != "XMLHttpRequest" &&
-        MIME_TYPES.include?(response.content_type)
+        MIME_TYPES.include?(response.content_type) &&
+        (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"])))
       end
       
       def builder
@@ -63,6 +77,11 @@ module Rack
       # rescue
       #   @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/error.html.erb")
       #   @template.result(binding)
+      end
+      
+      def ip_mask
+        return nil unless @options[:ip_mask]
+        IPAddr.new(@options[:ip_mask])
       end
       
     end

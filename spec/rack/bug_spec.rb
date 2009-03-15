@@ -35,4 +35,23 @@ describe Rack::Bug do
     response = get "/error"
     response.should_not contain("Rack::Bug")
   end
+  
+  context "configured with an IP address mask" do
+    def app
+      Rack::Builder.new do
+        use Rack::Bug::Middleware, :ip_mask => "127.0.0.1/255.255.255.0"
+        run SampleApp.new
+      end
+    end
+    
+    it "inserts the Rack::Bug toolbar when the IP matches" do
+      response = get "/", {}, "REMOTE_ADDR" => "127.0.0.2"
+      response.should contain("Rack::Bug")
+    end
+    
+    it "is disabled when the IP doesn't match" do
+      response = get "/", {}, "REMOTE_ADDR" => "128.0.0.1"
+      response.should_not contain("Rack::Bug")
+    end
+  end
 end
