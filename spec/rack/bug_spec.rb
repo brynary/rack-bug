@@ -30,6 +30,11 @@ describe Rack::Bug do
     response = get "/", :content_type => "text/csv"
     response.should_not contain("Rack::Bug")
   end
+
+  it "does not modify redirects" do
+    response = get "/redirect"
+    response.body.should == []
+  end
   
   it "does not modify server errors" do
     response = get "/error"

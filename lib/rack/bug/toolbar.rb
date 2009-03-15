@@ -34,7 +34,7 @@ module Rack
       end
       
       def modify?(env, response)
-        !response.server_error? &&
+        response.ok? &&
         env["X-Requested-With"] != "XMLHttpRequest" &&
         MIME_TYPES.include?(response.content_type) &&
         (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"]))) &&

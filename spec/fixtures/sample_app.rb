@@ -2,6 +2,10 @@ require "sinatra"
 
 class SampleApp < Sinatra::Default
 
+  get "/redirect" do
+    redirect "/"
+  end
+  
   get "/error" do
     raise "Error!"
   end
