@@ -1,3 +1,4 @@
+require "sinatra/base"
 require "rack/bug/extensions/memcache_extension"
 
 module Rack
@@ -79,6 +80,14 @@ module Rack
         end
       end
       
+      class PanelApp < Sinatra::Default
+        get "/__rack_bug__/delete_cache" do
+          raise "Rails not found... can't delete key" unless defined?(Rails)
+          Rails.cache.delete(params[:key])
+          "OK"
+        end
+      end
+      
       def self.record(method, *keys, &block)
         start_time = Time.now
         result = block.call
@@ -94,6 +103,10 @@ module Rack
       
       def self.stats
         Thread.current["rack.bug.cache"] ||= Stats.new
+      end
+      
+      def panel_app
+        PanelApp.new
       end
       
       def name

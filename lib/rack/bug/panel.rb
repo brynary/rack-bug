@@ -8,7 +8,11 @@ module Rack
       include ERB::Util
       
       def initialize(app)
-        @app = app
+        if panel_app
+          @app = Rack::Cascade.new([panel_app, app])
+        else
+          @app = app
+        end
       end
       
       def call(env)
@@ -17,6 +21,10 @@ module Rack
         after(env, status, headers, body)
         env["rack-bug.panels"] << self
         return [status, headers, body]
+      end
+      
+      def panel_app
+        nil
       end
       
       def has_content?

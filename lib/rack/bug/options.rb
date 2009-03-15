@@ -65,6 +65,7 @@ module Rack::Bug
         'rack-bug.ip_masks' => [IPAddr.new("127.0.0.1")],
         'rack-bug.password' => nil,
         'rack-bug.verbose'  => nil,
+        'rack-bug.panels' => [],
         'rack-bug.panel_classes' => [
           RailsInfoPanel,
           TimerPanel,
