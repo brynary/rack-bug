@@ -17,10 +17,10 @@ module Rack
         end
         
         @measurements = [
-          ["User CPU time", "%.2fms" % (@times.utime * 1_000)],
+          ["User CPU time",   "%.2fms" % (@times.utime * 1_000)],
           ["System CPU time", "%.2fms" % (@times.stime * 1_000)],
-          ["Total CPU time", "%.2fms" % (@times.total * 1_000)],
-          ["Elapsed time", "%.2fms" % (@times.real * 1_000)]
+          ["Total CPU time",  "%.2fms" % (@times.total * 1_000)],
+          ["Elapsed time",    "%.2fms" % (@times.real * 1_000)]
         ]
         
         env["rack-bug.panels"] << self
