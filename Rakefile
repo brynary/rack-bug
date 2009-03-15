@@ -2,7 +2,10 @@ require "rubygems"
 require "rake/gempackagetask"
 require "rake/clean"
 require "spec/rake/spectask"
-require File.expand_path("./lib/rack/bug")
+
+$LOAD_PATH.unshift File.dirname(File.dirname(__FILE__)) + '/lib'
+
+require "rack/bug"
 
 Spec::Rake::SpecTask.new do |t|
   t.spec_opts = ['--options', "\"#{File.dirname(__FILE__)}/spec/spec.opts\""]
