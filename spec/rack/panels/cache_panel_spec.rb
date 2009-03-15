@@ -4,6 +4,7 @@ module Rack::Bug
   describe CachePanel do
     before do
       CachePanel.reset
+      header "rack-bug.panel_classes", [CachePanel]
     end
     
     describe "heading" do

@@ -10,5 +10,6 @@ Thanks to:
   Rails footnotes
   Rack's ShowException middleware
   Oink
+  Rack::Cache
   
   

@@ -2,6 +2,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 module Rack::Bug
   describe EnvPanel do
+    before do
+      header "rack-bug.panel_classes", [EnvPanel]
+    end
+    
     describe "heading" do
       it "displays 'Rack Env'" do
         response = get "/"

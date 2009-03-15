@@ -23,7 +23,7 @@ module Rack
           ["Elapsed time", "%.2fms" % (@times.real * 1_000)]
         ]
         
-        env["rack.bug.panels"] << self
+        env["rack-bug.panels"] << self
         return [status, headers, body]
       end
       

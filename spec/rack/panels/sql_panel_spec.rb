@@ -4,6 +4,7 @@ module Rack::Bug
   describe SQLPanel do
     before do
       SQLPanel.reset
+      header "rack-bug.panel_classes", [SQLPanel]
     end
     
     describe "heading" do

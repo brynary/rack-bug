@@ -4,6 +4,7 @@ module Rack::Bug
   describe LogPanel do
     before do
       LogPanel.reset
+      header "rack-bug.panel_classes", [LogPanel]
     end
     
     describe "heading" do

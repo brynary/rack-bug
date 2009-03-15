@@ -4,6 +4,7 @@ module Rack::Bug
   describe ActiveRecordPanel do
     before do
       ActiveRecordPanel.reset
+      header "rack-bug.panel_classes", [ActiveRecordPanel]
     end
     
     describe "heading" do

@@ -42,11 +42,8 @@ describe Rack::Bug do
   end
   
   context "configured with an IP address restriction" do
-    def app
-      Rack::Builder.new do
-        use Rack::Bug, :ip_mask => "127.0.0.1/255.255.255.0"
-        run SampleApp.new
-      end
+    before do
+      header "rack-bug.ip_masks", [IPAddr.new("127.0.0.1/255.255.255.0")]
     end
     
     it "inserts the Rack::Bug toolbar when the IP matches" do
@@ -61,11 +58,8 @@ describe Rack::Bug do
   end
   
   context "configured with a password" do
-    def app
-      Rack::Builder.new do
-        use Rack::Bug, :password => "secret"
-        run SampleApp.new
-      end
+    before do
+      header "rack-bug.password", "secret"
     end
     
     it "inserts the Rack::Bug toolbar when the password matches" do

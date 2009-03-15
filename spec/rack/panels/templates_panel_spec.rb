@@ -4,6 +4,7 @@ module Rack::Bug
   describe TemplatesPanel do
     before do
       TemplatesPanel.reset
+      header "rack-bug.panel_classes", [TemplatesPanel]
     end
     
     describe "heading" do

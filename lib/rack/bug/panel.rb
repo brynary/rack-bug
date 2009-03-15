@@ -15,7 +15,7 @@ module Rack
         before(env)
         status, headers, body = @app.call(env)
         after(env, status, headers, body)
-        env["rack.bug.panels"] << self
+        env["rack-bug.panels"] << self
         return [status, headers, body]
       end
       

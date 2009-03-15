@@ -24,7 +24,7 @@ module Rack
       
       def call(env)
         @env = env
-        @env["rack.bug.panels"] ||= []
+        @env["rack-bug.panels"] ||= []
         
         status, headers, body = builder.call(env)
         response = Rack::Response.new(body, status, headers)
@@ -37,7 +37,7 @@ module Rack
         response.ok? &&
         env["X-Requested-With"] != "XMLHttpRequest" &&
         MIME_TYPES.include?(response.content_type) &&
-        (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"]))) &&
+        (!ip_masks || ip_masks.any? { |ip| ip.include?(IPAddr.new(env["REMOTE_ADDR"])) }) &&
         (!password || Request.new(env).cookies["rack_bug_password"] == password_sha)
       end
       
@@ -46,7 +46,7 @@ module Rack
       end
       
       def password
-        @options[:password]
+        @options["rack-bug.password"]
       end
       
       def builder
@@ -59,17 +59,7 @@ module Rack
       end
       
       def panel_classes
-        [
-          RailsInfoPanel,
-          TimerPanel,
-          EnvPanel,
-          SQLPanel,
-          ActiveRecordPanel,
-          CachePanel,
-          TemplatesPanel,
-          LogPanel,
-          MemoryPanel
-        ]
+        @options["rack-bug.panel_classes"]
       end
       
       def inject_into(response)
@@ -81,7 +71,7 @@ module Rack
       end
       
       def render
-        @panels = @env["rack.bug.panels"].reverse
+        @panels = @env["rack-bug.panels"].reverse
         @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/bug.html.erb")
         @template.result(binding)
       # rescue
@@ -89,9 +79,9 @@ module Rack
       #   @template.result(binding)
       end
       
-      def ip_mask
-        return nil unless @options[:ip_mask]
-        IPAddr.new(@options[:ip_mask])
+      def ip_masks
+        return nil unless @options["rack-bug.ip_masks"]
+        @options["rack-bug.ip_masks"]
       end
       
     end
