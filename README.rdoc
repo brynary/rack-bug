@@ -2,7 +2,7 @@ Usage:
  script/plugin install git://github.com/brynary/rack-bug.git 
 
  # config/environments/development.rb
- config.middleware.use "Rack::Bug::Middleware"
+ config.middleware.use "Rack::Bug"
 
 Thanks to:
 

@@ -44,7 +44,7 @@ describe Rack::Bug do
   context "configured with an IP address restriction" do
     def app
       Rack::Builder.new do
-        use Rack::Bug::Middleware, :ip_mask => "127.0.0.1/255.255.255.0"
+        use Rack::Bug, :ip_mask => "127.0.0.1/255.255.255.0"
         run SampleApp.new
       end
     end
@@ -63,7 +63,7 @@ describe Rack::Bug do
   context "configured with a password" do
     def app
       Rack::Builder.new do
-        use Rack::Bug::Middleware, :password => "secret"
+        use Rack::Bug, :password => "secret"
         run SampleApp.new
       end
     end

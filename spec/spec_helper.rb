@@ -26,7 +26,7 @@ Spec::Runner.configure do |config|
   
   def app
     Rack::Builder.new do
-      use Rack::Bug::Middleware
+      use Rack::Bug
       run SampleApp.new
     end
   end

@@ -12,6 +12,10 @@ module Rack
     
     VERSION = "0.1.0"
     
+    def self.new(*args, &block)
+      Middleware.new(*args, &block)
+    end
+    
     class Middleware
       
       def initialize(app, options = {})
