@@ -118,9 +118,7 @@ module Rack
       end
 
       def content
-        @stats = self.class.stats
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/cache.html.erb")
-        result = @template.result(binding)
+        result = render_template "panels/cache", :stats => self.class.stats
         self.class.reset
         return result
       end

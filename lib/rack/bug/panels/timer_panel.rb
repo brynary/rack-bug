@@ -32,8 +32,7 @@ module Rack
       end
       
       def content
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/timer.html.erb")
-        @template.result(binding)
+        render_template "panels/timer", :measurements => @measurements
       end
       
     end

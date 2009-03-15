@@ -14,7 +14,7 @@
     <ul class="panels">
       <li id="rb_debug_button">Rack::Bug</li>
     
-      <% @panels.each do |panel| %>
+      <% panels.each do |panel| %>
         <li>
           <% if panel.has_content? %>
             <a href="#" class="<%= panel.name %>">
@@ -28,7 +28,7 @@
     </ul>
   </div>
   
-  <% @panels.each do |panel| %>
+  <% panels.each do |panel| %>
     <% if panel.has_content? %>
       <div class="panel_content" id="<%= panel.name %>">
         <a href="" class="rack_bug_close">Close</a>

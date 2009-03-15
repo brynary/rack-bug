@@ -5,6 +5,7 @@ module Rack
     
     # Panels are also Rack middleware
     class Panel
+      include Render
       include ERB::Util
       
       def initialize(app)

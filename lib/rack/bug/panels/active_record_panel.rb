@@ -36,9 +36,8 @@ module Rack
       end
       
       def content
-        @records = self.class.records.to_a.sort_by { |key, value| value }.reverse
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/active_record.html.erb")
-        @template.result(binding)
+        records = self.class.records.to_a.sort_by { |key, value| value }.reverse
+        render_template "panels/active_record", :records => records
       end
       
     end

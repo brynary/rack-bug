@@ -115,9 +115,7 @@ module Rack
       end
 
       def content
-        @template_trace = self.class.template_trace
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/templates.html.erb")
-        result = @template.result(binding)
+        result = render_template "panels/templates", :template_trace => self.class.template_trace
         self.class.reset
         return result
       end

@@ -28,9 +28,7 @@ module Rack
       end
 
       def content
-        @logs = self.class.logs
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/log.html.erb")
-        result = @template.result(binding)
+        result = render_template "panels/log", :logs => self.class.logs
         self.class.reset
         return result
       end

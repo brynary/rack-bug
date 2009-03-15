@@ -12,29 +12,29 @@
   </colgroup>
   <tr>
     <th>Total Calls</th>
-    <td><%= @stats.calls %></td>
+    <td><%= stats.calls %></td>
     
     <th>Total Time</th>
-    <td><%= @stats.display_time %>ms</td>
+    <td><%= stats.display_time %>ms</td>
     
     <th>Hits</th>
-    <td><%= @stats.hits %></td>
+    <td><%= stats.hits %></td>
     
     <th>Misses</th>
-    <td><%= @stats.misses %></td>
+    <td><%= stats.misses %></td>
   </tr>
   <tr>
     <th>gets</th>
-    <td><%= @stats.gets %></td>
+    <td><%= stats.gets %></td>
     
     <th>sets</th>
-    <td><%= @stats.sets %></td>
+    <td><%= stats.sets %></td>
     
     <th>deletes</th>
-    <td><%= @stats.deletes %></td>
+    <td><%= stats.deletes %></td>
     
     <th>get_multis</th>
-    <td><%= @stats.get_multis %></td>
+    <td><%= stats.get_multis %></td>
   </tr>
 </table>
 
@@ -51,7 +51,7 @@
   </thead>
   <tbody>
     <% i = 1 %>
-    <% @stats.queries.each do |query| %>
+    <% stats.queries.each do |query| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
         <td><%= query.display_time %></td>
         <td><%= query.method %></td>

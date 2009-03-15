@@ -50,9 +50,7 @@ module Rack
       end
 
       def content
-        @queries = self.class.queries
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/sql.html.erb")
-        result = @template.result(binding)
+        result = render_template "panels/sql", :queries => self.class.queries
         self.class.reset
         return result
       end

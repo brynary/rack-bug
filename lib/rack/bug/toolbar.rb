@@ -2,6 +2,7 @@ require "ipaddr"
 require "digest"
 
 require "rack/bug/options"
+require "rack/bug/render"
 
 Dir[File.dirname(__FILE__) + "/panels/*.rb"].each do |panel_name|
   require "rack/bug/panels/" + File.basename(panel_name)
@@ -11,7 +12,8 @@ module Rack
   module Bug
     
     class Toolbar
-      include Rack::Bug::Options
+      include Options
+      include Render
       
       MIME_TYPES = ["text/html", "application/xhtml+xml"]
       
@@ -31,60 +33,61 @@ module Rack
       
       def call(env)
         @env = @default_options.merge(env)
+        @original_request = Request.new(@env)
         
-        if authorized?(@env)
-          dispatch(@env)
+        if ip_authorized? && password_authorized?
+          dispatch
         else
-          @app.call(@env)
+          pass
         end
       end
       
-      def dispatch(env)
+      def pass
+        @app.call(@env)
+      end
+      
+      def dispatch
         status, headers, body = builder.call(@env)
-        response = Rack::Response.new(body, status, headers)
+        @response = Rack::Response.new(body, status, headers)
         
-        if response.redirect?
-          if options["rack-bug.intercept_redirects"]
-            redirect_to = response.location
-            template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/redirect.html.erb")
-            new_body = template.result(binding)
-            new_response = Rack::Response.new(new_body, 200, headers)
-            response["Content-Length"] = new_body.size.to_s
-            return new_response.to_a
-          else
-            return response.to_a
-          end
-        else
-          inject_into(response) if modify?(@env, response)
-          return response.to_a
+        if @response.redirect? && options["rack-bug.intercept_redirects"]
+          intercept_redirect
+        elsif modify?
+          inject_toolbar
         end
+        
+        return @response.to_a
       end
       
-      def authorized?(env)
-        ip_authorized?(env) && password_authorized?(env)
+      def intercept_redirect
+        redirect_to = @response.location
+        new_body = render_template("redirect", :redirect_to => @response.location)
+        new_response = Rack::Response.new(new_body, 200, { "Content-Type" => "text/html" })
+        new_response["Content-Length"] = new_body.size.to_s
+        @response = new_response
       end
       
-      def ip_authorized?(env)
+      def ip_authorized?
         return true unless options["rack-bug.ip_masks"]
         
         options["rack-bug.ip_masks"].any? do |ip_mask|
-          ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"]))
+          ip_mask.include?(IPAddr.new(@original_request.ip))
         end
       end
       
-      def password_authorized?(env)
+      def password_authorized?
         return true unless options["rack-bug.password"]
         
         expected_sha = Digest::SHA1.hexdigest ["rack_bug", options["rack-bug.password"]].join(":")
-        actual_sha = Request.new(env).cookies["rack_bug_password"]
+        actual_sha = @original_request.cookies["rack_bug_password"]
         
         actual_sha == expected_sha
       end
       
-      def modify?(env, response)
-        response.ok? &&
-        env["X-Requested-With"] != "XMLHttpRequest" &&
-        MIME_TYPES.include?(response.content_type)
+      def modify?
+        @response.ok? &&
+        @env["X-Requested-With"] != "XMLHttpRequest" &&
+        MIME_TYPES.include?(@response.content_type)
       end
       
       def builder
@@ -99,21 +102,16 @@ module Rack
         return builder
       end
       
-      def inject_into(response)
-        full_body = response.body.join
+      def inject_toolbar
+        full_body = @response.body.join
         full_body.sub! /<\/body>/, render + "</body>"
         
-        response["Content-Length"] = full_body.size.to_s
-        response.body = [full_body]
+        @response["Content-Length"] = full_body.size.to_s
+        @response.body = [full_body]
       end
       
       def render
-        @panels = @env["rack-bug.panels"].reverse
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/bug.html.erb")
-        @template.result(binding)
-      # rescue
-      #   @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/error.html.erb")
-      #   @template.result(binding)
+        render_template("bug", :panels => @env["rack-bug.panels"].reverse)
       end
       
     end

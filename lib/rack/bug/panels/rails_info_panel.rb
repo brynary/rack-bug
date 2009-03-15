@@ -14,8 +14,7 @@ module Rack
 
       def content
         return unless defined?(Rails)
-        @template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../views/panels/rails_info.html.erb")
-        @template.result(binding)
+        render_template "panels/rails_info"
       end
       
     end

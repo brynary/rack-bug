@@ -8,7 +8,7 @@
   </thead>
   <tbody>
     <% i = 1 %>
-    <% @queries.each do |query| %>
+    <% queries.each do |query| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
         <td><%= query.human_time %></td>
         <td class="syntax"><%= query.sql %></td>
