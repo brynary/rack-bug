@@ -64,7 +64,8 @@ describe Rack::Bug do
     end
     
     it "inserts the Rack::Bug toolbar when the password matches" do
-      response = get "/", {}, :cookie => "rack_bug_password=secret"
+      sha = "545049d1c5e2a6e0dfefd37f9a9e0beb95241935"
+      response = get "/", {}, :cookie => "rack_bug_password=#{sha}"
       response.should contain("Rack::Bug")
     end
     

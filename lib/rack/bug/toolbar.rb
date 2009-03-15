@@ -1,4 +1,5 @@
 require "ipaddr"
+require "digest"
 
 require "rack/bug/panels/timer_panel"
 require "rack/bug/panels/env_panel"
@@ -37,7 +38,11 @@ module Rack
         env["X-Requested-With"] != "XMLHttpRequest" &&
         MIME_TYPES.include?(response.content_type) &&
         (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"]))) &&
-        (!password || Request.new(env).cookies["rack_bug_password"] == @options[:password])
+        (!password || Request.new(env).cookies["rack_bug_password"] == password_sha)
+      end
+      
+      def password_sha
+        Digest::SHA1.hexdigest ["rack_bug", password].join(":")
       end
       
       def password
