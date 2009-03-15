@@ -42,8 +42,22 @@ module Rack
       def dispatch(env)
         status, headers, body = builder.call(@env)
         response = Rack::Response.new(body, status, headers)
-        inject_into(response) if modify?(@env, response)
-        return response.to_a
+        
+        if response.redirect?
+          if options["rack-bug.intercept_redirects"]
+            redirect_to = response.location
+            template = ERB.new ::File.read(::File.dirname(__FILE__) + "/../bug/views/redirect.html.erb")
+            new_body = template.result(binding)
+            new_response = Rack::Response.new(new_body, 200, headers)
+            response["Content-Length"] = new_body.size.to_s
+            return new_response.to_a
+          else
+            return response.to_a
+          end
+        else
+          inject_into(response) if modify?(@env, response)
+          return response.to_a
+        end
       end
       
       def authorized?(env)

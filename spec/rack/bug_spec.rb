@@ -41,6 +41,13 @@ describe Rack::Bug do
     response.should_not contain("Rack::Bug")
   end
   
+  context "configured to intercept redirects" do
+    it "inserts the Rack::Bug toolbar for redirects" do
+      response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
+      response.should contain("Location: /")
+    end
+  end
+  
   context "configured with an IP address restriction" do
     before do
       header "rack-bug.ip_masks", [IPAddr.new("127.0.0.1/255.255.255.0")]

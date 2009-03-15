@@ -13,6 +13,7 @@ module Rack::Bug
     option_accessor :ip_masks
     option_accessor :password
     option_accessor :panel_classes
+    option_accessor :intercept_redirects
 
     # The underlying options Hash. During initialization (or outside of a
     # request), this is a default values Hash. During a request, this is the
@@ -65,6 +66,7 @@ module Rack::Bug
         'rack-bug.ip_masks' => [IPAddr.new("127.0.0.1")],
         'rack-bug.password' => nil,
         'rack-bug.verbose'  => nil,
+        'rack-bug.intercept_redirects' => false,
         'rack-bug.panels' => [],
         'rack-bug.panel_classes' => [
           RailsInfoPanel,
