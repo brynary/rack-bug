@@ -1,3 +1,9 @@
+Usage:
+ script/plugin install git://github.com/brynary/rack-bug.git 
+
+ # config/environments/development.rb
+ config.middleware.use "Rack::Bug::Middleware"
+
 Thanks to:
 
   Django debug toolbar
