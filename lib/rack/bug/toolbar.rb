@@ -36,7 +36,12 @@ module Rack
         !response.server_error? &&
         env["X-Requested-With"] != "XMLHttpRequest" &&
         MIME_TYPES.include?(response.content_type) &&
-        (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"])))
+        (!ip_mask || ip_mask.include?(IPAddr.new(env["REMOTE_ADDR"]))) &&
+        (!password || Request.new(env).cookies["rack_bug_password"] == @options[:password])
+      end
+      
+      def password
+        @options[:password]
       end
       
       def builder

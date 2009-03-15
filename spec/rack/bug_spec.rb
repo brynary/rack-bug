@@ -21,7 +21,7 @@ describe Rack::Bug do
     response.should_not contain("Rack::Bug")
   end
   
-  it "modifies XHHTML responses" do
+  it "modifies XHTML responses" do
     response = get "/", :content_type => "application/xhtml+xml"
     response.should contain("Rack::Bug")
   end
@@ -36,7 +36,7 @@ describe Rack::Bug do
     response.should_not contain("Rack::Bug")
   end
   
-  context "configured with an IP address mask" do
+  context "configured with an IP address restriction" do
     def app
       Rack::Builder.new do
         use Rack::Bug::Middleware, :ip_mask => "127.0.0.1/255.255.255.0"
@@ -51,6 +51,25 @@ describe Rack::Bug do
     
     it "is disabled when the IP doesn't match" do
       response = get "/", {}, "REMOTE_ADDR" => "128.0.0.1"
+      response.should_not contain("Rack::Bug")
+    end
+  end
+  
+  context "configured with a password" do
+    def app
+      Rack::Builder.new do
+        use Rack::Bug::Middleware, :password => "secret"
+        run SampleApp.new
+      end
+    end
+    
+    it "inserts the Rack::Bug toolbar when the password matches" do
+      response = get "/", {}, :cookie => "rack_bug_password=secret"
+      response.should contain("Rack::Bug")
+    end
+    
+    it "is disabled when the password doesn't match" do
+      response = get "/"
       response.should_not contain("Rack::Bug")
     end
   end
