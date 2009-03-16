@@ -17,6 +17,8 @@ class SampleApp < Sinatra::Default
     
     <<-HTML
       <html>
+        <head>
+        </head>
         <body>
           <p>Hello</p>
         </body>

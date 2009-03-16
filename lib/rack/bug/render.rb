@@ -19,7 +19,7 @@ module Rack
       def compile(filename, local_assigns)
         render_symbol = method_name(filename, local_assigns)
         
-        if !CompiledTemplates.method_defined?(render_symbol)
+        if !CompiledTemplates.instance_methods.include?(render_symbol.to_s)
           compile!(filename, local_assigns)
         end
       end

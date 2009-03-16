@@ -33,6 +33,7 @@ module Rack
       
       def call(env)
         @env = @default_options.merge(env)
+        @env["rack-bug.panels"] = []
         @original_request = Request.new(@env)
         
         if ip_authorized? && password_authorized?
