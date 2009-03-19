@@ -1,19 +1,87 @@
-<h3>GET</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Variable</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% i = 1 %>
-    <% env.sort_by { |k, v| k.to_s }.each do |key, val| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
-        <td><%=h key %></td>
-        <td class="code"><div><%=h val %></div></td>
+<% if request.GET.any? %>
+  <h3>GET</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
       </tr>
-      <% i += 1 %>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% request.GET.sort_by { |k, v| k.to_s }.each do |key, val| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%=h key %></td>
+          <td class="code"><div><%=h val %></div></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if request.POST.any? %>
+  <h3>POST</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% request.POST.sort_by { |k, v| k.to_s }.each do |key, val| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%=h key %></td>
+          <td class="code"><div><%=h val %></div></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if request.env["rack.session"] && request.env["rack.session"].any? %>
+  <h3>Session</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% request.env["rack.session"].sort_by { |k, v| k.to_s }.each do |key, val| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%=h key %></td>
+          <td class="code"><div><%=h val %></div></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<% if request.env["rack.request.cookie_hash"] && request.env["rack.request.cookie_hash"].any? %>
+  <h3>Cookies</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% request.env["rack.request.cookie_hash"].sort_by { |k, v| k.to_s }.each do |key, val| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%=h key %></td>
+          <td class="code"><div><%=h val %></div></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

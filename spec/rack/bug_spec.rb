@@ -16,6 +16,11 @@ describe Rack::Bug do
     response.should be_ok
   end
   
+  it "modifies HTML responses with a charset" do
+    response = get "/", :content_type => "application/xhtml+xml; charset=utf-8"
+    response.should contain("Rack::Bug")
+  end
+  
   it "does not modify XMLHttpRequest responses" do
     response = get "/", {}, { :xhr => true }
     response.should_not contain("Rack::Bug")

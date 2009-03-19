@@ -17,6 +17,37 @@ module Rack
         def human_time
           "%.2fms" % (@time * 1_000)
         end
+
+        def inspectable?
+          sql.strip !~ /^SHOW FIELDS/i &&
+          sql.strip !~ /^SET /i
+        end
+      end
+      
+      class PanelApp < Sinatra::Default
+        include Rack::Bug::Render
+        
+        get "/__rack_bug__/explain_sql" do
+          result = ActiveRecord::Base.connection.execute("EXPLAIN #{params[:query]}")
+          render_template "panels/explain_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+        end
+        
+        get "/__rack_bug__/profile_sql" do
+          ActiveRecord::Base.connection.execute("SET PROFILING=1")
+          ActiveRecord::Base.connection.execute(params[:query])
+          result = ActiveRecord::Base.connection.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
+          ActiveRecord::Base.connection.execute("SET PROFILING=0")
+          render_template "panels/profile_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+        end
+        
+        get "/__rack_bug__/execute_sql" do
+          result = ActiveRecord::Base.connection.execute(params[:query])
+          render_template "panels/execute_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+        end
+      end
+      
+      def panel_app
+        PanelApp.new
       end
       
       def self.record(sql, &block)

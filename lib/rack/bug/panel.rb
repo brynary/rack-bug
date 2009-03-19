@@ -19,6 +19,7 @@ module Rack
       def call(env)
         before(env)
         status, headers, body = @app.call(env)
+        @request = Request.new(env)
         after(env, status, headers, body)
         env["rack-bug.panels"] << self
         return [status, headers, body]

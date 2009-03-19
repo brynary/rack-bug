@@ -4,6 +4,7 @@
     <tr>
       <th>Time&nbsp;(ms)</th>
       <th>Query</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -12,6 +13,13 @@
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
         <td><%= query.human_time %></td>
         <td class="syntax"><%= query.sql %></td>
+        <td>
+          <% if query.inspectable? %>
+            <a href="/__rack_bug__/execute_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">SELECT</a> |
+            <a href="/__rack_bug__/explain_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">EXPLAIN</a> |
+            <a href="/__rack_bug__/profile_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">Profile</a>
+          <% end %>
+        </td>
       </tr>
       <% i += 1 %>
     <% end %>

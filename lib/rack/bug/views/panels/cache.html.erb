@@ -58,7 +58,8 @@
         <td><%= query.keys %></td>
         <td></td>
         <td>
-          <a href="/__rack_bug__/delete_cache?key=<%= query.keys.first %>" class="rb_delete_cache">Delete</a>
+          <a href="/__rack_bug__/view_cache?key=<%=u query.keys.first %>" class="remote_call">View</a> |
+          <a href="/__rack_bug__/delete_cache?key=<%=u query.keys.first %>" class="rb_delete_cache">Delete</a>
         </td>
       </tr>
       <% i += 1 %>

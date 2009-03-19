@@ -81,6 +81,12 @@ module Rack
       end
       
       class PanelApp < Sinatra::Default
+        include Rack::Bug::Render
+          
+        get "/__rack_bug__/view_cache" do
+          render_template "panels/view_cache", :key => params[:key], :value => Rails.cache.read(params[:key])
+        end
+        
         get "/__rack_bug__/delete_cache" do
           raise "Rails not found... can't delete key" unless defined?(Rails)
           Rails.cache.delete(params[:key])

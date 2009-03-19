@@ -88,7 +88,7 @@ module Rack
       def modify?
         @response.ok? &&
         @env["X-Requested-With"] != "XMLHttpRequest" &&
-        MIME_TYPES.include?(@response.content_type)
+        MIME_TYPES.include?(@response.content_type.split(";").first)
       end
       
       def builder

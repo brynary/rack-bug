@@ -71,6 +71,7 @@ module Rack::Bug
         'rack-bug.panel_classes' => [
           RailsInfoPanel,
           TimerPanel,
+          RequestVariablesPanel,
           EnvPanel,
           SQLPanel,
           ActiveRecordPanel,
