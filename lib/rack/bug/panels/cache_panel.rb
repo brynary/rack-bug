@@ -120,7 +120,7 @@ module Rack
       end
       
       def heading
-        "Cache: %.2fms" % self.class.stats.time
+        "Cache: %.2fms (#{self.class.stats.queries.size} calls)" % self.class.stats.time
       end
 
       def content
