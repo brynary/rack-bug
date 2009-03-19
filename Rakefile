@@ -3,7 +3,7 @@ require "rake/gempackagetask"
 require "rake/clean"
 require "spec/rake/spectask"
 
-$LOAD_PATH.unshift File.dirname(File.dirname(__FILE__)) + '/lib'
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/lib'
 
 require "rack/bug"
 
