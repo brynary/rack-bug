@@ -11,5 +11,9 @@
 </dl>
 
 <p>
-  <%=h value %>
+  <% if value.is_a?(String )%>
+    <%=h value %>
+  <% else %>
+    <%=h value.inspect %>
+  <% end %>
 </p>
