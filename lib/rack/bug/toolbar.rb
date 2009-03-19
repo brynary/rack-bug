@@ -11,6 +11,21 @@ end
 module Rack
   module Bug
     
+    class RackStaticBugAvoider
+      def initialize(app, static_app)
+        @app = app
+        @static_app = static_app
+      end
+      
+      def call(env)
+        if env["PATH_INFO"]
+          @static_app.call(env)
+        else
+          @app.call(env)
+        end
+      end
+    end
+    
     class Toolbar
       include Options
       include Render
@@ -24,7 +39,7 @@ module Rack
       end
       
       def asset_server(app)
-        Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path)
+        RackStaticBugAvoider.new(app, Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path))
       end
       
       def public_path
@@ -35,7 +50,7 @@ module Rack
         @env = @default_options.merge(env)
         @env["rack-bug.panels"] = []
         @original_request = Request.new(@env)
-        
+
         if ip_authorized? && password_authorized?
           dispatch
         else
