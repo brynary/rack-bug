@@ -27,6 +27,10 @@ Spec::Runner.configure do |config|
   include Rack::Test::Methods
   include Webrat::Matchers
   
+  config.before do
+    header :cookie, "rack_bug_enabled=1"
+  end
+  
   def app
     Rack::Builder.new do
       use Rack::Bug
