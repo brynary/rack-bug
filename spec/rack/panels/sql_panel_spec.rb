@@ -34,5 +34,49 @@ module Rack::Bug
         response.should have_row("#sql", "SELECT NOW();", TIME_MS_REGEXP)
       end
     end
+    
+    def stub_result(results = [[]])
+      columns = results.first
+      fields = columns.map { |c| stub("field", :name => c) }
+      rows = results[1..-1]
+      
+      result = stub("result", :fetch_fields => fields)
+      result.stub!(:each).and_yield(*rows)
+      return result
+    end
+    
+    def expect_query(sql, results)
+      conn = stub("connection")
+      ActiveRecord::Base.stub!(:connection => conn)
+      conn.should_receive(:execute).with(sql).and_return(stub_result(results))
+    end
+    
+    describe "execute_sql" do
+      it "displays the query results" do
+        Rack::Bug::SQLPanel::Query.stub!(:secret_key => "abc")
+        expect_query "SELECT username FROM users",
+          [["username"],
+           ["bryan"]]
+        
+        response = get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should contain("SELECT username FROM users")
+        response.should be_ok
+      end
+    end
+    
+    describe "explain_sql" do
+      it "displays the query explain plan" do
+        Rack::Bug::SQLPanel::Query.stub!(:secret_key => "abc")
+        expect_query "EXPLAIN SELECT username FROM users",
+          [["table"],
+           ["users"]]
+        
+        response = get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should contain("SELECT username FROM users")
+        response.should be_ok
+      end
+    end
   end
 end

@@ -1,3 +1,5 @@
+require "digest"
+require "active_support/secure_random"
 require "rack/bug/extensions/sql_extension"
 
 module Rack
@@ -8,6 +10,10 @@ module Rack
       class Query
         attr_reader :sql
         attr_reader :time
+        
+        def self.secret_key
+          @secret_key ||= ActiveSupport::SecureRandom.hex
+        end
         
         def initialize(sql, time)
           @sql = sql
@@ -21,27 +27,65 @@ module Rack
         def inspectable?
           sql.strip =~ /^SELECT /i
         end
+        
+        def with_profiling
+          self.class.execute("SET PROFILING=1")
+          result = yield
+          self.class.execute("SET PROFILING=0")
+          return result
+        end
+        
+        def explain
+          self.class.execute "EXPLAIN #{@sql}"
+        end
+        
+        def profile
+          with_profiling do
+            execute
+            self.class.execute <<-SQL
+              SELECT *
+                FROM information_schema.profiling
+               WHERE query_id = (SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)
+            SQL
+          end
+        end
+        
+        def execute
+          self.class.execute(@sql)
+        end
+        
+        def valid_hash?(possible_hash)
+          possible_hash == hash
+        end
+        
+        def hash
+          Digest::SHA1.hexdigest [self.class.secret_key, @sql].join(":")
+        end
+        
+        def self.execute(sql)
+          ActiveRecord::Base.connection.execute(sql)
+        end
       end
       
       class PanelApp < Sinatra::Default
         include Rack::Bug::Render
         
         get "/__rack_bug__/explain_sql" do
-          result = ActiveRecord::Base.connection.execute("EXPLAIN #{params[:query]}")
-          render_template "panels/explain_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+          query = Query.new(params[:query], params[:time].to_f)
+          raise "Security violation. Invalid query hash}" unless query.valid_hash?(params[:hash])
+          render_template "panels/explain_sql", :result => query.explain, :query => query.sql, :time => query.time
         end
         
         get "/__rack_bug__/profile_sql" do
-          ActiveRecord::Base.connection.execute("SET PROFILING=1")
-          ActiveRecord::Base.connection.execute(params[:query])
-          result = ActiveRecord::Base.connection.execute("SELECT * FROM information_schema.profiling WHERE query_id=(SELECT query_id FROM information_schema.profiling ORDER BY query_id DESC LIMIT 1)")
-          ActiveRecord::Base.connection.execute("SET PROFILING=0")
-          render_template "panels/profile_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+          query = Query.new(params[:query], params[:time].to_f)
+          raise "Security violation. Invalid query hash" unless query.valid_hash?(params[:hash])
+          render_template "panels/profile_sql", :result => query.profile, :query => query.sql, :time => query.time
         end
         
         get "/__rack_bug__/execute_sql" do
-          result = ActiveRecord::Base.connection.execute(params[:query])
-          render_template "panels/execute_sql", :result => result, :query => params[:query], :time => params[:time].to_f
+          query = Query.new(params[:query], params[:time].to_f)
+          raise "Security violation. Invalid query hash" unless query.valid_hash?(params[:hash])
+          render_template "panels/execute_sql", :result => query.execute, :query => query.sql, :time => query.time
         end
       end
       

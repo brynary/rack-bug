@@ -21,6 +21,11 @@ module Rails
   end
 end
 
+module ActiveRecord
+  class Base
+  end
+end
+
 Spec::Runner.configure do |config|
   TIME_MS_REGEXP = /\d+\.\d{2}ms/
   

@@ -15,9 +15,9 @@
         <td class="syntax"><%= query.sql %></td>
         <td>
           <% if query.inspectable? %>
-            <a href="/__rack_bug__/execute_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">SELECT</a> |
-            <a href="/__rack_bug__/explain_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">EXPLAIN</a> |
-            <a href="/__rack_bug__/profile_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>" class="remote_call">Profile</a>
+            <a href="/__rack_bug__/execute_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>&amp;hash=<%=u query.hash %>" class="remote_call">SELECT</a> |
+            <a href="/__rack_bug__/explain_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>&amp;hash=<%=u query.hash %>" class="remote_call">EXPLAIN</a> |
+            <a href="/__rack_bug__/profile_sql?query=<%=u query.sql %>&amp;time=<%=u query.time %>&amp;hash=<%=u query.hash %>" class="remote_call">Profile</a>
           <% end %>
         </td>
       </tr>
