@@ -7,22 +7,19 @@ module Rack
     class ActiveRecordPanel < Panel
       
       def self.record(class_name)
-        Thread.current["rack.bug.active_records"] ||= {}
-        Thread.current["rack.bug.active_records"][class_name] ||= 0
-        Thread.current["rack.bug.active_records"][class_name] += 1
+        records[class_name] += 1
       end
       
       def self.reset
-        Thread.current["rack.bug.active_records"] = {}
+        Thread.current["rack.bug.active_records"] = Hash.new { 0 }
       end
       
       def self.records
-        Thread.current["rack.bug.active_records"] || {}
+        Thread.current["rack.bug.active_records"] ||= Hash.new { 0 }
       end
       
       def self.total
-        Thread.current["rack.bug.active_records"] ||= {}
-        Thread.current["rack.bug.active_records"].inject(0) do |memo, (key, value)|
+        records.inject(0) do |memo, (key, value)|
           memo + value
         end
       end

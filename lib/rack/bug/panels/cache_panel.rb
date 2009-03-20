@@ -20,6 +20,14 @@ module Rack
           def display_time
             "%.2fms" % time
           end
+          
+          def display_keys
+            if keys.size == 1
+              keys.first
+            else
+              keys.join(", ")
+            end
+          end
         end
         
         attr_reader :calls

@@ -7,8 +7,7 @@ module Rack
       
       def self.record(message)
         return unless message
-        Thread.current["rack.bug.logs"] ||= []
-        Thread.current["rack.bug.logs"] << message
+        logs << message
       end
       
       def self.reset
@@ -16,7 +15,7 @@ module Rack
       end
       
       def self.logs
-        Thread.current["rack.bug.logs"] || []
+        Thread.current["rack.bug.logs"] ||= []
       end
       
       def name

@@ -19,8 +19,7 @@ module Rack
         end
 
         def inspectable?
-          sql.strip !~ /^SHOW FIELDS/i &&
-          sql.strip !~ /^SET /i
+          sql.strip =~ /^SELECT /i
         end
       end
       
@@ -53,9 +52,7 @@ module Rack
       def self.record(sql, &block)
         start_time = Time.now
         result = block.call
-        
-        Thread.current["rack.test.queries"] ||= []
-        Thread.current["rack.test.queries"] << Query.new(sql, Time.now - start_time)
+        queries << Query.new(sql, Time.now - start_time)
         
         return result
       end
@@ -65,7 +62,7 @@ module Rack
       end
       
       def self.queries
-        Thread.current["rack.test.queries"] || []
+        Thread.current["rack.test.queries"] ||= []
       end
       
       def self.total_time
