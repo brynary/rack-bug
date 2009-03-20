@@ -10,14 +10,16 @@ module Rack
       class Query
         attr_reader :sql
         attr_reader :time
+        attr_reader :backtrace
         
         def self.secret_key
           @secret_key ||= ActiveSupport::SecureRandom.hex
         end
         
-        def initialize(sql, time)
+        def initialize(sql, time, backtrace = [])
           @sql = sql
           @time = time
+          @backtrace = backtrace
         end
         
         def human_time
@@ -65,6 +67,17 @@ module Rack
         def self.execute(sql)
           ActiveRecord::Base.connection.execute(sql)
         end
+        
+        def has_backtrace?
+          filtered_backtrace.any?
+        end
+        
+        def filtered_backtrace
+          @filtered_backtrace ||= @backtrace.map { |l| l.strip }.select do |line|
+            line.starts_with?(Rails.root) &&
+            !line.starts_with?(Rails.root.join("vendor"))
+          end
+        end
       end
       
       class PanelApp < Sinatra::Default
@@ -93,10 +106,10 @@ module Rack
         PanelApp.new
       end
       
-      def self.record(sql, &block)
+      def self.record(sql, backtrace = [], &block)
         start_time = Time.now
         result = block.call
-        queries << Query.new(sql, Time.now - start_time)
+        queries << Query.new(sql, Time.now - start_time, backtrace)
         
         return result
       end
