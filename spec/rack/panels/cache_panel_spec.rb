@@ -102,5 +102,19 @@ module Rack::Bug
         response.should contain("OK")
       end
     end
+    
+    describe "view_cache" do
+      it "renders the cache key" do
+        Rails.stub!(:cache => mock("cache", :read => "cache body"))
+        response = get "/__rack_bug__/view_cache", :key => "user:1"
+        response.should contain("cache body")
+      end
+      
+      it "renders non-String cache values properly" do
+        Rails.stub!(:cache => mock("cache", :read => [1, 2]))
+        response = get "/__rack_bug__/view_cache", :key => "user:1"
+        response.should contain("[1, 2]")
+      end
+    end
   end
 end
