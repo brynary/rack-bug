@@ -1,4 +1,5 @@
 require "digest"
+require "sinatra/base"
 require "active_support/secure_random"
 require "rack/bug/extensions/sql_extension"
 
