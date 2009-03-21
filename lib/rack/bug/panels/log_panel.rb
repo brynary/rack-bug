@@ -7,7 +7,7 @@ module Rack
       
       def self.record(message)
         return unless message
-        logs << message
+        logs << message.to_s
       end
       
       def self.reset

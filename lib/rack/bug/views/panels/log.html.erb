@@ -14,7 +14,7 @@
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
         <td></td>
         <td></td>
-        <td><%= log.gsub(/\e\[[;\d]+m/, "") %></td>
+        <td><%= log.to_s.gsub(/\e\[[;\d]+m/, "") %></td>
         <td></td>
       </tr>
       <% i += 1 %>
