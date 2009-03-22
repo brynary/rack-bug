@@ -54,16 +54,15 @@
   margin: 0;
   padding: 0;
   line-height: 30px;
-  padding: 8px 9px 9px;
   position: relative;
   width: auto;
 }
-
-#rack_bug_toolbar li:hover {
-  background: #487858;
+#rack_bug_toolbar li a {
+  padding: 8px 9px 9px;
 }
 
-#rack_bug_toolbar li:hover a {
+#rack_bug_toolbar li a:hover {
+  background: #487858;
   color: #fff;
 }
 
