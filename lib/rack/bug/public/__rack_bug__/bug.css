@@ -44,7 +44,6 @@
 }
 
 #rack_bug_toolbar li {
-  border-left: 1px solid #487858;
   color: #fff;
   display: inline;
   font-size: 11px;
@@ -58,6 +57,7 @@
   width: auto;
 }
 #rack_bug_toolbar li a {
+  border-left: 1px solid #487858;
   padding: 8px 9px 9px;
 }
 
