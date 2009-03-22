@@ -86,6 +86,14 @@ module Rack
         def count_queries(method)
           @queries.select { |q| q.method == method }.size
         end
+        
+        def queries_to_param
+          params = []
+          @queries.each_with_index do |query, index|
+            params << "keys[#{index}]=#{query.keys.first}"
+          end
+          params.join("&")
+        end
       end
       
       class PanelApp < Sinatra::Default
@@ -98,6 +106,14 @@ module Rack
         get "/__rack_bug__/delete_cache" do
           raise "Rails not found... can't delete key" unless defined?(Rails)
           Rails.cache.delete(params[:key])
+          "OK"
+        end
+        
+        get "/__rack_bug__/delete_cache_list" do
+          raise "Rails not found... can't delete key" unless defined?(Rails)
+          params[:keys].each do |key, value|
+            Rails.cache.delete(value)
+          end
           "OK"
         end
       end

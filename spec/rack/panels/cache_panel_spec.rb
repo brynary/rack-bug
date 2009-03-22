@@ -89,6 +89,23 @@ module Rack::Bug
       end
     end
     
+    describe "expire_all" do
+      it "expires the cache keys" do
+        Rails.stub!(:cache => mock("cache"))
+        Rails.cache.should_receive(:delete).with("user:1")
+        Rails.cache.should_receive(:delete).with("user:2")
+        Rails.cache.should_receive(:delete).with("user:3")
+        Rails.cache.should_receive(:delete).with("user:4")
+        get "/__rack_bug__/delete_cache_list", :keys => {"1" => "user:1", "2" => "user:2", "3" => "user:3", "4" => "user:4"}
+      end
+      
+      it "returns OK" do
+        Rails.stub!(:cache => mock("cache", :delete => nil))
+        response = get "/__rack_bug__/delete_cache_list", :keys => {"1" => "user:1", "2" => "user:2", "3" => "user:3", "4" => "user:4"}
+        response.should contain("OK")
+      end
+    end
+    
     describe "expire" do
       it "expires the cache key" do
         Rails.stub!(:cache => mock("cache"))
