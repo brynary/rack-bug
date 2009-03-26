@@ -31,9 +31,10 @@ module Rack
       include Render
       
       MIME_TYPES = ["text/html", "application/xhtml+xml"]
+      AJAX_MIME_TYPES = ["text/javascript", "application/json"]
       
       def initialize(app, options = {})
-        @app = asset_server(app)
+        @app = Rack::Cascade.new([toolbar_app, asset_server(app)])
         initialize_options options
         instance_eval(&block) if block_given?
       end
@@ -70,6 +71,9 @@ module Rack
           intercept_redirect
         elsif modify?
           inject_toolbar
+        elsif ajax?
+          store_toolbar
+          inject_toolbar_notification
         end
         
         return @response.to_a
@@ -106,8 +110,13 @@ module Rack
       
       def modify?
         @response.ok? &&
-        @env["X-Requested-With"] != "XMLHttpRequest" &&
+        !ajax? &&
         MIME_TYPES.include?(@response.content_type.split(";").first)
+      end
+      
+      def ajax?
+        @env["X-Requested-With"] == "XMLHttpRequest" ||
+        AJAX_MIME_TYPES.include?(@response.content_type.split(";").first)
       end
       
       def builder
@@ -122,12 +131,35 @@ module Rack
         return builder
       end
       
+      class ToolbarApp < Sinatra::Default
+        include Rack::Bug::Render
+          
+        get "/__rack_bug__/update_toolbar" do
+          raise "Rails not found... can't read key" unless defined?(Rails)
+          "$('#rack_bug').replaceWith(#{Rails.cache.read(params[:key]).to_json});"
+        end
+      end
+      
+      def toolbar_app
+        ToolbarApp.new
+      end
+      
       def inject_toolbar
         full_body = @response.body.join
         full_body.sub! /<\/body>/, render + "</body>"
         
         @response["Content-Length"] = full_body.size.to_s
         @response.body = [full_body]
+      end
+      
+      def store_toolbar
+        return unless defined?(Rails)
+        Rails.cache.write("rack-bug.#{@original_request.path_info}", render)
+        "OK"
+      end
+      
+      def inject_toolbar_notification
+        @response["__Rack_Bug__"] = "rack-bug.#{@original_request.path_info}"
       end
       
       def render
