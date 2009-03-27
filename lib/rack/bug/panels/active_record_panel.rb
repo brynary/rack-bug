@@ -7,6 +7,7 @@ module Rack
     class ActiveRecordPanel < Panel
       
       def self.record(class_name)
+        return unless Rack::Bug.enabled?
         records[class_name] += 1
       end
       
@@ -34,7 +35,9 @@ module Rack
       
       def content
         records = self.class.records.to_a.sort_by { |key, value| value }.reverse
-        render_template "panels/active_record", :records => records
+        result = render_template "panels/active_record", :records => records
+        self.class.reset
+        result
       end
       
     end

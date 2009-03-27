@@ -149,6 +149,8 @@ module Rack
       end
       
       def self.record(method, *keys, &block)
+        return block.call unless Rack::Bug.enabled?
+        
         start_time = Time.now
         result = block.call
         total_time = Time.now - start_time

@@ -92,6 +92,8 @@ module Rack
       end
       
       def self.record(template, &block)
+        return block.call unless Rack::Bug.enabled?
+        
         template_trace.start(template)
         result = block.call
         template_trace.finished(template)

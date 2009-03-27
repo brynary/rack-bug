@@ -64,7 +64,10 @@ module Rack
       def dispatch
         @env["rack-bug.panels"] = []
         
+        Rack::Bug.enable
         status, headers, body = builder.call(@env)
+        Rack::Bug.disable
+        
         @response = Rack::Response.new(body, status, headers)
         
         if @response.redirect? && options["rack-bug.intercept_redirects"]

@@ -34,6 +34,10 @@ Spec::Runner.configure do |config|
   include Webrat::Matchers
   
   config.before do
+    # This allows specs to record data outside the request
+    Rack::Bug.enable
+    
+    # Set the cookie that triggers Rack::Bug under normal conditions
     header :cookie, "rack_bug_enabled=1"
   end
   

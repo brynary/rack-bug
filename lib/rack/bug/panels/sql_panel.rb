@@ -133,6 +133,8 @@ module Rack
       end
       
       def self.record(sql, backtrace = [], &block)
+        return block.call unless Rack::Bug.enabled?
+        
         start_time = Time.now
         result = block.call
         queries << Query.new(sql, Time.now - start_time, backtrace)

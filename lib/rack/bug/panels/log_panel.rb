@@ -6,6 +6,7 @@ module Rack
     class LogPanel < Panel
       
       def self.record(message)
+        return unless Rack::Bug.enabled?
         return unless message
         logs << message.to_s
       end
