@@ -8,6 +8,7 @@ $LOAD_PATH.unshift File.dirname(File.dirname(__FILE__))
 
 require "rack/bug"
 require "spec/fixtures/sample_app"
+require "spec/fixtures/dummy_panel"
 
 module Rails
   def self.version

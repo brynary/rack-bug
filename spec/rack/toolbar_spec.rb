@@ -67,6 +67,12 @@ describe Rack::Bug do
       response = get "/", {}, "REMOTE_ADDR" => "128.0.0.1"
       response.should_not contain("Rack::Bug")
     end
+    
+    it "doesn't use any panels" do
+      DummyPanel.should_not_receive(:new)
+      header "rack-bug.panel_classes", [DummyPanel]
+      get "/", {}, "REMOTE_ADDR" => "128.0.0.1"
+    end
   end
   
   context "configured with a password" do
@@ -83,6 +89,12 @@ describe Rack::Bug do
     it "is disabled when the password doesn't match" do
       response = get "/"
       response.should_not contain("Rack::Bug")
+    end
+    
+    it "doesn't use any panels" do
+      DummyPanel.should_not_receive(:new)
+      header "rack-bug.panel_classes", [DummyPanel]
+      get "/"
     end
   end
 end
