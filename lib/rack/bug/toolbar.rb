@@ -131,7 +131,7 @@ module Rack
       end
       
       def render
-        render_template("bug", :panels => @env["rack-bug.panels"].reverse)
+        render_template("toolbar", :panels => @env["rack-bug.panels"].reverse)
       end
       
     end

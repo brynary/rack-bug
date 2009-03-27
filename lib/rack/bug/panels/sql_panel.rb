@@ -1,5 +1,4 @@
 require "digest"
-require "sinatra/base"
 require "active_support/secure_random"
 require "rack/bug/extensions/sql_extension"
 
@@ -81,24 +80,50 @@ module Rack
         end
       end
       
-      class PanelApp < Sinatra::Default
+      class PanelApp
         include Rack::Bug::Render
         
-        get "/__rack_bug__/explain_sql" do
-          query = Query.new(params[:query], params[:time].to_f)
-          raise "Security violation. Invalid query hash}" unless query.valid_hash?(params[:hash])
+        attr_reader :request
+        
+        def call(env)
+          @request = Rack::Request.new(env)
+          
+          case request.path_info
+          when "/__rack_bug__/explain_sql" then explain_sql
+          when "/__rack_bug__/profile_sql" then profile_sql
+          when "/__rack_bug__/execute_sql" then execute_sql
+          else
+            not_found
+          end
+        end
+
+        def params
+          @request.GET
+        end
+        
+        def not_found
+          [404, {}, []]
+        end
+        
+        def render_template(*args)
+          Rack::Response.new([super]).to_a
+        end
+        
+        def explain_sql
+          query = Query.new(params["query"], params["time"].to_f)
+          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
           render_template "panels/explain_sql", :result => query.explain, :query => query.sql, :time => query.time
         end
         
-        get "/__rack_bug__/profile_sql" do
-          query = Query.new(params[:query], params[:time].to_f)
-          raise "Security violation. Invalid query hash" unless query.valid_hash?(params[:hash])
+        def profile_sql
+          query = Query.new(params["query"], params["time"].to_f)
+          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
           render_template "panels/profile_sql", :result => query.profile, :query => query.sql, :time => query.time
         end
         
-        get "/__rack_bug__/execute_sql" do
-          query = Query.new(params[:query], params[:time].to_f)
-          raise "Security violation. Invalid query hash" unless query.valid_hash?(params[:hash])
+        def execute_sql
+          query = Query.new(params["query"], params["time"].to_f)
+          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
           render_template "panels/execute_sql", :result => query.execute, :query => query.sql, :time => query.time
         end
       end

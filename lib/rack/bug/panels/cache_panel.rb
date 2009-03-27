@@ -1,4 +1,3 @@
-require "sinatra/base"
 require "rack/bug/extensions/memcache_extension"
 
 module Rack
@@ -96,25 +95,56 @@ module Rack
         end
       end
       
-      class PanelApp < Sinatra::Default
+      class PanelApp
         include Rack::Bug::Render
+        
+        attr_reader :request
+        
+        def call(env)
+          @request = Rack::Request.new(env)
           
-        get "/__rack_bug__/view_cache" do
-          render_template "panels/view_cache", :key => params[:key], :value => Rails.cache.read(params[:key])
+          case request.path_info
+          when "/__rack_bug__/view_cache"         then view_cache
+          when "/__rack_bug__/delete_cache"       then delete_cache
+          when "/__rack_bug__/delete_cache_list"  then delete_cache_list
+          else
+            not_found
+          end
         end
         
-        get "/__rack_bug__/delete_cache" do
-          raise "Rails not found... can't delete key" unless defined?(Rails)
-          Rails.cache.delete(params[:key])
-          "OK"
+        def params
+          request.GET
         end
         
-        get "/__rack_bug__/delete_cache_list" do
+        def not_found
+          [404, {}, []]
+        end
+        
+        def ok
+          Rack::Response.new(["OK"]).to_a
+        end
+        
+        def render_template(*args)
+          Rack::Response.new([super]).to_a
+        end
+        
+        def view_cache
+          render_template "panels/view_cache", :key => params["key"], :value => Rails.cache.read(params["key"])
+        end
+        
+        def delete_cache
           raise "Rails not found... can't delete key" unless defined?(Rails)
-          params[:keys].each do |key, value|
+          Rails.cache.delete(params["key"])
+          ok
+        end
+        
+        def delete_cache_list
+          raise "Rails not found... can't delete key" unless defined?(Rails)
+          params.each do |key, value|
+            next unless key =~ /^keys/
             Rails.cache.delete(value)
           end
-          "OK"
+          ok
         end
       end
       
