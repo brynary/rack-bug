@@ -47,7 +47,7 @@
       <th>Parameters</th>
       <th>Function</th>
       <th>
-        <a href="/__rack_bug__/delete_cache_list?<%= stats.queries_to_param %>" class="rb_delete_cache">
+        <a href="/__rack_bug__/delete_cache_list?<%= signed_params(stats.queries_to_param) %>" class="rb_delete_cache">
           Delete All
         </a>
       </th>

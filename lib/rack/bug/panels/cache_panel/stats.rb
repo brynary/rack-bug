@@ -84,11 +84,11 @@ module Rack
         end
         
         def queries_to_param
-          params = []
+          params = {}
           @queries.each_with_index do |query, index|
-            params << "keys[#{index}]=#{query.keys.first}"
+            params["keys[#{index}]"] = query.keys.first
           end
-          params.join("&")
+          params
         end
       end
       
