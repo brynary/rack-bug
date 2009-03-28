@@ -86,7 +86,7 @@ module Rack
         def queries_to_param
           params = {}
           @queries.each_with_index do |query, index|
-            params["keys[#{index}]"] = query.keys.first
+            params["keys_#{index}"] = query.keys.first
           end
           params
         end

@@ -36,7 +36,7 @@ module Rack
           raise "Rails not found... can't delete key" unless defined?(Rails)
           
           params.each do |key, value|
-            next unless key =~ /^keys/
+            next unless key =~ /^keys_/
             Rails.cache.delete(value)
           end
           

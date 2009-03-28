@@ -44,15 +44,19 @@ module Rack
       end
       
       def signature(params)
+        Digest::SHA1.hexdigest(signature_base(params))
+      end
+      
+      def signature_base(params)
         signature = []
         signature << secret_key
         
         params.keys.sort.each do |key|
           next if key == "hash"
-          signature << params[key]
+          signature << params[key].to_s
         end
         
-        Digest::SHA1.hexdigest(signature.join(":"))
+        signature.join(":")
       end
       
     end
