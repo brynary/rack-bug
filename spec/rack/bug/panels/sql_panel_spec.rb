@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 module Rack::Bug
   describe SQLPanel do
@@ -53,7 +53,7 @@ module Rack::Bug
     
     describe "execute_sql" do
       it "displays the query results" do
-        Rack::Bug::SQLPanel::Query.stub!(:secret_key => "abc")
+        header "rack-bug.secret_key", "abc"
         expect_query "SELECT username FROM users",
           [["username"],
            ["bryan"]]
@@ -63,11 +63,32 @@ module Rack::Bug
         response.should contain("SELECT username FROM users")
         response.should be_ok
       end
+      
+      it "is forbidden when the hash is missing or wrong" do
+        header "rack-bug.secret_key", 'abc'
+        lambda { get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+                                                  :hash => "foobar"
+               }.should raise_error(SecurityError)
+      end
+      
+      it "is not available when the rack-bug.secret_key is nil" do
+        header "rack-bug.secret_key", nil
+        response = get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should be_not_found
+      end
+      
+      it "is not available when the rack-bug.secret_key is an empty string" do
+        header "rack-bug.secret_key", ""
+        response = get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should be_not_found
+      end
     end
     
     describe "explain_sql" do
       it "displays the query explain plan" do
-        Rack::Bug::SQLPanel::Query.stub!(:secret_key => "abc")
+        header "rack-bug.secret_key", "abc"
         expect_query "EXPLAIN SELECT username FROM users",
           [["table"],
            ["users"]]
@@ -76,6 +97,27 @@ module Rack::Bug
           :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
         response.should contain("SELECT username FROM users")
         response.should be_ok
+      end
+      
+      it "is forbidden when the hash is missing or wrong" do
+        header "rack-bug.secret_key", 'abc'
+        lambda { get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+          :hash => "foobar"
+               }.should raise_error(SecurityError)
+      end
+      
+      it "is not available when the rack-bug.secret_key is nil" do
+        header "rack-bug.secret_key", nil
+        response = get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should be_not_found
+      end
+      
+      it "is not available when the rack-bug.secret_key is an empty string" do
+        header "rack-bug.secret_key", ""
+        response = get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        response.should be_not_found
       end
     end
   end

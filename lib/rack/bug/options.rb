@@ -10,6 +10,7 @@ module Rack::Bug
       end
     end
     
+    option_accessor :secret_key
     option_accessor :ip_masks
     option_accessor :password
     option_accessor :panel_classes
@@ -66,6 +67,7 @@ module Rack::Bug
         'rack-bug.ip_masks' => [IPAddr.new("127.0.0.1")],
         'rack-bug.password' => nil,
         'rack-bug.verbose'  => nil,
+        'rack-bug.secret_key' => nil,
         'rack-bug.intercept_redirects' => false,
         'rack-bug.panels' => [],
         'rack-bug.panel_classes' => [

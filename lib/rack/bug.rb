@@ -5,6 +5,9 @@ module Rack::Bug
   
   VERSION = "0.1.0"
   
+  class SecurityError < StandardError
+  end
+  
   def self.enable
     Thread.current["rack-bug.enabled"] = true
   end

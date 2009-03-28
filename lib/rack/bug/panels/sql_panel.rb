@@ -12,10 +12,6 @@ module Rack
         attr_reader :time
         attr_reader :backtrace
         
-        def self.secret_key
-          @secret_key ||= ActiveSupport::SecureRandom.hex
-        end
-        
         def initialize(sql, time, backtrace = [])
           @sql = sql
           @time = time
@@ -56,12 +52,9 @@ module Rack
           self.class.execute(@sql)
         end
         
-        def valid_hash?(possible_hash)
+        def valid_hash?(secret_key, possible_hash)
+          hash = Digest::SHA1.hexdigest [secret_key, @sql].join(":")
           possible_hash == hash
-        end
-        
-        def hash
-          Digest::SHA1.hexdigest [self.class.secret_key, @sql].join(":")
         end
         
         def self.execute(sql)
@@ -87,6 +80,7 @@ module Rack
         
         def call(env)
           @request = Rack::Request.new(env)
+          return not_found if secret_key.nil? || secret_key == ""
           
           case request.path_info
           when "/__rack_bug__/explain_sql" then explain_sql
@@ -96,7 +90,11 @@ module Rack
             not_found
           end
         end
-
+        
+        def secret_key
+          @request.env['rack-bug.secret_key']
+        end
+        
         def params
           @request.GET
         end
@@ -109,21 +107,25 @@ module Rack
           Rack::Response.new([super]).to_a
         end
         
+        def validate_query_hash(query)
+          raise SecurityError.new("Invalid query hash") unless query.valid_hash?(secret_key, params["hash"])
+        end
+        
         def explain_sql
           query = Query.new(params["query"], params["time"].to_f)
-          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
+          validate_query_hash(query)
           render_template "panels/explain_sql", :result => query.explain, :query => query.sql, :time => query.time
         end
         
         def profile_sql
           query = Query.new(params["query"], params["time"].to_f)
-          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
+          validate_query_hash(query)
           render_template "panels/profile_sql", :result => query.profile, :query => query.sql, :time => query.time
         end
         
         def execute_sql
           query = Query.new(params["query"], params["time"].to_f)
-          raise "Security violation. Invalid query hash" unless query.valid_hash?(params["hash"])
+          validate_query_hash(query)
           render_template "panels/execute_sql", :result => query.execute, :query => query.sql, :time => query.time
         end
       end
