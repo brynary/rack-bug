@@ -39,7 +39,7 @@ module Rack
         end
         
         if secret_key_blank? || request.params["hash"] != signature(request.params)
-          raise SecurityError.new("Invalid query hash")
+          raise SecurityError.new("Invalid query hash. expected #{signature(request.params)}")
         end
       end
       

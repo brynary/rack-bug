@@ -20,16 +20,19 @@ module Rack
         end
         
         def view_cache
+          validate_params
           render_template "panels/view_cache", :key => params["key"], :value => Rails.cache.read(params["key"])
         end
         
         def delete_cache
+          validate_params
           raise "Rails not found... can't delete key" unless defined?(Rails)
           Rails.cache.delete(params["key"])
           ok
         end
         
         def delete_cache_list
+          validate_params
           raise "Rails not found... can't delete key" unless defined?(Rails)
           
           params.each do |key, value|
