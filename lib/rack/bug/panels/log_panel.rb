@@ -1,4 +1,4 @@
-require "rack/bug/extensions/rails_extension"
+require "rack/bug/panels/log_panel/rails_extension"
 
 module Rack
   module Bug
