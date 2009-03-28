@@ -8,6 +8,8 @@ module Rack
       include Render
       include ERB::Util
       
+      attr_reader :request
+      
       def initialize(app)
         if panel_app
           @app = Rack::Cascade.new([panel_app, app])

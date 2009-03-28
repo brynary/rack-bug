@@ -1,3 +1,5 @@
+require "rack/bug/params_signature"
+
 module Rack
   module Bug
     
@@ -21,6 +23,10 @@ module Rack
 
       def not_found
         [404, {}, []]
+      end
+
+      def validate_params
+        ParamsSignature.new(request).validate!
       end
       
     end

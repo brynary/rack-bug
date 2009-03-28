@@ -66,23 +66,29 @@ module Rack::Bug
       
       it "is forbidden when the hash is missing or wrong" do
         header "rack-bug.secret_key", 'abc'
-        lambda { get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
-                                                  :hash => "foobar"
-               }.should raise_error(SecurityError)
+        
+        lambda {
+          get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+            :hash => "foobar"
+        }.should raise_error(SecurityError)
       end
       
       it "is not available when the rack-bug.secret_key is nil" do
         header "rack-bug.secret_key", nil
-        response = get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
-        response.should be_not_found
+        
+        lambda {
+          get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+            :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        }.should raise_error(SecurityError)
       end
       
       it "is not available when the rack-bug.secret_key is an empty string" do
         header "rack-bug.secret_key", ""
-        response = get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
-        response.should be_not_found
+        
+        lambda {
+          get "/__rack_bug__/execute_sql", :query => "SELECT username FROM users",
+            :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        }.should raise_error(SecurityError)
       end
     end
     
@@ -101,23 +107,29 @@ module Rack::Bug
       
       it "is forbidden when the hash is missing or wrong" do
         header "rack-bug.secret_key", 'abc'
-        lambda { get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
-          :hash => "foobar"
-               }.should raise_error(SecurityError)
+        
+        lambda {
+          get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+            :hash => "foobar"
+        }.should raise_error(SecurityError)
       end
       
       it "is not available when the rack-bug.secret_key is nil" do
         header "rack-bug.secret_key", nil
-        response = get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
-        response.should be_not_found
+        
+        lambda {
+          get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+            :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        }.should raise_error(SecurityError)
       end
       
       it "is not available when the rack-bug.secret_key is an empty string" do
         header "rack-bug.secret_key", ""
-        response = get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
-        response.should be_not_found
+        
+        lambda {
+          get "/__rack_bug__/explain_sql", :query => "SELECT username FROM users",
+            :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+        }.should raise_error(SecurityError)
       end
     end
   end

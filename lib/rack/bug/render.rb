@@ -6,6 +6,11 @@ module Rack
     module Render
       include ERB::Util
       
+      def signed_params(hash)
+        # require "rubygems"; require "ruby-debug"; Debugger.start; debugger
+        ParamsSignature.sign(request, hash)
+      end
+      
       module CompiledTemplates
       end
       include CompiledTemplates

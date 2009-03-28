@@ -30,8 +30,8 @@ end
 Spec::Runner.configure do |config|
   TIME_MS_REGEXP = /\d+\.\d{2}ms/
   
-  include Rack::Test::Methods
-  include Webrat::Matchers
+  config.include Rack::Test::Methods
+  config.include Webrat::Matchers
   
   config.before do
     # This allows specs to record data outside the request
