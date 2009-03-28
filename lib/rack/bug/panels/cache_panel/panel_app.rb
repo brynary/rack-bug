@@ -1,16 +1,10 @@
+require "rack/bug/panel_app"
+
 module Rack
   module Bug
     class CachePanel
       
-      class PanelApp
-        include Rack::Bug::Render
-        
-        attr_reader :request
-        
-        def call(env)
-          @request = Rack::Request.new(env)
-          dispatch
-        end
+      class PanelApp < ::Rack::Bug::PanelApp
         
         def dispatch
           case request.path_info
@@ -21,20 +15,8 @@ module Rack
           end
         end
         
-        def params
-          request.GET
-        end
-        
-        def not_found
-          [404, {}, []]
-        end
-        
         def ok
           Rack::Response.new(["OK"]).to_a
-        end
-        
-        def render_template(*args)
-          Rack::Response.new([super]).to_a
         end
         
         def view_cache
@@ -49,12 +31,15 @@ module Rack
         
         def delete_cache_list
           raise "Rails not found... can't delete key" unless defined?(Rails)
+          
           params.each do |key, value|
             next unless key =~ /^keys/
             Rails.cache.delete(value)
           end
+          
           ok
         end
+        
       end
       
     end

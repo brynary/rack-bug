@@ -1,16 +1,10 @@
+require "rack/bug/panel_app"
+
 module Rack
   module Bug
     class SQLPanel
       
-      class PanelApp
-        include Rack::Bug::Render
-  
-        attr_reader :request
-  
-        def call(env)
-          @request = Rack::Request.new(env)
-          dispatch
-        end
+      class PanelApp < ::Rack::Bug::PanelApp
   
         def dispatch
           return not_found if secret_key.nil? || secret_key == ""
@@ -25,18 +19,6 @@ module Rack
   
         def secret_key
           @request.env['rack-bug.secret_key']
-        end
-  
-        def params
-          @request.GET
-        end
-  
-        def not_found
-          [404, {}, []]
-        end
-  
-        def render_template(*args)
-          Rack::Response.new([super]).to_a
         end
   
         def validate_query_hash(query)
