@@ -15,7 +15,7 @@
     <td><%= stats.calls %></td>
     
     <th>Total Time</th>
-    <td><%= stats.display_time %>ms</td>
+    <td><%= stats.display_time %></td>
     
     <th>Hits</th>
     <td><%= stats.hits %></td>
@@ -38,38 +38,40 @@
   </tr>
 </table>
 
-<h3>Breakdown</h3>
-<table id="cache_breakdown">
-  <thead>
-    <tr>
-      <th>Time&nbsp;(ms)</th>
-      <th>Type</th>
-      <th>Parameters</th>
-      <th>Function</th>
-      <th>
-        <a href="/__rack_bug__/delete_cache_list?<%= signed_params(stats.queries_to_param) %>" class="rb_delete_cache">
-          Delete All
-        </a>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% i = 1 %>
-    <% stats.queries.each do |query| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
-        <td><%= query.display_time %></td>
-        <td><%= query.method %></td>
-        <td><%= query.display_keys %></td>
-        <td></td>
-        <td>
-          <a href="/__rack_bug__/view_cache?<%= signed_params("key" => query.keys.first) %>" class="remote_call">View</a> |
-          <a href="/__rack_bug__/delete_cache?<%= signed_params("key" => query.keys.first) %>" class="rb_delete_cache">Delete</a>
-        </td>
+<% if stats.queries.any? %>
+  <h3>Breakdown</h3>
+  <table id="cache_breakdown">
+    <thead>
+      <tr>
+        <th>Time&nbsp;(ms)</th>
+        <th>Type</th>
+        <th>Parameters</th>
+        <th>Function</th>
+        <th>
+          <a href="/__rack_bug__/delete_cache_list?<%= signed_params(stats.queries_to_param) %>" class="rb_delete_cache">
+            Delete All
+          </a>
+        </th>
       </tr>
-      <% i += 1 %>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% stats.queries.each do |query| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%= query.display_time %></td>
+          <td><%= query.method %></td>
+          <td><%= query.display_keys %></td>
+          <td></td>
+          <td>
+            <a href="/__rack_bug__/view_cache?<%= signed_params("key" => query.keys.first) %>" class="remote_call">View</a> |
+            <a href="/__rack_bug__/delete_cache?<%= signed_params("key" => query.keys.first) %>" class="rb_delete_cache">Delete</a>
+          </td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <script type="text/javascript" charset="utf-8">
   jQuery(function () {

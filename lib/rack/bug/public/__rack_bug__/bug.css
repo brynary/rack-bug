@@ -70,8 +70,9 @@
   border-right: 1px solid #487858;
 }
 
-#rb_debug_button {
+#rack_bug_toolbar #rb_debug_button {
   color: #92ef3f;
+  padding-left: 20px;
 }
 
 #rack_bug .panel_content {
