@@ -47,7 +47,8 @@ module Rack
       end
       
       def call(env)
-        @env = @default_options.merge(env)
+        env.replace @default_options.merge(env)
+        @env = env
         @original_request = Request.new(@env)
 
         if toolbar_requested? && ip_authorized? && password_authorized?
