@@ -12,10 +12,10 @@
     <% i = 1 %>
     <% logs.each do |log| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+        <td><%= log[0] %></td>
         <td></td>
-        <td></td>
-        <td><%= log.to_s.gsub(/\e\[[;\d]+m/, "") %></td>
-        <td></td>
+        <td><%= log[1] %></td>
+        <td><%#= log[1].to_s.gsub(/\e\[[;\d]+m/, "") %></td>
       </tr>
       <% i += 1 %>
     <% end %>

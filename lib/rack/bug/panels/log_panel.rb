@@ -5,10 +5,10 @@ module Rack
     
     class LogPanel < Panel
       
-      def self.record(message)
+      def self.record(*args)
         return unless Rack::Bug.enabled?
-        return unless message
-        logs << message.to_s
+        return unless args
+        logs << [args[1], args[0]]
       end
       
       def self.reset
