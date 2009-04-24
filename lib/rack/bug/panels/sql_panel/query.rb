@@ -61,7 +61,7 @@ module Rack
         end
         
         def filtered_backtrace
-          @filtered_backtrace ||= @backtrace.map { |l| l.strip }.select do |line|
+          @filtered_backtrace ||= @backtrace.map { |l| l.to_s.strip }.select do |line|
             line.starts_with?(Rails.root) &&
             !line.starts_with?(Rails.root.join("vendor"))
           end
