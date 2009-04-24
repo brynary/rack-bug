@@ -102,14 +102,14 @@ module Rack::Bug
         Rails.cache.should_receive(:delete).with("user:4")
         
         get "/__rack_bug__/delete_cache_list",
-          :keys => {"1" => "user:1", "2" => "user:2", "3" => "user:3", "4" => "user:4"},
+          :keys_1 => "user:1", :keys_2 => "user:2", :keys_3 => "user:3", :keys_4 => "user:4",
           :hash => "c367b76e0199c308862a3afd8fba32b8715e7976"
       end
       
       it "returns OK" do
         Rails.stub!(:cache => mock("cache", :delete => nil))
         response = get "/__rack_bug__/delete_cache_list",
-          :keys => {"1" => "user:1", "2" => "user:2", "3" => "user:3", "4" => "user:4"},
+          :keys_1 => "user:1", :keys_2 => "user:2", :keys_3 => "user:3", :keys_4 => "user:4",
           :hash => "c367b76e0199c308862a3afd8fba32b8715e7976"
         response.should contain("OK")
       end

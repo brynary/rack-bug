@@ -8,7 +8,7 @@ describe Rack::Bug do
   
   it "updates the Content-Length" do
     response = get "/"
-    response["Content-Length"].should == response.body.join.size.to_s
+    response["Content-Length"].should == response.body.size.to_s
   end
   
   it "serves the Rack::Bug assets under /__rack_bug__/" do
@@ -38,7 +38,7 @@ describe Rack::Bug do
 
   it "does not modify redirects" do
     response = get "/redirect"
-    response.body.should == []
+    response.body.should == ""
   end
   
   it "does not modify server errors" do
