@@ -12,11 +12,11 @@ module Rack
       end
       
       def heading
-        "Request Vars"
+        "Rack Env"
       end
       
       def content
-        render_template "panels/request_variables", :request => @request
+        render_template "panels/request_variables", :request => @request, :env => @env
       end
 
     end

@@ -74,7 +74,6 @@ module Rack::Bug
           RailsInfoPanel,
           TimerPanel,
           RequestVariablesPanel,
-          EnvPanel,
           SQLPanel,
           ActiveRecordPanel,
           CachePanel,

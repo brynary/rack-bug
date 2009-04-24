@@ -197,3 +197,15 @@
   text-indent: -3000px;
   color: transparent;
 }
+
+#rack_bug #sql.panel_content th.time {
+  width: 80px;
+}
+
+#rack_bug #sql.panel_content th.backtrace {
+  width: 100px;
+}
+
+#rack_bug #sql.panel_content th.actions {
+  width: 150px;
+}
