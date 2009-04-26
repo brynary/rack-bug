@@ -10,7 +10,7 @@
   <dd><%=h "%.2f" % (time * 1_000) %>ms</dd>
 </dl>
 
-<table>
+<table class="sortable">
   <thead>
     <tr>
       <% result.fetch_fields.each do |field| %>
