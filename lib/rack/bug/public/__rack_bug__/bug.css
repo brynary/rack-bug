@@ -16,12 +16,19 @@
 #rack_bug_toolbar {
   background: #326342;
   height: 30px;
-  z-index: 100000000;
-  border-bottom: 2px solid #234f32;
+  z-index: 1000000000;
   position:absolute;
-  top:0;
   left:0;
   right:0;
+  cursor: pointer;
+}
+.rb_bottom #rack_bug_toolbar {
+  bottom:0;
+  border-top: 2px solid #234f32;
+}
+.rb_top #rack_bug_toolbar {
+  top:0;
+  border-bottom: 2px solid #234f32;
 }
 
 .rack_bug_error #rack_bug_toolbar {
@@ -83,14 +90,20 @@
   position: absolute;
   margin: 0;
   padding: 10px;
-  top: 32px;
   width: auto;
   left: 0px;
   right: 0px;
-  bottom: 5px;
   color: black;
   z-index: 1000000;
   overflow: auto;
+}
+
+#rack_bug.rb_top .panel_content {
+  top: 32px;  
+}
+
+#rack_bug.rb_bottom .panel_content {
+  bottom: 32px;
 }
 
 #rack_bug .panel_content p a,
