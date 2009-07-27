@@ -1,0 +1,32 @@
+<h3>Redis Usage</h3>
+<table id="redis_usage">
+  <tr>
+    <th>Total Calls</th>
+    <td><%= stats.calls %></td>
+    
+    <th>Total Time</th>
+    <td><%= stats.display_time %></td>    
+  </tr>
+</table>
+
+<% if stats.queries.any? %>
+  <h3>Breakdown</h3>
+  <table id="redis_breakdown">
+    <thead>
+      <tr>
+        <th>Time&nbsp;(ms)</th>
+        <th>Command</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% i = 1 %>
+      <% stats.queries.each do |query| %>
+        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+          <td><%= query.display_time %></td>
+          <td><%= query.command %></td>
+        </tr>
+        <% i += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

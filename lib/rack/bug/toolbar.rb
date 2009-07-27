@@ -4,13 +4,8 @@ require "digest"
 require "rack/bug/options"
 require "rack/bug/render"
 
-Dir[File.dirname(__FILE__) + "/panels/*.rb"].each do |panel_name|
-  require "rack/bug/panels/" + File.basename(panel_name)
-end
-
 module Rack
   module Bug
-    
     class RackStaticBugAvoider
       def initialize(app, static_app)
         @app = app

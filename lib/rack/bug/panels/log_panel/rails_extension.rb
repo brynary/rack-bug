@@ -1,4 +1,4 @@
-if defined?(Rails) && Rails.logger
+if defined?(Rails) && Rails.respond_to?(:logger) && Rails.logger
   module LoggingExtensions
     def add(*args, &block)
       logged_message = super
