@@ -1,4 +1,3 @@
-require "rack/bug/panel"
 require "benchmark"
 
 module Rack

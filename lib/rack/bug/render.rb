@@ -7,7 +7,6 @@ module Rack
       include ERB::Util
       
       def signed_params(hash)
-        # require "rubygems"; require "ruby-debug"; Debugger.start; debugger
         ParamsSignature.sign(request, hash)
       end
       

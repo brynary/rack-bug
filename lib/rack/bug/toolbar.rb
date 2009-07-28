@@ -1,9 +1,6 @@
 require "ipaddr"
 require "digest"
 
-require "rack/bug/options"
-require "rack/bug/render"
-
 module Rack
   module Bug
     class RackStaticBugAvoider

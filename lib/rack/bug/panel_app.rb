@@ -1,5 +1,3 @@
-require "rack/bug/params_signature"
-
 module Rack
   module Bug
     

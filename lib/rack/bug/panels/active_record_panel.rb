@@ -1,4 +1,3 @@
-require "rack/bug/panel"
 require "rack/bug/panels/active_record_panel/activerecord_extensions"
 
 module Rack

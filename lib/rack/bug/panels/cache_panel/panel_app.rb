@@ -1,5 +1,3 @@
-require "rack/bug/panel_app"
-
 module Rack
   module Bug
     class CachePanel

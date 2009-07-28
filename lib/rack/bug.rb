@@ -1,10 +1,14 @@
 require "rack"
 
 module Rack::Bug
-  require "rack/bug/toolbar"
-  require "rack/bug/panel"
-  require "rack/bug/panel_app"
+  autoload :Options,                "rack/bug/options"
+  autoload :Panel,                  "rack/bug/panel"
+  autoload :PanelApp,               "rack/bug/panel_app"
+  autoload :ParamsSignature,        "rack/bug/params_signature"
+  autoload :Render,                 "rack/bug/render"
+  autoload :Toolbar,                "rack/bug/toolbar"
 
+  # Panels
   autoload :ActiveRecordPanel,      "rack/bug/panels/active_record_panel"
   autoload :CachePanel,             "rack/bug/panels/cache_panel"
   autoload :LogPanel,               "rack/bug/panels/log_panel"
