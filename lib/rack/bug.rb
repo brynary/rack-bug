@@ -7,7 +7,6 @@ module Rack::Bug
   
   autoload :ActiveRecordPanel, "rack/bug/panels/active_record_panel"
   autoload :CachePanel, "rack/bug/panels/cache_panel"
-  autoload :EnvPanel, "rack/bug/panels/env_panel"
   autoload :LogPanel, "rack/bug/panels/log_panel"
   autoload :MemoryPanel, "rack/bug/panels/memory_panel"
   autoload :RailsInfoPanel, "rack/bug/panels/rails_info_panel"
