@@ -8,6 +8,16 @@ Usage:
  # add bookmarklet to browser
  open http://RAILS_APP/__rack_bug__/bookmarklet.html
 
+Notes:
+
+ To use rack-bug with hoptoad, you need to stub hoptoad from trying to serialize the environment variables
+ that rack-bug uses like so:
+ 
+ HoptoadNotifier.configure do |config|
+   config.environment_filters << 'rack-bug.*'
+ end
+ 
+ 
 Thanks to:
 
   Django debug toolbar
