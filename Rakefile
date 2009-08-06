@@ -6,6 +6,7 @@ require "rack/bug"
 
 begin
   require 'jeweler'
+
   Jeweler::Tasks.new do |s|
     s.name      = "rack-bug"
     s.author    = "Bryan Helmkamp"
@@ -16,6 +17,8 @@ begin
     s.rubyforge_project = "rack-bug"
     s.extra_rdoc_files = %w(README.rdoc MIT-LICENSE.txt)
   end
+
+  Jeweler::RubyforgeTasks.new
 rescue LoadError
   puts "Jeweler not available. Install it with: gem install jeweler"
 end
