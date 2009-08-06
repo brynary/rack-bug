@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-bug}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp"]
@@ -75,6 +75,7 @@ Gem::Specification.new do |s|
      "lib/rack/bug/views/panels/view_cache.html.erb",
      "lib/rack/bug/views/redirect.html.erb",
      "lib/rack/bug/views/toolbar.html.erb",
+     "rack-bug.gemspec",
      "spec/fixtures/config.ru",
      "spec/fixtures/dummy_panel.rb",
      "spec/fixtures/sample_app.rb",
