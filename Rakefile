@@ -1,7 +1,7 @@
 require "rubygems"
 require "spec/rake/spectask"
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/lib'
+$LOAD_PATH.unshift "lib"
 require "rack/bug"
 
 begin
@@ -13,6 +13,7 @@ begin
     s.homepage  = "http://github.com/brynary/rack-bug"
     s.summary   = "Debugging toolbar for Rack applications implemented as middleware"
     # s.description  = "TODO"
+    s.rubyforge_project = "rack-bug"
     s.extra_rdoc_files = %w(README.rdoc MIT-LICENSE.txt)
   end
 rescue LoadError
