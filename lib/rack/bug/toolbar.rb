@@ -65,7 +65,8 @@ module Rack
         
         if @response.redirect? && options["rack-bug.intercept_redirects"]
           intercept_redirect
-        elsif modify?
+        end
+        if modify?
           inject_toolbar
         end
         

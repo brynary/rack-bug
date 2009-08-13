@@ -49,7 +49,12 @@ describe Rack::Bug do
   context "configured to intercept redirects" do
     it "inserts the Rack::Bug toolbar for redirects" do
       response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
-      response.should contain("Location: /")
+      response.should have_selector("div#rack_bug")
+    end
+
+    it "should provide a link to the target URL" do
+      response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
+      response.should have_selector("a[href='/']")
     end
   end
   
