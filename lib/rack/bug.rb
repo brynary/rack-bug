@@ -20,7 +20,7 @@ module Rack::Bug
   autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
   autoload :TimerPanel,             "rack/bug/panels/timer_panel"
 
-  VERSION = File.read(File.join(File.dirname(__FILE__), "..", "..", "VERSION")).strip
+  VERSION = "0.2.2"
 
   class SecurityError < StandardError
   end
