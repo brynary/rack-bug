@@ -124,6 +124,11 @@ module Rack
         full_body.sub! /<\/body>/, render + "</body>"
         
         @response["Content-Length"] = full_body.size.to_s
+        
+        # Ensure that browser does
+        @response["Etag"] = ""
+        @response["Cache-Control"] = "no-cache"
+        
         @response.body = [full_body]
       end
       
