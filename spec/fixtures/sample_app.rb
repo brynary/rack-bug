@@ -1,6 +1,6 @@
 require "sinatra/base"
 
-class SampleApp < Sinatra::Default
+class SampleApp < Sinatra::Base
 
   get "/redirect" do
     redirect "/"
@@ -21,6 +21,7 @@ class SampleApp < Sinatra::Default
         </head>
         <body>
           <p>Hello</p>
+          <p><a href="__rack_bug__/bookmarklet.html">Page with bookmarklet for enabling Rack::Bug</a></p>
         </body>
       </html>
     HTML
