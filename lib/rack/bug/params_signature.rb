@@ -36,9 +36,7 @@ module Rack
       def validate!
         if secret_key_blank?
           raise SecurityError.new("Missing secret key")
-        end
-
-        if secret_key_blank? || request.params["hash"] != signature(request.params)
+        elsif request.params["hash"] != signature(request.params)
           raise SecurityError.new("Invalid query hash.")
         end
       end
