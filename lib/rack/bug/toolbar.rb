@@ -19,15 +19,13 @@ module Rack
 
         @response = Rack::Response.new(body, status, headers)
         
-        inject_toolbar if modify?
+        inject_toolbar if response_type_okay_to_modify?
         
         return @response.to_a
       end
 
-      def modify?
-        @response.ok? &&
-        @env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest" &&
-        MIME_TYPES.include?(@response.content_type.split(";").first)
+      def response_type_okay_to_modify?
+        @response.ok? && MIME_TYPES.include?(@response.content_type.split(";").first)
       end
 
       def builder

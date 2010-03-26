@@ -38,7 +38,7 @@ class Rack::Bug
     @env = env
     @original_request = Rack::Request.new(@env)
 
-    if toolbar_requested? && ip_authorized? && password_authorized?
+    if toolbar_requested? && ip_authorized? && password_authorized? && !@original_request.xhr?
       @toolbar.call(env)
     else
       @app.call(env)
