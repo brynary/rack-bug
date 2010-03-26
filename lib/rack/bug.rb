@@ -29,7 +29,7 @@ class Rack::Bug
     initialize_options options
     instance_eval(&block) if block_given?
     
-    @toolbar = Toolbar.new(@app)
+    @toolbar = Toolbar.new(RedirectInterceptor.new(@app))
   end
 
 
