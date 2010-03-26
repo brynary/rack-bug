@@ -25,7 +25,8 @@ module Rack
       end
 
       def response_type_okay_to_modify?
-        @response.ok? && MIME_TYPES.include?(@response.content_type.split(";").first)
+        content_type, charset = @response.content_type.split(";")
+        @response.ok? && MIME_TYPES.include?(content_type)
       end
 
       def builder
