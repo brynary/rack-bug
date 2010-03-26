@@ -17,11 +17,9 @@ module Rack
       end
       
       def intercept_redirect
-         redirect_to = @response.location
          new_body = render_template("redirect", :redirect_to => @response.location)
-         new_response = Rack::Response.new(new_body, 200, { "Content-Type" => "text/html" })
-         new_response["Content-Length"] = new_body.size.to_s
-         @response = new_response
+         new_headers = { "Content-Type" => "text/html", "Content-Length" => new_body.size.to_s }
+         @response = Rack::Response.new(new_body, 200, new_headers)
        end
       
     end
