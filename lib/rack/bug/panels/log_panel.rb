@@ -1,4 +1,4 @@
-require "rack/bug/panels/log_panel/rails_extension"
+require "rack/bug/panels/log_panel/logger_extension"
 
 module Rack
   class Bug

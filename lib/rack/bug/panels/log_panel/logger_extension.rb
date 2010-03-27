@@ -1,5 +1,5 @@
 if defined?(Rails) && Rails.respond_to?(:logger) && Rails.logger
-  module LoggingExtensions
+  module LoggerExtension
     def add(*args, &block)
       logged_message = super
       Rack::Bug::LogPanel.record(logged_message, args[0])
@@ -7,5 +7,5 @@ if defined?(Rails) && Rails.respond_to?(:logger) && Rails.logger
     end
   end
 
-  Rails.logger.extend LoggingExtensions
+  Rails.logger.extend LoggerExtensions
 end
