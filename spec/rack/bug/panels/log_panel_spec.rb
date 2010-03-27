@@ -22,5 +22,22 @@ class Rack::Bug
         response.should contain("DEBUG")
       end
     end
+    
+    describe "Extended Logger" do
+      it "does still return true/false for #add if class Logger" do
+        #AS::BufferedLogger returns the added string, Logger returns true/false
+        LOGGER.add(0, "foo").should  == true
+      end
+    end
+    
+    
+    describe "With no logger defined" do
+      it "does not err out" do
+        logger = LOGGER
+        Object.send :remove_const, :LOGGER
+        lambda{ load("rack/bug/panels/log_panel/logger_extension.rb") }.should_not raise_error
+        ::LOGGER = logger
+      end
+    end
   end
 end

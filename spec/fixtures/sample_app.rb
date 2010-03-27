@@ -2,6 +2,11 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
 require "rack/bug"
 
 require "sinatra/base"
+require 'logger'
+
+RAILS_ENV = "development" unless defined?(RAILS_ENV)
+log_to = RAILS_ENV == "test" ? StringIO.new : STDOUT
+LOGGER = Logger.new(log_to)
 
 class SampleApp < Sinatra::Base
   use Rack::Bug#, :intercept_redirects => true, :password => 'secret'
@@ -23,7 +28,7 @@ class SampleApp < Sinatra::Base
     if params[:content_type]
       headers["Content-Type"] = params[:content_type]
     end
-
+    LOGGER.error "I am a log message"
     <<-HTML
       <html>
         <head>
