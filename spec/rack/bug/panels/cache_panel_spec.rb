@@ -5,6 +5,14 @@ class Rack::Bug
     before do
       CachePanel.reset
       rack_env "rack-bug.panel_classes", [CachePanel]
+      unless defined?(Rails)
+        @added_rails = true
+        Object.const_set :Rails, Module.new
+      end
+    end
+
+    after do
+      Object.send :remove_const, :Rails if @added_rails
     end
 
     describe "heading" do

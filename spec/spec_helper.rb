@@ -10,18 +10,6 @@ require "rack/bug"
 require "spec/fixtures/sample_app"
 require "spec/fixtures/dummy_panel"
 
-module Rails
-  def self.version
-    ""
-  end
-
-  class Info
-    def self.properties
-      []
-    end
-  end
-end
-
 module ActiveRecord
   class Base
   end
