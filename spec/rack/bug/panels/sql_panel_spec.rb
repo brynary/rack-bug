@@ -5,6 +5,16 @@ class Rack::Bug
     before do
       SQLPanel.reset
       rack_env "rack-bug.panel_classes", [SQLPanel]
+
+      unless defined?(ActiveRecord)
+        @added_rails = true
+        Object.const_set :ActiveRecord, Module.new
+        ActiveRecord.const_set :Base, Class.new
+      end
+    end
+    
+    after do
+      Object.send :remove_const, :ActiveRecord if @added_active_record
     end
 
     describe "heading" do
