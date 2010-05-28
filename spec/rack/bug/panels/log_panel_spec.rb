@@ -16,9 +16,10 @@ module Rack::Bug
     
     describe "content" do
       it "displays recorded log lines" do
-        LogPanel.record("This is a logged message")
+        LogPanel.record("This is a logged message", 0)
         response = get_via_rack "/"
         response.should contain("This is a logged message")
+        response.should contain("DEBUG")
       end
     end
   end
