@@ -105,6 +105,10 @@ Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional
 
 Thanks to Weplay.com for supporting the development of Rack::Bug
 
+Development
+-----------
+For development, you'll need to install the following gems: rspec, rack-test, webrat, sinatra
+
 License
 -------
 
