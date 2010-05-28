@@ -6,6 +6,7 @@
 
   * Compatibilty
   
+    * backtrace filtering now supports more than just Rails (Alex Chaffee)
     * compatibility with current rack-test (Luke Melia & Joey Aghion)
     * update Sinatra sample app (Tim Conner)
     
