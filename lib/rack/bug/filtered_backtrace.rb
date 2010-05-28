@@ -5,7 +5,7 @@ module Rack
       def backtrace
         @backtrace
       end
-      
+
       def has_backtrace?
         filtered_backtrace.any?
       end
@@ -16,7 +16,7 @@ module Rack
           (line.index(root_for_backtrace_filtering) == 0) && !(line.index(root_for_backtrace_filtering("vendor")) == 0)
         end
       end
-      
+
       def root_for_backtrace_filtering(sub_path = nil)
         if defined?(Rails) && Rails.respond_to?(:root)
           sub_path ? Rails.root.join(sub_path) : Rails.root

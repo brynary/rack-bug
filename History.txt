@@ -1,20 +1,20 @@
 == HEAD
   * New features
-    
+
     * Log panel includes log level and timestamp (Tim Connor)
     * Sphinx panel (George Chatzigeorgiou)
     * Backtraces for Redis panel (Luke Melia & Joey Aghion)
-  
+
   * Minor fixes
-  
+
     * Don't "enable" rack bug if you hit cancel on the bookmarklet prompt (Mischa Fierer)
-      
+
   * Compatibilty
-  
+
     * backtrace filtering now supports more than just Rails (Alex Chaffee)
     * compatibility with current rack-test (Luke Melia & Joey Aghion)
     * update Sinatra sample app (Tim Conner)
-    
-== 0.2.1 
+
+== 0.2.1
 
   * The beginning of recorded history

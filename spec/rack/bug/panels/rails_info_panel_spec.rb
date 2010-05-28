@@ -5,7 +5,7 @@ module Rack::Bug
     before do
       rack_env "rack-bug.panel_classes", [RailsInfoPanel]
     end
-    
+
     describe "heading" do
       it "displays the Rails version" do
         Rails.stub!(:version => "v2.3.0")

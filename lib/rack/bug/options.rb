@@ -9,7 +9,7 @@ module Rack::Bug
         define_method("#{key}?") { || !! read_option(key) }
       end
     end
-    
+
     option_accessor :secret_key
     option_accessor :ip_masks
     option_accessor :password
@@ -45,7 +45,7 @@ module Rack::Bug
     end
 
   private
-  
+
     def read_option(key)
       options[option_name(key)]
     end
@@ -61,7 +61,7 @@ module Rack::Bug
       else raise ArgumentError
       end
     end
-    
+
     def initialize_options(options={})
       @default_options = {
         'rack-bug.ip_masks' => [IPAddr.new("127.0.0.1")],
@@ -84,6 +84,6 @@ module Rack::Bug
       }
       self.options = options
     end
-    
+
   end
 end

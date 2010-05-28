@@ -14,7 +14,7 @@ module Rails
   def self.version
     ""
   end
-  
+
   class Info
     def self.properties
       []
@@ -29,25 +29,25 @@ end
 
 Spec::Runner.configure do |config|
   TIME_MS_REGEXP = /\d+\.\d{2}ms/
-  
+
   config.include Rack::Test::Methods
   config.include Webrat::Matchers
-  
+
   config.before do
     # This allows specs to record data outside the request
     Rack::Bug.enable
-    
+
     # Set the cookie that triggers Rack::Bug under normal conditions
     set_cookie "rack_bug_enabled=1"
   end
-  
+
   def app
     Rack::Builder.new do
       use Rack::Bug
       run SampleApp.new
     end
   end
-  
+
   def have_row(container, key, value = nil)
     simple_matcher("contain row") do |response|
       if value
@@ -59,7 +59,7 @@ Spec::Runner.configure do |config|
       end
     end
   end
-  
+
   def have_heading(text)
     simple_matcher("have heading") do |response|
       response.should have_selector("#rack_bug_toolbar li") do |heading|
@@ -67,12 +67,12 @@ Spec::Runner.configure do |config|
       end
     end
   end
-  
+
   def rack_env(key, value)
     @rack_env ||= {}
     @rack_env[key] = value
   end
-  
+
   def get_via_rack(uri, params = {}, env = {}, &block)
     env = env.merge(@rack_env) if @rack_env
     get(uri, params, env, &block)

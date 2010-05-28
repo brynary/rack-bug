@@ -6,7 +6,7 @@ module Rack::Bug
       ActiveRecordPanel.reset
       rack_env "rack-bug.panel_classes", [ActiveRecordPanel]
     end
-    
+
     describe "heading" do
       it "displays the total number of instantiated AR objects" do
         ActiveRecordPanel.record("User")
@@ -15,7 +15,7 @@ module Rack::Bug
         response.should have_heading("2 AR Objects")
       end
     end
-    
+
     describe "content" do
       it "displays the count of instantiated objects for each class" do
         ActiveRecordPanel.record("User")

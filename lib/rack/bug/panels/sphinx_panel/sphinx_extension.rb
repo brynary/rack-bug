@@ -7,7 +7,7 @@ if defined?(Riddle)
         request_without_rack_bug(command, messages)
       end
     end
-  
+
     alias_method_chain :request, :rack_bug
   end
 end

@@ -8,7 +8,7 @@ module Rack
 
       def self.record(*sphinx_command_args, &block)
         return block.call unless Rack::Bug.enabled?
-        
+
         start_time = Time.now
         result = block.call
         total_time = Time.now - start_time

@@ -42,13 +42,13 @@ if defined?(Memcached)
         prepend_without_rack_bug(key, value)
       end
     end
-    
+
     def delete_with_rack_bug(key)
       Rack::Bug::CachePanel.record(:delete, key) do
         delete_without_rack_bug(key)
       end
     end
-    
+
     def get_with_rack_bug(keys, marshal=true)
       if keys.is_a? Array
         Rack::Bug::CachePanel.record(:get_multi, *keys) do
@@ -117,7 +117,7 @@ if defined?(MemCache)
         delete_without_rack_bug(key, expiry)
       end
     end
-    
+
     alias_method_chain :decr,       :rack_bug
     alias_method_chain :get,        :rack_bug
     alias_method_chain :get_multi,  :rack_bug

@@ -8,7 +8,7 @@ if defined?(Redis)
         call_command_without_rack_bug(argv)
       end
     end
-  
+
     alias_method_chain :call_command, :rack_bug
   end
 end

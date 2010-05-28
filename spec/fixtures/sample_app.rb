@@ -5,16 +5,16 @@ class SampleApp < Sinatra::Base
   get "/redirect" do
     redirect "/"
   end
-  
+
   get "/error" do
     raise "Error!"
   end
-  
+
   get "/" do
     if params[:content_type]
       headers["Content-Type"] = params[:content_type]
     end
-    
+
     <<-HTML
       <html>
         <head>
@@ -26,5 +26,5 @@ class SampleApp < Sinatra::Base
       </html>
     HTML
   end
-  
+
 end

@@ -33,7 +33,7 @@ Features
 Rails quick start
 ---------------------------
 
-    script/plugin install git://github.com/brynary/rack-bug.git 
+    script/plugin install git://github.com/brynary/rack-bug.git
 
 In config/environments/development.rb, add:
 
@@ -74,7 +74,7 @@ We have have found that Rack::Bug is fast enough to run in production for specif
 
 ### Configuration ####
 
-Add the middleware configuration to an initializer or the appropriate environment files, taking the rest of this section into consideration. 
+Add the middleware configuration to an initializer or the appropriate environment files, taking the rest of this section into consideration.
 
 ### Security ####
 
