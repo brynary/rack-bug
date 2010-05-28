@@ -1,4 +1,7 @@
 == HEAD
+  * New features
+    
+    * Backtraces for Redis access (Luke Melia & Joey Aghion)
 
   * Compatibilty
   
