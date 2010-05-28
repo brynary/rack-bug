@@ -67,4 +67,14 @@ Spec::Runner.configure do |config|
       end
     end
   end
+  
+  def rack_env(key, value)
+    @rack_env ||= {}
+    @rack_env[key] = value
+  end
+  
+  def get_via_rack(uri, params = {}, env = {}, &block)
+    env = env.merge(@rack_env) if @rack_env
+    get(uri, params, env, &block)
+  end
 end

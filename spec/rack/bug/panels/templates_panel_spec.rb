@@ -4,12 +4,12 @@ module Rack::Bug
   describe TemplatesPanel do
     before do
       TemplatesPanel.reset
-      header "rack-bug.panel_classes", [TemplatesPanel]
+      rack_env "rack-bug.panel_classes", [TemplatesPanel]
     end
     
     describe "heading" do
       it "displays the total rendering time" do
-        response = get "/"
+        response = get_via_rack "/"
         response.should have_heading("Templates: 0.00ms")
       end
     end
@@ -17,7 +17,7 @@ module Rack::Bug
     describe "content" do
       it "displays the template paths" do
         TemplatesPanel.record("users/show") { }
-        response = get "/"
+        response = get_via_rack "/"
         response.should contain("users/show")
       end
       
@@ -26,7 +26,7 @@ module Rack::Bug
           TemplatesPanel.record("users/toolbar") { }
         end
         
-        response = get "/"
+        response = get_via_rack "/"
         response.should have_selector("li", :content => "users/show") do |li|
           li.should contain("users/toolbar")
         end
@@ -38,7 +38,7 @@ module Rack::Bug
             TemplatesPanel.record("users/toolbar") { }
           end
           
-          response = get "/"
+          response = get_via_rack "/"
           response.should have_selector("li", :content => "users/show") do |li|
             li.should contain(TIME_MS_REGEXP)
           end
@@ -49,7 +49,7 @@ module Rack::Bug
             TemplatesPanel.record("users/toolbar") { }
           end
           
-          response = get "/"
+          response = get_via_rack "/"
           response.should have_selector("li", :content => "users/show") do |li|
             li.should contain(/\d\.\d{2} exclusive/)
           end
@@ -60,7 +60,7 @@ module Rack::Bug
         it "does not display the exclusive time" do
           TemplatesPanel.record("users/show") { }
           
-          response = get "/"
+          response = get_via_rack "/"
           response.should contain("users/show") do |li|
             li.should_not contain("exclusive")
           end
