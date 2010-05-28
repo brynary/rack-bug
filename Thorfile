@@ -21,7 +21,7 @@ module GemHelpers
       s.test_files = normalize_files(Dir['spec/**/*.rb'] - repo.lib.ignored_files)
 
       s.has_rdoc = true
-      s.extra_rdoc_files = %w[README.rdoc MIT-LICENSE.txt]
+      s.extra_rdoc_files = %w[README.md MIT-LICENSE.txt]
 
       s.add_dependency "rack", ">= 1.0"
     end

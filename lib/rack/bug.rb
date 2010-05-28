@@ -22,7 +22,7 @@ module Rack::Bug
   autoload :TimerPanel,             "rack/bug/panels/timer_panel"
   autoload :SphinxPanel,            "rack/bug/panels/sphinx_panel"
 
-  VERSION = "0.2.2.pre"
+  VERSION = "0.3.0"
 
   class SecurityError < StandardError
   end

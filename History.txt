@@ -1,4 +1,5 @@
-== HEAD
+== 0.3.0 / 2010-05-28
+
   * New features
 
     * Log panel includes log level and timestamp (Tim Connor)
