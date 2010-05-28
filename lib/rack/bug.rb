@@ -20,6 +20,7 @@ module Rack::Bug
   autoload :SQLPanel,               "rack/bug/panels/sql_panel"
   autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
   autoload :TimerPanel,             "rack/bug/panels/timer_panel"
+  autoload :SphinxPanel,            "rack/bug/panels/sphinx_panel"
 
   VERSION = "0.2.2.pre"
 

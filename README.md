@@ -27,6 +27,7 @@ Features
         * Memory
     * Other bundled panels:
         * Redis
+        * Sphinx
     * The API for adding your own panels is simple and powerful
 
 Rails quick start
