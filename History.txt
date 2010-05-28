@@ -1,0 +1,10 @@
+== HEAD
+
+  * Compatibilty
+  
+    * compatibility with current rack-test (Luke Melia & Joey Aghion)
+    * update Sinatra sample app (Tim Conner)
+    
+== 0.2.1 
+
+  * The beginning of recorded history
