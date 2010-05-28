@@ -1,6 +1,7 @@
 require "rack"
 
 module Rack::Bug
+  autoload :FilteredBacktrace,      "rack/bug/filtered_backtrace"
   autoload :Options,                "rack/bug/options"
   autoload :Panel,                  "rack/bug/panel"
   autoload :PanelApp,               "rack/bug/panel_app"

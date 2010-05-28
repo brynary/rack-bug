@@ -3,9 +3,10 @@ module Rack
     class SQLPanel
       
       class Query
+        include Rack::Bug::FilteredBacktrace
+        
         attr_reader :sql
         attr_reader :time
-        attr_reader :backtrace
         
         def initialize(sql, time, backtrace = [])
           @sql = sql
@@ -54,17 +55,6 @@ module Rack
         
         def self.execute(sql)
           ActiveRecord::Base.connection.execute(sql)
-        end
-        
-        def has_backtrace?
-          filtered_backtrace.any?
-        end
-        
-        def filtered_backtrace
-          @filtered_backtrace ||= @backtrace.map { |l| l.to_s.strip }.select do |line|
-            line.starts_with?(Rails.root) &&
-            !line.starts_with?(Rails.root.join("vendor"))
-          end
         end
       end
       

@@ -4,9 +4,10 @@ module Rack
       
       class Stats
         class Query
+          include Rack::Bug::FilteredBacktrace
+          
           attr_reader :time
           attr_reader :command
-          attr_reader :backtrace
           
           def initialize(time, command_args, backtrace)
             @time = time
@@ -16,18 +17,6 @@ module Rack
           
           def display_time
             "%.2fms" % time
-          end
-          
-          def has_backtrace?
-            filtered_backtrace.any?
-          end
-
-          def filtered_backtrace
-            @filtered_backtrace ||= @backtrace.map{|l| l.to_s.strip }.select do |line|
-              !defined?(Rails) ||
-              !Rails.respond_to?(:root) ||
-              (line.starts_with?(Rails.root) && !line.starts_with?(Rails.root.join("vendor")))
-            end
           end
         end
         
