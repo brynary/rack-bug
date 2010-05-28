@@ -14,7 +14,5 @@ Spec::Rake::SpecTask.new(:rcov) do |t|
   end
 end
 
-task :spec => :check_dependencies
-
 desc "Run the specs"
 task :default => :spec
