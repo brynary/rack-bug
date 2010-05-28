@@ -16,6 +16,7 @@
       <tr>
         <th>Time&nbsp;(ms)</th>
         <th>Command</th>
+        <th class="backtrace"></th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +25,20 @@
         <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
           <td><%= query.display_time %></td>
           <td><%= query.command %></td>
+          <td><%= "<a href='#' class='reveal_backtrace'>Show Backtrace</a>" if query.has_backtrace? %></td>
         </tr>
+        <% if query.has_backtrace? %>
+          <tr style="display:none">
+            <td></td>
+            <td colspan="2">
+              <ul>
+                <% query.filtered_backtrace.each do |line| %>
+                  <li><%=h line %></li>
+                <% end %>
+              </ul>
+            </td>
+          </tr>
+        <% end %>
         <% i += 1 %>
       <% end %>
     </tbody>

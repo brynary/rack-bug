@@ -4,7 +4,7 @@ if defined?(Redis)
   Redis.class_eval do
 
     def call_command_with_rack_bug(argv)
-      Rack::Bug::RedisPanel.record(argv) do
+      Rack::Bug::RedisPanel.record(argv, Kernel.caller) do
         call_command_without_rack_bug(argv)
       end
     end
