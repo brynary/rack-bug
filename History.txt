@@ -1,9 +1,10 @@
 == HEAD
   * New features
     
+    * Log panel includes log level and timestamp (Tim Connor)
     * Sphinx panel (George Chatzigeorgiou)
     * Backtraces for Redis panel (Luke Melia & Joey Aghion)
-
+    
   * Compatibilty
   
     * backtrace filtering now supports more than just Rails (Alex Chaffee)
