@@ -38,7 +38,7 @@ Spec::Runner.configure do |config|
     Rack::Bug.enable
     
     # Set the cookie that triggers Rack::Bug under normal conditions
-    header 'cookie', "rack_bug_enabled=1"
+    set_cookie "rack_bug_enabled=1"
   end
   
   def app
