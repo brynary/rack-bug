@@ -36,18 +36,36 @@ describe Rack::Bug do
     response.should_not have_selector("div#rack_bug")
   end
 
-  it "does not modify redirects" do
-    response = get "/redirect"
-    response.body.should == ""
-  end
-
   it "does not modify server errors" do
     response = get "/error"
     response.should_not have_selector("div#rack_bug")
   end
 
-  context "configured to intercept redirects" do
-    it "inserts the Rack::Bug toolbar for redirects" do
+  context "redirected when not configured to intercept redirects" do
+    it "passes the redirect unmodified" do
+      response = get "/redirect"
+      response.status.should == 302
+    end
+    
+    it "does not show the interception page" do
+      response = get "/redirect"
+      response.body.should_not contain("Location: /")
+    end
+
+    it "does not insert the toolbar" do
+      header 'cookie', ""
+      response = get "/redirect"
+      response.should_not have_selector("div#rack_bug")
+     end
+    
+    it "does not insert the toolbar if even toolbar requested" do
+      response = get "/redirect"
+      response.should_not have_selector("div#rack_bug")
+     end
+  end
+  
+  context "redirected when configured to intercept redirects" do
+    it "shows the interception page" do
       response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
       response.should have_selector("div#rack_bug")
     end
@@ -55,6 +73,17 @@ describe Rack::Bug do
     it "should provide a link to the target URL" do
       response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
       response.should have_selector("a[href='/']")
+    end
+    
+    it "inserts the toolbar if requested" do
+      response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
+      response.should have_selector("div#rack_bug")
+    end
+    
+    it "does not inserts the toolbar if not requested" do
+      header 'cookie', ""
+      response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
+      response.should_not have_selector("div#rack_bug")
     end
   end
 
