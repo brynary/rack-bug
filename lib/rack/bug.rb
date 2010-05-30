@@ -7,6 +7,7 @@ module Rack::Bug
   autoload :Panel,                  "rack/bug/panel"
   autoload :PanelApp,               "rack/bug/panel_app"
   autoload :ParamsSignature,        "rack/bug/params_signature"
+  autoload :RackStaticBugAvoider,   "rack/bug/rack_static_bug_avoider"
   autoload :Render,                 "rack/bug/render"
   autoload :Toolbar,                "rack/bug/toolbar"
 
