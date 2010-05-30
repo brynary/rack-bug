@@ -97,7 +97,7 @@ Authors
 -------
 
 - Maintained by [Bryan Helmkamp](mailto:bryan@brynary.com)
-- Contributions from Luke Melia, Joey Aghion, and more
+- Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
 
 Thanks
 ------
