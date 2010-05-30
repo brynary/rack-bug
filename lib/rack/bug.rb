@@ -1,4 +1,5 @@
 require "rack"
+require "digest/sha1"
 
 module Rack::Bug
   autoload :FilteredBacktrace,      "rack/bug/filtered_backtrace"

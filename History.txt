@@ -2,6 +2,7 @@
 
   * Minor fixes
   
+    * Explicitly require 'digest/sha1' (Jérémy Lecour)
     * Eliminate unreachable code in params signature validation (Tim Connor)
     
 == 0.3.0 / 2010-05-28
