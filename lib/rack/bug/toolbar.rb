@@ -1,45 +1,16 @@
-require "ipaddr"
-require "digest"
-
 module Rack
   class Bug
     class Toolbar
-      include Options
       include Render
 
       MIME_TYPES = ["text/html", "application/xhtml+xml"]
 
-      def initialize(app, options = {})
-        @app = asset_server(app)
-        initialize_options options
-        instance_eval(&block) if block_given?
+      def initialize(app)
+        @app = app
       end
-
-      def asset_server(app)
-        RackStaticBugAvoider.new(app, Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path))
-      end
-
-      def public_path
-        ::File.expand_path(::File.dirname(__FILE__) + "/../bug/public")
-      end
-
+      
       def call(env)
-        env.replace @default_options.merge(env)
         @env = env
-        @original_request = Request.new(@env)
-
-        if toolbar_requested? && ip_authorized? && password_authorized?
-          dispatch
-        else
-          pass
-        end
-      end
-
-      def pass
-        @app.call(@env)
-      end
-
-      def dispatch
         @env["rack-bug.panels"] = []
 
         Rack::Bug.enable
@@ -48,7 +19,7 @@ module Rack
 
         @response = Rack::Response.new(body, status, headers)
 
-        if @response.redirect? && options["rack-bug.intercept_redirects"]
+        if @response.redirect? && @env["rack-bug.intercept_redirects"]
           intercept_redirect
         end
         if modify?
@@ -66,27 +37,6 @@ module Rack
         @response = new_response
       end
 
-      def toolbar_requested?
-        @original_request.cookies["rack_bug_enabled"]
-      end
-
-      def ip_authorized?
-        return true unless options["rack-bug.ip_masks"]
-
-        options["rack-bug.ip_masks"].any? do |ip_mask|
-          ip_mask.include?(IPAddr.new(@original_request.ip))
-        end
-      end
-
-      def password_authorized?
-        return true unless options["rack-bug.password"]
-
-        expected_sha = Digest::SHA1.hexdigest ["rack_bug", options["rack-bug.password"]].join(":")
-        actual_sha = @original_request.cookies["rack_bug_password"]
-
-        actual_sha == expected_sha
-      end
-
       def modify?
         @response.ok? &&
         @env["HTTP_X_REQUESTED_WITH"] != "XMLHttpRequest" &&
@@ -96,7 +46,7 @@ module Rack
       def builder
         builder = Rack::Builder.new
 
-        options["rack-bug.panel_classes"].each do |panel_class|
+        @env["rack-bug.panel_classes"].each do |panel_class|
           builder.use panel_class
         end
 
