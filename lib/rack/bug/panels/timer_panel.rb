@@ -1,7 +1,7 @@
 require "benchmark"
 
 module Rack
-  module Bug
+  class Bug
 
     class TimerPanel < Panel
 

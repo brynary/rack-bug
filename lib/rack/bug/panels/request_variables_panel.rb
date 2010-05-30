@@ -1,5 +1,5 @@
 module Rack
-  module Bug
+  class Bug
 
     class RequestVariablesPanel < Panel
 

@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-module Rack::Bug
+class Rack::Bug
   describe RailsInfoPanel do
     before do
       rack_env "rack-bug.panel_classes", [RailsInfoPanel]

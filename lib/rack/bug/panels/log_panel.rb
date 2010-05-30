@@ -1,7 +1,7 @@
 require "rack/bug/panels/log_panel/rails_extension"
 
 module Rack
-  module Bug
+  class Bug
 
     class LogPanel < Panel
       class LogEntry

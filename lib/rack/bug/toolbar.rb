@@ -2,7 +2,7 @@ require "ipaddr"
 require "digest"
 
 module Rack
-  module Bug
+  class Bug
     class Toolbar
       include Options
       include Render

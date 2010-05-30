@@ -1,6 +1,6 @@
 #
 module Rack
-  module Bug
+  class Bug
 
     class MemoryPanel < Panel
 

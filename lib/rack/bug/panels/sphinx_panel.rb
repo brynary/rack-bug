@@ -1,5 +1,5 @@
 module Rack
-  module Bug
+  class Bug
 
     class SphinxPanel < Panel
       require "rack/bug/panels/sphinx_panel/sphinx_extension"

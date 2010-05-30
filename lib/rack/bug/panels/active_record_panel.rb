@@ -1,7 +1,7 @@
 require "rack/bug/panels/active_record_panel/activerecord_extensions"
 
 module Rack
-  module Bug
+  class Bug
 
     class ActiveRecordPanel < Panel
 

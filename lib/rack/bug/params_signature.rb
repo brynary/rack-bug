@@ -1,7 +1,7 @@
 require "digest"
 
 module Rack
-  module Bug
+  class Bug
 
     class ParamsSignature
       extend ERB::Util

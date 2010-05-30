@@ -2,7 +2,7 @@ require "rack"
 require "digest/sha1"
 require "rack/bug/autoloading"
 
-module Rack::Bug
+class Rack::Bug
   VERSION = "0.3.0"
 
   class SecurityError < StandardError
@@ -19,8 +19,13 @@ module Rack::Bug
   def self.enabled?
     Thread.current["rack-bug.enabled"] == true
   end
-
-  def self.new(*args, &block)
-    Toolbar.new(*args, &block)
+  
+  def initialize(*args, &block)
+    @toolbar = Toolbar.new(*args, &block)
   end
+
+  def call(env)
+    @toolbar.call(env)
+  end
+  
 end

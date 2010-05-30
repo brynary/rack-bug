@@ -1,7 +1,7 @@
 require "rack/bug/panels/cache_panel/memcache_extension"
 
 module Rack
-  module Bug
+  class Bug
 
     class CachePanel < Panel
       autoload :PanelApp, "rack/bug/panels/cache_panel/panel_app"

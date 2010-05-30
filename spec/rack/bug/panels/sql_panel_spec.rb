@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-module Rack::Bug
+class Rack::Bug
   describe SQLPanel do
     before do
       SQLPanel.reset

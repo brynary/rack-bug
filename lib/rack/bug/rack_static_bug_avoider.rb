@@ -1,4 +1,4 @@
-module Rack::Bug
+class Rack::Bug
   class RackStaticBugAvoider
     def initialize(app, static_app)
       @app = app

@@ -1,4 +1,4 @@
-module Rack::Bug
+class Rack::Bug
 
   module Options
     class << self

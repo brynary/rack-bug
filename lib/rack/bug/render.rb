@@ -1,7 +1,7 @@
 require "erb"
 
 module Rack
-  module Bug
+  class Bug
 
     module Render
       include ERB::Util

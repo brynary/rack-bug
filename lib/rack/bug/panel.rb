@@ -1,7 +1,7 @@
 require "erb"
 
 module Rack
-  module Bug
+  class Bug
 
     # Panels are also Rack middleware
     class Panel

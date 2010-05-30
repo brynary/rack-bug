@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 $LOADED_FEATURES << "redis.rb" #avoid dependency on redis
 
-module Rack::Bug
+class Rack::Bug
   describe RedisPanel do
     before do
       RedisPanel.reset

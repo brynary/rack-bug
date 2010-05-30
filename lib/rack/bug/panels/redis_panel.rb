@@ -1,5 +1,5 @@
 module Rack
-  module Bug
+  class Bug
 
     class RedisPanel < Panel
       require "rack/bug/panels/redis_panel/redis_extension"
