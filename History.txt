@@ -4,6 +4,10 @@
   
     * Explicitly require 'digest/sha1' (Jérémy Lecour)
     * Eliminate unreachable code in params signature validation (Tim Connor)
+
+  * Compatibilty
+
+    * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
     
 == 0.3.0 / 2010-05-28
 
