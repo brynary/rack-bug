@@ -8,6 +8,10 @@
   * Compatibilty
 
     * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
+  
+  * Other
+  
+    * Refactoring and code cleanup (Tim Connor)
     
 == 0.3.0 / 2010-05-28
 
