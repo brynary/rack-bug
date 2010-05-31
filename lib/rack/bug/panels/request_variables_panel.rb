@@ -36,11 +36,11 @@ module Rack
         server, rack = {}, {}
         env.each do |k,v|
           if k.index("rack.") == 0
-            rack[k] = v.to_s
+            rack[k] = v
           elsif k.index("rack-bug.") == 0
             #don't output the rack-bug variables - especially secret_key
           else
-            server[k] = v.to_s
+            server[k] = v
           end
         end
         return server, rack

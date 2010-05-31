@@ -2,7 +2,7 @@
      next unless sections.has_key?(header)
 %>
   <h3><%=header%></h3>
-  <table>
+  <table id="request_variables">
     <thead>
       <tr>
         <th>Variable</th>
@@ -14,7 +14,7 @@
       <% sections[header].each do |key, val| %>
         <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
           <td><%=h key %></td>
-          <td class="code"><div><%=h val %></div></td>
+          <td class="code"><div><%=h val.inspect %></div></td>
         </tr>
         <% i += 1 %>
       <% end %>

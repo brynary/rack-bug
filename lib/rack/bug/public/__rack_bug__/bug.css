@@ -209,3 +209,8 @@
 #rack_bug #sql.panel_content th.actions {
   width: 150px;
 }
+#rack_bug #request_variables td.code > div {
+  max-height:200px;
+  max-width: 800px;
+  overflow:auto;
+}
