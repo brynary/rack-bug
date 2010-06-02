@@ -16,7 +16,8 @@
   * Other
   
     * Refactoring and code cleanup (Tim Connor)
-    
+    * Testing cleanup - better isolation of Rails vs. non-Rails in tests (Tim Connor)
+  
 == 0.3.0 / 2010-05-28
 
   * New features
