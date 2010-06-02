@@ -46,7 +46,10 @@ Add the bookmarklet to your browser:
 
 Using with non-Rails Rack apps
 ------------------------------
-Nothing should prevent this from being possible. Please contribute docs if you do this. :-)
+
+Just 'use Rack::Bug' as any other middleware.  See the SampleApp in the spec/fixtures folder for an example Sinatra app.
+
+If you wish to use the logger panel define the LOGGER constant that is a ruby Logger or ActiveSupport::BufferedLogger
 
 Configuring custom panels
 -------------------------

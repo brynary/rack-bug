@@ -1,5 +1,9 @@
 == HEAD
 
+  * New features
+
+    * Can use LoggerPanel on ruby stdlib Logger in non-rails app (Tim Connor)
+
   * Bug fixes
   
     * Fix profile, explain and select in the queries tab, fixes issue #22 (ebertech)
