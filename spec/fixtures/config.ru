@@ -3,8 +3,6 @@ require "rubygems"
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require "sample_app"
 
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
-require "rack/bug"
-
-use Rack::Bug, :password => "secret"
+#Example usage, but moved inside sample app for easier testing
+#use Rack::Bug, :password => "secret"
 run SampleApp

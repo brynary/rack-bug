@@ -1,7 +1,16 @@
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
+require "rack/bug"
+
 require "sinatra/base"
 
 class SampleApp < Sinatra::Base
+  use Rack::Bug
+  set :environment, 'test'
 
+  configure :test do
+    set :raise_errors, true
+  end
+  
   get "/redirect" do
     redirect "/"
   end

@@ -37,7 +37,9 @@ describe Rack::Bug do
   end
 
   it "does not modify server errors" do
+    app.disable :raise_errors
     response = get "/error"
+    app.enable :raise_errors
     response.should_not have_selector("div#rack_bug")
   end
 

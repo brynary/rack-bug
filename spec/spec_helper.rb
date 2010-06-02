@@ -42,10 +42,7 @@ Spec::Runner.configure do |config|
   end
 
   def app
-    Rack::Builder.new do
-      use Rack::Bug
-      run SampleApp.new
-    end
+    SampleApp
   end
 
   def have_row(container, key, value = nil)
