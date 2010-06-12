@@ -16,6 +16,13 @@ module Rack
         return result
       end
 
+      def self.record_event(event)
+        return unless Rack::Bug.enabled?
+
+        template_description = "#{event.name}: #{event.payload[:virtual_path] || event.payload[:identifier]}"
+        template_trace.add(template_description, event.time, event.end, event)
+      end
+
       def self.reset
         Thread.current["rack.bug.template_trace"] = Trace.new
       end
@@ -33,7 +40,7 @@ module Rack
       end
 
       def content
-        result = render_template "panels/templates", :template_trace => self.class.template_trace
+        result = render_template "panels/templates", :root_rendering => self.class.template_trace.root_rendering
         self.class.reset
         return result
       end
