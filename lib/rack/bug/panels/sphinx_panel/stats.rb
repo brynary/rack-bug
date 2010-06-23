@@ -12,7 +12,7 @@ module Rack
             if command_args.flatten.first == :search
               @command = "search: " + decode_message(command_args.first.flatten.last).collect{|k,v| "#{k} => #{v}"}.join(", ")
             else
-              @command = command_args.flatten.first.to_s + ": No more info is available for this Riddle request type"
+              @command = command_args.flatten.first.to_s + ": No more info is available for this Sphinx request type"
             end
           end
 
