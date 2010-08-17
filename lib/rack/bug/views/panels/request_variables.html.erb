@@ -14,7 +14,13 @@
       <% sections[header].each do |key, val| %>
         <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
           <td><%=h key %></td>
-          <td class="code"><div><%=h val.inspect %></div></td>
+          <td class="code"><div>
+          <% if val.is_a?(Hash) %>
+            <%=h val.inspect %>
+          <% else %>
+            <%=h val.to_s %>
+          <% end %>
+          </div></td>
         </tr>
         <% i += 1 %>
       <% end %>
