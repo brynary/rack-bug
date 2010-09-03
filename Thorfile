@@ -24,6 +24,10 @@ module GemHelpers
       s.extra_rdoc_files = %w[README.md MIT-LICENSE.txt]
 
       s.add_dependency "rack", ">= 1.0"
+      s.add_development_dependency "webrat"
+      s.add_development_dependency "rspec"
+      s.add_development_dependency "sinatra"
+      s.add_development_dependency "git"
     end
   end
 

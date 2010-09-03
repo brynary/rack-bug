@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp"]
-  s.date = %q{2010-05-28}
+  s.date = %q{2010-09-03}
   s.email = %q{bryan@brynary.com}
   s.extra_rdoc_files = [
     "README.md",
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "Thorfile",
     "lib/rack/bug.rb",
+    "lib/rack/bug/autoloading.rb",
     "lib/rack/bug/filtered_backtrace.rb",
     "lib/rack/bug/options.rb",
     "lib/rack/bug/panel.rb",
@@ -58,6 +59,8 @@ Gem::Specification.new do |s|
     "lib/rack/bug/public/__rack_bug__/jquery-1.3.2.js",
     "lib/rack/bug/public/__rack_bug__/jquery.tablesorter.min.js",
     "lib/rack/bug/public/__rack_bug__/spinner.gif",
+    "lib/rack/bug/rack_static_bug_avoider.rb",
+    "lib/rack/bug/redirect_interceptor.rb",
     "lib/rack/bug/render.rb",
     "lib/rack/bug/toolbar.rb",
     "lib/rack/bug/views/error.html.erb",
@@ -122,13 +125,22 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rack>, [">= 1.0"])
-      s.add_development_dependency(%q<rspec>)
-      s.add_development_dependency(%q<webrat>)
-      s.add_development_dependency(%q<sinatra>)
+      s.add_development_dependency(%q<webrat>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<sinatra>, [">= 0"])
+      s.add_development_dependency(%q<git>, [">= 0"])
     else
       s.add_dependency(%q<rack>, [">= 1.0"])
+      s.add_dependency(%q<webrat>, [">= 0"])
+      s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<sinatra>, [">= 0"])
+      s.add_dependency(%q<git>, [">= 0"])
     end
   else
     s.add_dependency(%q<rack>, [">= 1.0"])
+    s.add_dependency(%q<webrat>, [">= 0"])
+    s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<sinatra>, [">= 0"])
+    s.add_dependency(%q<git>, [">= 0"])
   end
 end
