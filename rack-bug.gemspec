@@ -122,6 +122,9 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rack>, [">= 1.0"])
+      s.add_development_dependency(%q<rspec>)
+      s.add_development_dependency(%q<webrat>)
+      s.add_development_dependency(%q<sinatra>)
     else
       s.add_dependency(%q<rack>, [">= 1.0"])
     end
