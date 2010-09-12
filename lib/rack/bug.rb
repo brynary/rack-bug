@@ -38,7 +38,7 @@ class Rack::Bug
     @env = env
     @original_request = Rack::Request.new(@env)
 
-    if toolbar_requested? && ip_authorized? && password_authorized? && !@original_request.xhr?
+    if toolbar_requested? && ip_authorized? && password_authorized? && toolbar_xhr?
       @toolbar.call(env)
     else
       @app.call(env)
@@ -46,6 +46,10 @@ class Rack::Bug
   end
   
 private 
+
+  def toolbar_xhr?
+    !@original_request.xhr? || @original_request.path =~ /^\/__rack_bug__/
+  end
 
   def asset_server(app)
     RackStaticBugAvoider.new(app, Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path))

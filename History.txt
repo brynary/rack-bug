@@ -1,5 +1,9 @@
 == HEAD
 
+  * Bug fixes
+  
+    * Fix profile, explain and select in the queries tab, fixes issue #22 (ebertech)
+    
   * Minor fixes
   
     * Explicitly require 'digest/sha1' (Jérémy Lecour)
