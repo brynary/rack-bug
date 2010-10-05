@@ -78,6 +78,7 @@ class Rack::Bug
           ActiveRecordPanel,
           CachePanel,
           TemplatesPanel,
+          FiltersPanel,
           LogPanel,
           MemoryPanel
         ]
