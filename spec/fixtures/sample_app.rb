@@ -1,3 +1,5 @@
+# coding: utf-8
+
 $LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
 require "rack/bug"
 
@@ -38,6 +40,7 @@ class SampleApp < Sinatra::Base
           <p><a href="__rack_bug__/bookmarklet.html">Page with bookmarklet for enabling Rack::Bug</a></p>
           <p><a href="/redirect">Page with a redirect - turn on intercept_redirects to see Rack::Bug catch it</a></p>
           <p><a href="/error">Page with an error to check rack-bug not rescuing errors</a></p>
+          <p>И наконец, не забываем про UTF-8</p>
         </body>
       </html>
     HTML

@@ -8,7 +8,7 @@ describe Rack::Bug do
 
   it "updates the Content-Length" do
     response = get "/"
-    response["Content-Length"].should == response.body.size.to_s
+    response["Content-Length"].should == response.body.bytesize.to_s
   end
 
   it "serves the Rack::Bug assets under /__rack_bug__/" do
