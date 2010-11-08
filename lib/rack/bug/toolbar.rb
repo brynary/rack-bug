@@ -45,7 +45,7 @@ module Rack
         full_body = @response.body.join
         full_body.sub! /<\/body>/, render + "</body>"
 
-        @response["Content-Length"] = full_body.bytesize.to_s
+        @response["Content-Length"] = Rack::Utils.bytesize(full_body).to_s
 
         # Ensure that browser does
         @response["Etag"] = ""

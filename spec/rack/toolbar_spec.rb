@@ -8,7 +8,12 @@ describe Rack::Bug do
 
   it "updates the Content-Length" do
     response = get "/"
-    response["Content-Length"].should == response.body.bytesize.to_s
+    response["Content-Length"].should == response.body.size.to_s
+  end
+
+  it "updates the Content-Length properly for UTF-8" do
+    response = get "/utf8"
+    response["Content-Length"].should == "4"
   end
 
   it "serves the Rack::Bug assets under /__rack_bug__/" do

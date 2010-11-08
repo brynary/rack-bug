@@ -26,6 +26,10 @@ class SampleApp < Sinatra::Base
     raise "Error!"
   end
 
+  get "/utf8" do
+    "2πr"
+  end
+
   get "/" do
     if params[:content_type]
       headers["Content-Type"] = params[:content_type]
@@ -40,7 +44,6 @@ class SampleApp < Sinatra::Base
           <p><a href="__rack_bug__/bookmarklet.html">Page with bookmarklet for enabling Rack::Bug</a></p>
           <p><a href="/redirect">Page with a redirect - turn on intercept_redirects to see Rack::Bug catch it</a></p>
           <p><a href="/error">Page with an error to check rack-bug not rescuing errors</a></p>
-          <p>И наконец, не забываем про UTF-8</p>
         </body>
       </html>
     HTML
