@@ -79,8 +79,4 @@ private
 
     actual_sha == expected_sha
   end
-<<<<<<< HEAD
-=======
-  
->>>>>>> brynary/master
 end

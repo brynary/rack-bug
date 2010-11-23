@@ -1,5 +1,5 @@
 module Rack
-  module Bug
+  class Bug
 
     class MongoPanel < Panel
       require "rack/bug/panels/mongo_panel/mongo_extension"
