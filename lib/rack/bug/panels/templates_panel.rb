@@ -1,5 +1,5 @@
 module Rack
-  module Bug
+  class Bug
 
     class TemplatesPanel < Panel
       require "rack/bug/panels/templates_panel/actionview_extension"

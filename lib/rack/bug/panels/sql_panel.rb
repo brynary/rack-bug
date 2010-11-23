@@ -1,7 +1,7 @@
 require "digest"
 
 module Rack
-  module Bug
+  class Bug
 
     class SQLPanel < Panel
       require "rack/bug/panels/sql_panel/sql_extension"

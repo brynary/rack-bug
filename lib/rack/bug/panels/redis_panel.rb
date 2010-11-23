@@ -1,18 +1,18 @@
 module Rack
-  module Bug
+  class Bug
 
     class RedisPanel < Panel
       require "rack/bug/panels/redis_panel/redis_extension"
 
       autoload :Stats, "rack/bug/panels/redis_panel/stats"
 
-      def self.record(*redis_command_args, &block)
+      def self.record(redis_command_args, backtrace, &block)
         return block.call unless Rack::Bug.enabled?
 
         start_time = Time.now
         result = block.call
         total_time = Time.now - start_time
-        stats.record_call(total_time * 1_000, redis_command_args)
+        stats.record_call(total_time * 1_000, redis_command_args, backtrace)
         return result
       end
 

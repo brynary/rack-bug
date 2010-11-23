@@ -14,7 +14,10 @@ Spec::Rake::SpecTask.new(:rcov) do |t|
   end
 end
 
-task :spec => :check_dependencies
-
 desc "Run the specs"
 task :default => :spec
+
+desc 'Removes trailing whitespace'
+task :whitespace do
+  sh %{find . -name '*.rb' -exec sed -i '' 's/ *$//g' {} \\;}
+end

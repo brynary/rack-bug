@@ -1,28 +1,14 @@
+require "ipaddr"
+require "digest"
 require "rack"
+require "digest/sha1"
+require "rack/bug/autoloading"
 
-module Rack::Bug
-  autoload :Options,                "rack/bug/options"
-  autoload :Panel,                  "rack/bug/panel"
-  autoload :PanelApp,               "rack/bug/panel_app"
-  autoload :ParamsSignature,        "rack/bug/params_signature"
-  autoload :Render,                 "rack/bug/render"
-  autoload :Toolbar,                "rack/bug/toolbar"
-
-  # Panels
-  autoload :ActiveRecordPanel,      "rack/bug/panels/active_record_panel"
-  autoload :CachePanel,             "rack/bug/panels/cache_panel"
-  autoload :LogPanel,               "rack/bug/panels/log_panel"
-  autoload :MemoryPanel,            "rack/bug/panels/memory_panel"
-  autoload :RailsInfoPanel,         "rack/bug/panels/rails_info_panel"
-  autoload :RedisPanel,             "rack/bug/panels/redis_panel"
-  autoload :MongoPanel,             "rack/bug/panels/mongo_panel"
-  autoload :RequestVariablesPanel,  "rack/bug/panels/request_variables_panel"
-  autoload :SQLPanel,               "rack/bug/panels/sql_panel"
-  autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
-  autoload :TimerPanel,             "rack/bug/panels/timer_panel"
-
-  VERSION = "0.2.2.pre"
-
+class Rack::Bug
+  include Options
+  
+  VERSION = "0.3.0"
+  
   class SecurityError < StandardError
   end
 
@@ -38,7 +24,63 @@ module Rack::Bug
     Thread.current["rack-bug.enabled"] == true
   end
 
-  def self.new(*args, &block)
-    Toolbar.new(*args, &block)
+  def initialize(app, options = {}, &block)
+    @app = asset_server(app)
+    initialize_options options
+    instance_eval(&block) if block_given?
+    
+    @toolbar = Toolbar.new(RedirectInterceptor.new(@app))
   end
+
+
+  def call(env)
+    env.replace @default_options.merge(env)
+    @env = env
+    @original_request = Rack::Request.new(@env)
+
+    if toolbar_requested? && ip_authorized? && password_authorized? && toolbar_xhr?
+      @toolbar.call(env)
+    else
+      @app.call(env)
+    end
+  end
+  
+private 
+
+  def toolbar_xhr?
+    !@original_request.xhr? || @original_request.path =~ /^\/__rack_bug__/
+  end
+
+  def asset_server(app)
+    RackStaticBugAvoider.new(app, Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path))
+  end
+
+  def public_path
+    ::File.expand_path(::File.dirname(__FILE__) + "/bug/public")
+  end
+  
+  def toolbar_requested?
+    @original_request.cookies["rack_bug_enabled"]
+  end
+
+  def ip_authorized?
+    return true unless options["rack-bug.ip_masks"]
+
+    options["rack-bug.ip_masks"].any? do |ip_mask|
+      ip_mask.include?(IPAddr.new(@original_request.ip))
+    end
+  end
+
+  def password_authorized?
+    return true unless options["rack-bug.password"]
+
+    expected_sha = Digest::SHA1.hexdigest ["rack_bug", options["rack-bug.password"]].join(":")
+    actual_sha = @original_request.cookies["rack_bug_password"]
+
+    actual_sha == expected_sha
+  end
+<<<<<<< HEAD
+=======
+  
+>>>>>>> brynary/master
 end

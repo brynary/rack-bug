@@ -1,0 +1,45 @@
+== HEAD
+
+  * New features
+
+    * Can use LoggerPanel on ruby stdlib Logger in non-rails app (Tim Connor)
+
+  * Bug fixes
+  
+    * Fix profile, explain and select in the queries tab, fixes issue #22 (ebertech)
+    
+  * Minor fixes
+  
+    * Explicitly require 'digest/sha1' (Jérémy Lecour)
+    * Eliminate unreachable code in params signature validation (Tim Connor)
+
+  * Compatibilty
+
+    * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
+  
+  * Other
+  
+    * Refactoring and code cleanup (Tim Connor)
+    * Testing cleanup - better isolation of Rails vs. non-Rails in tests (Tim Connor)
+  
+== 0.3.0 / 2010-05-28
+
+  * New features
+
+    * Log panel includes log level and timestamp (Tim Connor)
+    * Sphinx panel (George Chatzigeorgiou)
+    * Backtraces for Redis panel (Luke Melia & Joey Aghion)
+
+  * Minor fixes
+
+    * Don't "enable" rack bug if you hit cancel on the bookmarklet prompt (Mischa Fierer)
+
+  * Compatibilty
+
+    * backtrace filtering now supports more than just Rails (Alex Chaffee)
+    * compatibility with current rack-test (Luke Melia & Joey Aghion)
+    * update Sinatra sample app (Tim Conner)
+
+== 0.2.1
+
+  * The beginning of recorded history

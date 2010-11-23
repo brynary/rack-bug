@@ -5,17 +5,15 @@
       <th>Level</th>
       <th>Time</th>
       <th>Message</th>
-      <th>Location</th>
     </tr>
   </thead>
   <tbody>
     <% i = 1 %>
-    <% logs.each do |log| %>
+    <% logs.each do |entry| %>
       <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
-        <td></td>
-        <td></td>
-        <td><%= log.to_s.gsub(/\e\[[;\d]+m/, "") %></td>
-        <td></td>
+        <td><%= entry.level %></td>
+        <td><%= entry.time %>ms</td>
+        <td><%= entry.cleaned_message %></td>
       </tr>
       <% i += 1 %>
     <% end %>

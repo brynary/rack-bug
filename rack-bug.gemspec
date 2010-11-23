@@ -2,25 +2,26 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rack-bug}
-  s.version = "0.2.2.pre"
+  s.version = "0.3.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp"]
-  s.date = %q{2009-10-27}
+  s.date = %q{2010-09-03}
   s.email = %q{bryan@brynary.com}
   s.extra_rdoc_files = [
-    "README.rdoc",
+    "README.md",
     "MIT-LICENSE.txt"
   ]
   s.files = [
     ".gitignore",
     "History.txt",
     "MIT-LICENSE.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "Thorfile",
-    "VERSION",
     "lib/rack/bug.rb",
+    "lib/rack/bug/autoloading.rb",
+    "lib/rack/bug/filtered_backtrace.rb",
     "lib/rack/bug/options.rb",
     "lib/rack/bug/panel.rb",
     "lib/rack/bug/panel_app.rb",
@@ -38,6 +39,9 @@ Gem::Specification.new do |s|
     "lib/rack/bug/panels/redis_panel/redis_extension.rb",
     "lib/rack/bug/panels/redis_panel/stats.rb",
     "lib/rack/bug/panels/request_variables_panel.rb",
+    "lib/rack/bug/panels/sphinx_panel.rb",
+    "lib/rack/bug/panels/sphinx_panel/sphinx_extension.rb",
+    "lib/rack/bug/panels/sphinx_panel/stats.rb",
     "lib/rack/bug/panels/sql_panel.rb",
     "lib/rack/bug/panels/sql_panel/panel_app.rb",
     "lib/rack/bug/panels/sql_panel/query.rb",
@@ -55,6 +59,8 @@ Gem::Specification.new do |s|
     "lib/rack/bug/public/__rack_bug__/jquery-1.3.2.js",
     "lib/rack/bug/public/__rack_bug__/jquery.tablesorter.min.js",
     "lib/rack/bug/public/__rack_bug__/spinner.gif",
+    "lib/rack/bug/rack_static_bug_avoider.rb",
+    "lib/rack/bug/redirect_interceptor.rb",
     "lib/rack/bug/render.rb",
     "lib/rack/bug/toolbar.rb",
     "lib/rack/bug/views/error.html.erb",
@@ -67,6 +73,7 @@ Gem::Specification.new do |s|
     "lib/rack/bug/views/panels/rails_info.html.erb",
     "lib/rack/bug/views/panels/redis.html.erb",
     "lib/rack/bug/views/panels/request_variables.html.erb",
+    "lib/rack/bug/views/panels/sphinx.html.erb",
     "lib/rack/bug/views/panels/sql.html.erb",
     "lib/rack/bug/views/panels/templates.html.erb",
     "lib/rack/bug/views/panels/timer.html.erb",
@@ -94,7 +101,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/brynary/rack-bug}
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{rack-bug}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Debugging toolbar for Rack applications implemented as middleware}
   s.test_files = [
     "spec/fixtures/dummy_panel.rb",
@@ -116,12 +123,24 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<rack>, [">= 1.0"])
+      s.add_development_dependency(%q<webrat>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<sinatra>, [">= 0"])
+      s.add_development_dependency(%q<git>, [">= 0"])
     else
       s.add_dependency(%q<rack>, [">= 1.0"])
+      s.add_dependency(%q<webrat>, [">= 0"])
+      s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<sinatra>, [">= 0"])
+      s.add_dependency(%q<git>, [">= 0"])
     end
   else
     s.add_dependency(%q<rack>, [">= 1.0"])
+    s.add_dependency(%q<webrat>, [">= 0"])
+    s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<sinatra>, [">= 0"])
+    s.add_dependency(%q<git>, [">= 0"])
   end
 end
