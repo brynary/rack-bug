@@ -13,6 +13,8 @@ module Rack
         @env = env
         @env["rack-bug.panels"] = []
 
+        @env.delete("HTTP_IF_NONE_MATCH")
+
         Rack::Bug.enable
         status, headers, body = builder.call(@env)
         Rack::Bug.disable
