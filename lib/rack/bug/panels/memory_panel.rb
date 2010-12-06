@@ -17,9 +17,9 @@ module Rack
             mem = wproc.WorkingSetSize
           end
           mem.to_i / 1000
-        elsif pages = File.read("/proc/self/statm") rescue nil
+        elsif pages = ::File.read("/proc/self/statm") rescue nil
           pages.to_i * statm_page_size
-        elsif proc_file = File.new("/proc/#{$$}/smaps") rescue nil
+        elsif proc_file = ::File.new("/proc/#{$$}/smaps") rescue nil
           proc_file.map do |line|
             size = line[/Size: *(\d+)/, 1] and size.to_i
           end.compact.sum
