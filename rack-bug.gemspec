@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
     "lib/rack/bug/panels/cache_panel/panel_app.rb",
     "lib/rack/bug/panels/cache_panel/stats.rb",
     "lib/rack/bug/panels/log_panel.rb",
-    "lib/rack/bug/panels/log_panel/rails_extension.rb",
+    "lib/rack/bug/panels/log_panel/logger_extension.rb",
     "lib/rack/bug/panels/memory_panel.rb",
     "lib/rack/bug/panels/rails_info_panel.rb",
     "lib/rack/bug/panels/redis_panel.rb",
@@ -93,7 +93,7 @@ Gem::Specification.new do |s|
     "spec/rack/bug/panels/sql_panel_spec.rb",
     "spec/rack/bug/panels/templates_panel_spec.rb",
     "spec/rack/bug/panels/timer_panel_spec.rb",
-    "spec/rack/toolbar_spec.rb",
+    "spec/rack/bug_spec.rb",
     "spec/rcov.opts",
     "spec/spec.opts",
     "spec/spec_helper.rb"
@@ -115,7 +115,7 @@ Gem::Specification.new do |s|
     "spec/rack/bug/panels/sql_panel_spec.rb",
     "spec/rack/bug/panels/templates_panel_spec.rb",
     "spec/rack/bug/panels/timer_panel_spec.rb",
-    "spec/rack/toolbar_spec.rb",
+    "spec/rack/bug_spec.rb",
     "spec/spec_helper.rb"
   ]
 
