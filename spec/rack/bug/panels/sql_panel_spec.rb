@@ -47,10 +47,9 @@ class Rack::Bug
 
     def stub_result(results = [[]])
       columns = results.first
-      fields = columns.map { |c| stub("field", :name => c) }
       rows = results[1..-1]
 
-      result = stub("result", :fetch_fields => fields)
+      result = stub("result", :fields => columns)
       result.stub!(:each).and_yield(*rows)
       return result
     end

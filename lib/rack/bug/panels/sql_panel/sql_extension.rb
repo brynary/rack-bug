@@ -9,3 +9,11 @@ if defined?(ActiveRecord) &&  defined?(ActiveRecord::ConnectionAdapters)
     alias_method_chain :log, :rack_bug
   end
 end
+
+class Mysql
+  class Result
+    def fields
+      fetch_fields.each {|f| yield f.name }
+    end
+  end
+end

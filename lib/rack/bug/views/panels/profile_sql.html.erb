@@ -13,8 +13,8 @@
 <table class="sortable">
   <thead>
     <tr>
-      <% result.fetch_fields.each do |field| %>
-        <th><%= field.name.upcase %></th>
+      <% result.fields.each do |field| %>
+        <th><%= field.upcase %></th>
       <% end %>
     </tr>
   </thead>
