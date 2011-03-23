@@ -16,6 +16,7 @@ class Rack::Bug
   autoload :MemoryPanel,            "rack/bug/panels/memory_panel"
   autoload :RailsInfoPanel,         "rack/bug/panels/rails_info_panel"
   autoload :RedisPanel,             "rack/bug/panels/redis_panel"
+  autoload :MongoPanel,             "rack/bug/panels/mongo_panel"
   autoload :RequestVariablesPanel,  "rack/bug/panels/request_variables_panel"
   autoload :SQLPanel,               "rack/bug/panels/sql_panel"
   autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
