@@ -1,7 +1,12 @@
-Rack::Bug
+Rack::Bug (Logical Reality Design Fork)
 =========
 
-* Repository: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
+LRDesign fork of Rack::Bug.  We maintain our own fork because the base (by brynary)
+seems focussed on Rails 2, and we want to improve Rails 3 compatibility and add features.
+
+* Repository: [http://github.com/lrdesign/rack-bug](http://github.com/lrdesign/rack-bug)
+
+* Forked From: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
 
 Description
 -----------
@@ -99,7 +104,7 @@ Restrict access using a password:
 Authors
 -------
 
-- Maintained by [Bryan Helmkamp](mailto:bryan@brynary.com)
+- Maintained by [Evan Dorn](mailto:bryan@brynary.com)
 - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
 
 Thanks
