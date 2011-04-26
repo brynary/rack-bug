@@ -214,3 +214,7 @@
   max-width: 800px;
   overflow:auto;
 }
+
+#rack_bug #templates ul {
+  padding-left:20px;
+}
