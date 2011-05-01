@@ -13,8 +13,14 @@
 <table class="sortable">
   <thead>
     <tr>
-      <% result.fetch_fields.each do |field| %>
-        <th><%= field.name.upcase %></th>
+      <% if defined?(Mysql2) %>
+        <% result.fields.each do |field| %>
+          <th><%= field.upcase %></th>
+        <% end %>
+      <% else %>
+        <% result.fetch_fields.each do |field| %>
+          <th><%= field.name.upcase %></th>
+        <% end %>
       <% end %>
     </tr>
   </thead>
