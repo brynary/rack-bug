@@ -1,5 +1,4 @@
 require "rubygems"
-require "spec"
 require "webrat"
 require "rack/test"
 
