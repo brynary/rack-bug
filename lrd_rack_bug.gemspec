@@ -19,10 +19,11 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "Thorfile",
-    "lib/**/*",
     "lrd_rack_bug.gemspec",
-    "spec/**/*"
   ]
+  s.files += Dir.glob "lib/**/*"
+  s.files += Dir.glob "spec/**/*"
+
   s.homepage = %q{http://github.com/lrdesign/lrd_rack_bug}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
