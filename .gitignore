@@ -1,3 +1,2 @@
-coverage
-pkg
-TODO
+*.sw?
+*.gem
