@@ -1,1 +1,1 @@
-require File.expand_path('../rack/bug', __FILE__)
+require 'rack/bug'

@@ -1,0 +1,12 @@
+<a href='<%=url%>'>Raw JSON</a>
+<dl>
+  <dt>Name</dt><dd><%=frameStack['label']%></dd>
+  <dt>Began</dt><dd><%=frameStack['range']['start']%></dd>
+  <dt>Duration</dt><dd><%=frameStack['range']['duration']%></dd>
+  <dt>Children</dt>
+  <dd><ul>
+    <% frameStack['children'].each do |child| %>
+      <li><%= child.to_html %></li>
+    <%end%>
+  </ul></dd>
+</dl>
