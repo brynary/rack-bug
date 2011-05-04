@@ -1,6 +1,6 @@
 require 'rack/bug'
 #require 'yajl'
-#require 'uuid'
+require 'uuid'
 
 require 'rack/bug/panels/speedtracer_panel/trace-app'
 require 'rack/bug/panels/speedtracer_panel/tracer'
@@ -52,3 +52,5 @@ class Rack::Bug
     end
   end
 end
+
+require 'rack/bug/panels/speedtracer_panel/instrument'

@@ -77,7 +77,7 @@ class Rack::Bug
       end
 
       def to_html
-        render_template('panel/speedtracer/serverevent', 
+        render_template('panels/speedtracer/serverevent', 
                         {:self_time => duration - time_in_children}.merge(symbolize_hash(hash_representation)))
       end
     end
@@ -194,7 +194,7 @@ class Rack::Bug
         hash = hash_representation
         extra = {:self_time => duration - time_in_children}
         "<a href='#{hash['url']}'>Raw JSON</a>\n" + 
-          render_template('panel/speedtracer/serverevent', extra.merge(symbolize_hash(hash['trace']['frameStack'])))
+          render_template('panels/speedtracer/serverevent', extra.merge(symbolize_hash(hash['trace']['frameStack'])))
       end
 
       def finish
