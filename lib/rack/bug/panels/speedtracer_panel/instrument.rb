@@ -2,6 +2,12 @@ require "rack/bug/panels/speedtracer_panel/instrumentation"
 
 # Figure out what kind of app we're in front of.  For right now, we'll assume 
 # the answer is "Rails 3"
+#
+# TODO: Quickly so that it does drive me nuts: what I want to do here is have a 
+# class responsible for per-framework intrumentation, and an auto-instrument 
+# class method: run through registered subclasses, looking for one that says "I 
+# recognize this" and then run it.  First one wins.  Should have a nice "I need 
+# to come before..." method.
 
 
 Rack::Bug::SpeedTracerPanel::Instrumentation::connect do |inst|
