@@ -8,7 +8,11 @@ class Rack::Bug
         @children = []
       end
 
-      def finish; @finish = Time.now; end
+      attr_reader :start
+
+      def finish
+        @finish ||= Time.now
+      end
 
       def time_in_children
         @children.inject(0) do |time, child|

@@ -36,6 +36,15 @@ module Rack
         Thread.current["rack.bug.logs"] ||= []
       end
 
+      def initialize(app)
+        if Rails.logger and not Rails.logger.class.include?(Rack::Bug::LoggerExtension)
+          Rails.logger.class.class_eval do
+            include Rack::Bug::LoggerExtension
+          end
+        end
+        super
+      end
+
       def name
         "log"
       end

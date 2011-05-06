@@ -56,7 +56,7 @@ class Instrument
       tracer = Thread.current['st.tracer']
       result = nil
       if tracer.nil?
-        Rails.logger.debug{"No tracer in thread"}
+        Rails.logger.debug{"No tracer in thread - #{context} / #{called_at}"}
         result = yield
       else
         tracer.run(context, called_at, args){ result = yield }

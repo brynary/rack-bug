@@ -25,8 +25,8 @@ class Rack::Bug
   end
 
   def initialize(app, options = {}, &block)
-    @app = asset_server(app)
     initialize_options options
+    @app = asset_server(app)
     instance_eval(&block) if block_given?
     
     @toolbar = Toolbar.new(RedirectInterceptor.new(@app))
@@ -52,7 +52,19 @@ private
   end
 
   def asset_server(app)
-    RackStaticBugAvoider.new(app, Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path))
+    builder = Rack::Builder.new
+
+    read_option(:panel_classes).each do |panel_class|
+      if middleware = panel_class.middleware
+        puts "Using middleware for #{panel_class.name}"
+        builder.use middleware
+      end
+    end
+
+    builder.run app
+    app = builder.to_app
+    static_app = Rack::Static.new(app, :urls => ["/__rack_bug__"], :root => public_path)
+    return RackStaticBugAvoider.new(app, static_app)
   end
 
   def public_path

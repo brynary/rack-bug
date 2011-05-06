@@ -10,6 +10,10 @@ module Rack
 
       attr_reader :request
 
+      def self.middleware
+        nil
+      end
+
       def initialize(app)
         if panel_app
           @app = Rack::Cascade.new([panel_app, app])

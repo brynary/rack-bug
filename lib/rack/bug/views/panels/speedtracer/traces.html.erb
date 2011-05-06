@@ -1,8 +1,8 @@
 <h3>Traces</h3>
 
 <dl>
-  <% traces.each_pair do |uuid, trace| %>
-    <dt><%= uuid %></dt>
+  <% traces.each do |uuid, trace| %>
+    <dt><%= uuid %> - <%= trace.start.strftime("%H:%M:%S") %></dt>
     <dd><%= trace.to_html %></dd>
   <% end %>
 </dl>

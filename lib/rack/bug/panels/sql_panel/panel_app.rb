@@ -1,3 +1,5 @@
+require 'rack/bug/panels/sql_panel/query'
+
 module Rack
   class Bug
     class SQLPanel
@@ -15,20 +17,20 @@ module Rack
 
         def explain_sql
           validate_params
-          query = Query.new(params["query"], params["time"].to_f)
-          render_template "panels/explain_sql", :result => query.explain, :query => query.sql, :time => query.time
+          query = ExplainResult.new(params["query"], params["time"].to_f)
+          render_template "panels/explain_sql", :query => query
         end
 
         def profile_sql
           validate_params
-          query = Query.new(params["query"], params["time"].to_f)
-          render_template "panels/profile_sql", :result => query.profile, :query => query.sql, :time => query.time
+          query = ProfileResult.new(params["query"], params["time"].to_f)
+          render_template "panels/profile_sql", :query => query
         end
 
         def execute_sql
           validate_params
-          query = Query.new(params["query"], params["time"].to_f)
-          render_template "panels/execute_sql", :result => query.execute, :query => query.sql, :time => query.time
+          query = QueryResult.new(params["query"], params["time"].to_f)
+          render_template "panels/execute_sql", :query => query
         end
 
       end

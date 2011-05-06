@@ -7,7 +7,7 @@ module Rack
       require "rack/bug/panels/sql_panel/sql_extension"
 
       autoload :PanelApp, "rack/bug/panels/sql_panel/panel_app"
-      autoload :Query,    "rack/bug/panels/sql_panel/query"
+      autoload :QueryResult,    "rack/bug/panels/sql_panel/query"
 
       def panel_app
         PanelApp.new
@@ -18,14 +18,14 @@ module Rack
 
         start_time = Time.now
         result = block.call
-        queries << Query.new(sql, Time.now - start_time, backtrace)
+        queries << QueryResult.new(sql, Time.now - start_time, backtrace)
 
         return result
       end
       
       def self.record_event(sql, duration, backtrace = [])
         return unless Rack::Bug.enabled?
-        queries << Query.new(sql, duration, backtrace)
+        queries << QueryResult.new(sql, duration, backtrace)
       end
 
       def self.reset
