@@ -143,6 +143,10 @@
   padding: 0;
 }
 
+#rack_bug #speedtracer.panel_content ul ul {
+  padding: 0 0 0 8px;
+}
+
 #rack_bug .panel_content table {
   width: 100%;
   clear: both;
