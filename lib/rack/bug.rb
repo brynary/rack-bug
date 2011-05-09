@@ -55,9 +55,12 @@ private
     builder = Rack::Builder.new
 
     read_option(:panel_classes).each do |panel_class|
-      if middleware = panel_class.middleware
+      begin
+        middleware = panel_class.const_get("Middleware")
         puts "Using middleware for #{panel_class.name}"
         builder.use middleware
+      rescue NameError
+        #I guess no Middleware for you then.
       end
     end
 

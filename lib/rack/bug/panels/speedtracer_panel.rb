@@ -1,5 +1,9 @@
 require 'rack/bug'
-#require 'yajl'
+begin
+  require 'yajl'
+rescue LoadError
+  #Means no Chrome Speedtracer...
+end
 require 'uuid'
 
 require 'rack/bug/panels/speedtracer_panel/trace-app'
@@ -7,7 +11,7 @@ require 'rack/bug/panels/speedtracer_panel/tracer'
 
 class Rack::Bug
   class SpeedTracerPanel < Panel
-    class TracerMiddleware
+    class Middleware
       def initialize(app)
         @app = app
         @uuid = UUID.new
@@ -18,8 +22,6 @@ class Rack::Bug
       end
 
       def call(env)
-        Rails.logger.debug{ {:stp_panel => env["REQUEST_URI"]}.inspect }
-
         if %r{^/__rack_bug__/} =~ env["REQUEST_URI"] 
           @app.call(env)
         else
@@ -39,10 +41,6 @@ class Rack::Bug
           return [status, headers, body]
         end
       end
-    end
-
-    def self.middleware
-      TracerMiddleware
     end
 
     def self.database
@@ -74,7 +72,11 @@ class Rack::Bug
       traces = database.to_a.sort do |one, two|
         two[1].start <=> one[1].start
       end
-      render_template "panels/speedtracer/traces", :traces => traces
+      advice = []
+      if not defined?(Yajl)
+        advice << "yajl-ruby not installed - Speedtracer server events won't be available"
+      end
+      render_template "panels/speedtracer/traces", :traces => traces, :advice => advice
     end
 
     def before(env)

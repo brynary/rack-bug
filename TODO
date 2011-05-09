@@ -1,0 +1,3 @@
+Speedtracer Resymbolization: seems like it would be possible to get Speedtracer to pull up the Ruby code that was slow... ????
+
+Speedtracer call tagging: right now we just say "everything is either HTTP or METHOD" - maybe more accurate tagging would be useful.
