@@ -16,6 +16,7 @@
   * Compatibilty
 
     * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
+    * Fix issues with Ruby 1.9.2 and with mysql2 (George Ogota)
   
   * Other
   
