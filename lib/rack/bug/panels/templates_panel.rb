@@ -7,12 +7,15 @@ module Rack
       autoload :Trace,      "rack/bug/panels/templates_panel/trace"
       autoload :Rendering,  "rack/bug/panels/templates_panel/rendering"
 
-      def self.record(template, &block)
-        return block.call unless Rack::Bug.enabled?
+      def self.record(template)
+        return yield unless Rack::Bug.enabled?
 
         template_trace.start(template)
-        result = block.call
-        template_trace.finished(template)
+        begin
+          result = yield
+        ensure
+          template_trace.finished(template)
+        end
         return result
       end
 

@@ -19,7 +19,7 @@ module Rack
 
       def root_for_backtrace_filtering(sub_path = nil)
         if defined?(Rails) && Rails.respond_to?(:root)
-          sub_path ? Rails.root.join(sub_path) : Rails.root
+          (sub_path ? Rails.root.join(sub_path) : Rails.root).to_s
         else
           root = if defined?(RAILS_ROOT)
             RAILS_ROOT
