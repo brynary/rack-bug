@@ -37,7 +37,10 @@ module Rack
       end
 
       def self.total_time
-        (queries.inject(0) { |memo, query| memo + query.time}) * 1_000
+        (queries.inject(0) do |memo, query| 
+          Rails.logger.debug{ "QTime: #{query.time}" }
+          memo + query.time
+        end) * 1_000
       end
 
       def name

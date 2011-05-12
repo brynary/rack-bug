@@ -7,7 +7,7 @@ require "rack/bug/autoloading"
 class Rack::Bug
   include Options
   
-  VERSION = "0.3.0"
+  VERSION = "0.3.1"
   
   class SecurityError < StandardError
   end

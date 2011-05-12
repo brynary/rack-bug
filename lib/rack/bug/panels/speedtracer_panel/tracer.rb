@@ -197,7 +197,7 @@ class Rack::Bug
       def to_html
         hash = hash_representation
         extra = {:self_time => duration - time_in_children}
-        "<a href='#{hash['url']}'>Raw JSON</a>\n" + 
+        "<a href='#{hash['trace']['url']}'>Raw JSON</a>\n" + 
           render_template('panels/speedtracer/serverevent', extra.merge(symbolize_hash(hash['trace']['frameStack'])))
       end
 

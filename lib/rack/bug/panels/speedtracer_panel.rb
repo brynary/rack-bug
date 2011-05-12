@@ -43,9 +43,29 @@ class Rack::Bug
       end
     end
 
-    def self.database
-      @db ||= {}
+    class << self
+      def database
+        @db ||= make_database
+      end
+
+      def make_database
+      #  begin
+          require 'rack/bug/panels/speedtracer_panel/database'
+          return Database.new("speedtracer")
+#        rescue Object => ex
+#          msg = "Speedtracer issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect 
+#          if Rails.logger
+#            Rails.logger.debug msg
+#          else
+#            puts msg
+#          end
+#
+#          return {}
+#        end
+      end
+
     end
+
 
     def database
       self.class.database
@@ -75,6 +95,9 @@ class Rack::Bug
       advice = []
       if not defined?(Yajl)
         advice << "yajl-ruby not installed - Speedtracer server events won't be available"
+      end
+      if not defined?(SQLite3)
+        advice << "sqlite3 not installed - Speedtracer will behave oddly if run behind a forking webserver"
       end
       render_template "panels/speedtracer/traces", :traces => traces, :advice => advice
     end

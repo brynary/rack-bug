@@ -29,7 +29,13 @@ module Rack
         end
 
         def rows
-          result.values
+          if result.respond_to?(:values)
+            result.values
+          else
+            result.map do |row|
+              row
+            end
+          end
         end
 
         def human_time

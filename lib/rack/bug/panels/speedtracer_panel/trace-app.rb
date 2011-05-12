@@ -11,10 +11,13 @@ class Rack::Bug
       end
 
       def call(env)
+        Rails.logger.debug{ "#{env['PATH_INFO']} ?= #{TRACER_PATH}" }
         return FourOhFour unless env['PATH_INFO'].match(TRACER_PATH)
 
         resp = Rack::Response.new('', 200)
         resp['Content-Type'] = CONTENT_TYPE
+
+        Rails.logger.debug{ env['REQUEST_METHOD'] }
 
         case env['REQUEST_METHOD']
         when 'HEAD' then
@@ -31,8 +34,10 @@ class Rack::Bug
           # resource tab. Hence, server-side tracer data is
           # request on-demand, and we need to store it for
           # some time.
+          #
 
           qs = Rack::Utils.parse_query(env['QUERY_STRING'])
+          Rails.logger.debug{ { qs['id'] => @db.keys }.inspect }
           if qs['id'] && @db[qs['id']]
             resp.write @db[qs['id']].to_json
           else
