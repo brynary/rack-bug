@@ -13,7 +13,7 @@
 <table class="sortable">
   <thead>
     <tr>
-      <% if defined?(Mysql2) %>
+      <% if defined?(Mysql2) || defined?(PGresult) %>
         <% result.fields.each do |field| %>
           <th><%= field.upcase %></th>
         <% end %>
