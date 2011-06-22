@@ -1,6 +1,7 @@
 class Rack::Bug
   autoload :FilteredBacktrace,      "rack/bug/filtered_backtrace"
   autoload :Options,                "rack/bug/options"
+  autoload :Logger,                 "rack/bug/logger"
   autoload :Panel,                  "rack/bug/panel"
   autoload :PanelApp,               "rack/bug/panel_app"
   autoload :ParamsSignature,        "rack/bug/params_signature"

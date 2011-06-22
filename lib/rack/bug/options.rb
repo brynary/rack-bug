@@ -64,13 +64,15 @@ class Rack::Bug
 
     def initialize_options(options={})
       @default_options = {
-        'rack-bug.ip_masks' => [IPAddr.new("127.0.0.1")],
-        'rack-bug.password' => nil,
-        'rack-bug.verbose'  => nil,
-        'rack-bug.secret_key' => nil,
-        'rack-bug.intercept_redirects' => false,
-        'rack-bug.panels' => [],
-        'rack-bug.panel_classes' => [
+        'rack-bug.ip_masks'             =>  [IPAddr.new("127.0.0.1")],
+        'rack-bug.password'             =>  nil,
+        'rack-bug.verbose'              =>  nil,
+        'rack-bug.secret_key'           =>  nil,
+        'rack-bug.intercept_redirects'  =>  false,
+        'rack-bug.panels'               =>  [],
+        'rack-bug.log_level'            =>  Logger::DEBUG,
+        'rack-bug.log_path'             =>  "log/rack_bug.log",
+        'rack-bug.panel_classes'        =>  [
           RailsInfoPanel,
           TimerPanel,
           RequestVariablesPanel,

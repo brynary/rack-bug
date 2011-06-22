@@ -3,6 +3,7 @@ require "digest"
 require "rack"
 require "digest/sha1"
 require "rack/bug/autoloading"
+require 'rack/bug/logger'
 
 class Rack::Bug
   include Options
@@ -29,14 +30,16 @@ class Rack::Bug
     @app = asset_server(app)
     instance_eval(&block) if block_given?
     
+    @logger = Logger.new(read_option(:log_level), read_option(:log_path))
     @toolbar = Toolbar.new(RedirectInterceptor.new(@app))
   end
-
+  attr_reader :logger
 
   def call(env)
     env.replace @default_options.merge(env)
     @env = env
     @original_request = Rack::Request.new(@env)
+    env['rack-bug.logger'] = @logger
 
     if toolbar_requested? && ip_authorized? && password_authorized? && toolbar_xhr?
       @toolbar.call(env)
@@ -81,17 +84,30 @@ private
   def ip_authorized?
     return true unless options["rack-bug.ip_masks"]
 
-    options["rack-bug.ip_masks"].any? do |ip_mask|
-      ip_mask.include?(IPAddr.new(@original_request.ip))
+    logger.debug{ "Checking #{@original_request.ip} against ip_masks" }
+    ip = IPAddr.new(@original_request.ip)
+
+    mask = options["rack-bug.ip_masks"].find do |ip_mask|
+      ip_mask.include?(ip)
+    end
+    if mask
+      logger.debug{ "Matched #{mask}" }
+      return true
+    else
+      logger.debug{ "Matched no masks" }
+      return false
     end
   end
 
   def password_authorized?
     return true unless options["rack-bug.password"]
 
+    logger.debug{"Checking password"}
+
     expected_sha = Digest::SHA1.hexdigest ["rack_bug", options["rack-bug.password"]].join(":")
     actual_sha = @original_request.cookies["rack_bug_password"]
 
+    logger.debug{"Password result: #{actual_sha == expected_sha}"}
     actual_sha == expected_sha
   end
 end

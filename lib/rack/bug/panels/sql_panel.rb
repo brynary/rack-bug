@@ -13,16 +13,21 @@ module Rack
         PanelApp.new
       end
 
-      def self.record(sql, backtrace = [], &block)
-        return block.call unless Rack::Bug.enabled?
+      def self.record(sql, backtrace = [])
+        return yield unless Rack::Bug.enabled?
 
         start_time = Time.now
-        result = block.call
-        queries << QueryResult.new(sql, Time.now - start_time, backtrace)
+
+        result = nil
+        begin
+          result = yield
+        ensure
+          queries << QueryResult.new(sql, Time.now - start_time, backtrace, result)
+        end
 
         return result
       end
-      
+
       def self.record_event(sql, duration, backtrace = [])
         return unless Rack::Bug.enabled?
         queries << QueryResult.new(sql, duration, backtrace)
@@ -37,8 +42,7 @@ module Rack
       end
 
       def self.total_time
-        (queries.inject(0) do |memo, query| 
-          Rails.logger.debug{ "QTime: #{query.time}" }
+        (queries.inject(0) do |memo, query|
           memo + query.time
         end) * 1_000
       end

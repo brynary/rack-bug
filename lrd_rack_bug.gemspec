@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{lrd_rack_bug}
-  s.version = "0.3.1"
+  s.version = "0.3.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]
@@ -27,11 +27,11 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/lrdesign/lrd_rack_bug}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Debugging toolbar for Rack applications implemented as 
-    middleware.  Rails 3 compatible version maintained by Logical Reality 
+  s.summary = %q{Debugging toolbar for Rack applications implemented as
+    middleware.  Rails 3 compatible version maintained by Logical Reality
     Design.  }
-  s.description = %q{Debugging toolbar for Rack applications implemented as 
-    middleware.  Rails 3 compatible version maintained by Logical Reality 
+  s.description = %q{Debugging toolbar for Rack applications implemented as
+    middleware.  Rails 3 compatible version maintained by Logical Reality
     Design.  }
   s.add_dependency("uuid", "~> 2.3.1")
   #s.test_files = Dir.glob("spec/**/*") gem test assumes Test::Unit

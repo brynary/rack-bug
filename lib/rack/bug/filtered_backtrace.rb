@@ -11,13 +11,22 @@ module Rack
       end
 
       def filtered_backtrace
-        @filtered_backtrace ||= @backtrace.map{|l| l.to_s.strip }.select do |line|
-          root_for_backtrace_filtering.nil? ||
-          (line.index(root_for_backtrace_filtering) == 0) && !(line.index(root_for_backtrace_filtering("vendor")) == 0)
-        end
+        @filtered_backtrace ||= @backtrace.grep(FilteredBacktrace.backtrace_regexp)
       end
 
-      def root_for_backtrace_filtering(sub_path = nil)
+      def self.backtrace_regexp
+        @backtrace_regexp ||=
+          begin
+            if true or (app_root = root_for_backtrace_filtering).nil?
+              /.*/
+            else
+              excludes = %w{vendor}
+              %r{^#{app_root}(?:#{::File::Separator}(?!#{excludes.join("|")}).+)$}
+            end
+          end
+      end
+
+      def self.root_for_backtrace_filtering(sub_path = nil)
         if defined?(Rails) && Rails.respond_to?(:root)
           sub_path ? Rails.root.join(sub_path) : Rails.root
         else

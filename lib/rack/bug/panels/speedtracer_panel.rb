@@ -49,19 +49,17 @@ class Rack::Bug
       end
 
       def make_database
-      #  begin
-          require 'rack/bug/panels/speedtracer_panel/database'
-          return Database.new("speedtracer")
-#        rescue Object => ex
-#          msg = "Speedtracer issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect 
-#          if Rails.logger
-#            Rails.logger.debug msg
-#          else
-#            puts msg
-#          end
-#
-#          return {}
-#        end
+        require 'rack/bug/panels/speedtracer_panel/database'
+        return Database.new("speedtracer")
+      rescue Object => ex
+        msg = "Speedtracer issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect 
+        if Rails.logger
+          Rails.logger.debug msg
+        else
+          puts msg
+        end
+
+        return {}
       end
 
     end
