@@ -1,23 +1,20 @@
 class Rack::Bug
-  module SpeedTrace
+  module SpeedTracer
     class TraceApp
-      TRACER_PATH  = /^\/speedtracer/.freeze
+      include Database::RequestDataClient
+
       CONTENT_TYPE = 'application/json;charset=UTF-8'.freeze
 
       FourOhFour = [404, {"Content-Type" => "text/html"}, "App tracker doesn't know that path or id"].freeze
 
-      def initialize(db)
-        @db = db
+      def initialize
+        table_setup("speedtracer", "uuid")
+        key_sql_template = "'%s'"
       end
 
       def call(env)
-        Rails.logger.debug{ "#{env['PATH_INFO']} ?= #{TRACER_PATH}" }
-        return FourOhFour unless env['PATH_INFO'].match(TRACER_PATH)
-
         resp = Rack::Response.new('', 200)
         resp['Content-Type'] = CONTENT_TYPE
-
-        Rails.logger.debug{ env['REQUEST_METHOD'] }
 
         case env['REQUEST_METHOD']
         when 'HEAD' then
@@ -37,9 +34,8 @@ class Rack::Bug
           #
 
           qs = Rack::Utils.parse_query(env['QUERY_STRING'])
-          Rails.logger.debug{ { qs['id'] => @db.keys }.inspect }
-          if qs['id'] && @db[qs['id']]
-            resp.write @db[qs['id']].to_json
+          if qs['id'] && (trace = @table.retrieve("uuid = '#{qs['id']}'"))
+            resp.write trace.to_json
           else
             # Invalid request or missing request trace id
             return FourOhFour

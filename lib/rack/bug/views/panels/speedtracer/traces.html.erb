@@ -1,4 +1,4 @@
-<h3>Traces</h3>
+<h3>Trace</h3>
 <h4>Process: <%= Process.pid %>  (<%= Process.ppid %>)</h4>
 <% unless advice.empty? %>
   <p>Warning:</p>
@@ -9,8 +9,6 @@
   </ul>
 <% end %>
 <dl>
-  <% traces.each do |uuid, trace| %>
-    <dt><%= uuid %> - <%= trace.start.strftime("%H:%M:%S") %></dt>
-    <dd><%= trace.to_html %></dd>
-  <% end %>
+  <dt><%= trace.uuid %> - <%= trace.start.strftime("%H:%M:%S") %></dt>
+  <dd><%= trace.to_html %></dd>
 </dl>

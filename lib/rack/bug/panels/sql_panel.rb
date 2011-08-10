@@ -4,13 +4,27 @@ module Rack
   class Bug
 
     class SQLPanel < Panel
-      require "rack/bug/panels/sql_panel/sql_extension"
 
       autoload :PanelApp, "rack/bug/panels/sql_panel/panel_app"
       autoload :QueryResult,    "rack/bug/panels/sql_panel/query"
 
-      def panel_app
-        PanelApp.new
+      def initialize(app)
+        super
+        probe(self) do
+          instrument "ActiveRecord::ConnectionAdapters::AbstractAdapter" do
+            instance_probe :log
+          end
+        end
+        table_setup("sql_queries")
+        key_sql_template("")
+      end
+
+      def self.panel_mappings
+        { "sql" => PanelApp.new }
+      end
+
+      def after_detect(method_call, timing, arguments, results)
+        QueryResult.new(arguments.first, timing.duration, method_call.backtrace, results)
       end
 
       def self.record(sql, backtrace = [])

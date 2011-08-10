@@ -8,9 +8,9 @@ module Rack
 
         def dispatch
           case request.path_info
-          when "/__rack_bug__/explain_sql" then explain_sql
-          when "/__rack_bug__/profile_sql" then profile_sql
-          when "/__rack_bug__/execute_sql" then execute_sql
+          when "explain" then explain_sql
+          when "profile" then profile_sql
+          when "execute" then execute_sql
           else not_found
           end
         end

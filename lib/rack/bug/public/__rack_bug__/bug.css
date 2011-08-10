@@ -178,10 +178,15 @@
   background: #eee;
 }
 
-#rack_bug .panel_content .rack_bug_close {
+#rack_bug .panel_content .panel_controls {
   float: right;
   font-weight: bold;
 }
+
+#rack_bug .panel_content .panel_controls form {
+  display: inline;
+}
+
 
 #rack_bug .panel_content dt, #rack_bug .panel_content dd {
   display: block;

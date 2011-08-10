@@ -5,107 +5,73 @@ rescue LoadError
   #Means no Chrome Speedtracer...
 end
 require 'uuid'
-
 require 'rack/bug/panels/speedtracer_panel/trace-app'
 require 'rack/bug/panels/speedtracer_panel/tracer'
 
 class Rack::Bug
-  class SpeedTracerPanel < Panel
-    class Middleware
+  module SpeedTracer
+    class Panel < ::Rack::Bug::Panel
+
       def initialize(app)
         @app = app
         @uuid = UUID.new
+        table_setup("speedtracer", "uuid")
+        key_sql_template("'%s'")
+
+        @tracer = Tracer.new(@table)
+        probe(@tracer) do
+          instrument("ActionView::Rendering") do
+            instance_probe :render
+          end
+
+          instrument("ActionView::Partials::PartialRenderer") do
+            instance_probe :render
+          end
+
+          instrument("ActiveRecord::Base") do
+            class_probe :find, :all, :first, :last, :count, :delete_all
+            instance_probe :save, :save!, :destroy, :delete
+          end
+
+          instrument("ActionController::Base") do
+            instance_probe :process, :render
+          end
+        end
+
+        super
       end
 
-      def database
-        SpeedTracerPanel.database
-      end
 
       def call(env)
-        if %r{^/__rack_bug__/} =~ env["REQUEST_URI"] 
-          @app.call(env)
-        else
-          env['st.id'] = @uuid.generate
+        env['rack-bug.speedtracer-id'] = @uuid.generate
 
-          tracer = SpeedTrace::Tracer.new(env['st.id'], 
-                                          env['REQUEST_METHOD'], 
-                                          env['REQUEST_URI'])
-          env['st.tracer'] = tracer
-          Thread::current['st.tracer'] = tracer
+        status, headers, body = @app.call(env)
 
-          status, headers, body = @app.call(env)
+        store(env, env['rack-bug.speedtracer-id'], env['rack-bug.speedtracer-record'])
+        headers['X-TraceUrl'] = '__rack_bug__/speedtracer?id=' + env['rack-bug.speedtracer-id']
+        return [status, headers, body]
+      end
 
-          env['st.tracer'].finish
-          database[env['st.id']] = env['st.tracer']
-          headers['X-TraceUrl'] = '/speedtracer?id=' + env['st.id']
-          return [status, headers, body]
+      def self.panel_mappings
+        { "speedtracer" => TraceApp.new }
+      end
+
+      def name
+        "speedtracer"
+      end
+
+      def heading
+        "#{table_length} traces"
+      end
+
+      def content_for_request(request_id)
+        trace = retrieve(request_id).first
+        advice = []
+        if not defined?(Yajl)
+          advice << "yajl-ruby not installed - Speedtracer server events won't be available"
         end
+        render_template "panels/speedtracer/traces", :trace => trace, :advice => advice
       end
-    end
-
-    class << self
-      def database
-        @db ||= make_database
-      end
-
-      def make_database
-        require 'rack/bug/panels/speedtracer_panel/database'
-        return Database.new("speedtracer")
-      rescue Object => ex
-        msg = "Speedtracer issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect 
-        if Rails.logger
-          Rails.logger.debug msg
-        else
-          puts msg
-        end
-
-        return {}
-      end
-
-    end
-
-
-    def database
-      self.class.database
-    end
-
-    def initialize(app)
-      @app  = app
-      super
-    end
-
-    def panel_app
-      return SpeedTrace::TraceApp.new(database)
-    end
-
-    def name
-      "speedtracer"
-    end
-
-    def heading
-      "#{database.keys.length} traces"
-    end
-
-    def content
-      traces = database.to_a.sort do |one, two|
-        two[1].start <=> one[1].start
-      end
-      advice = []
-      if not defined?(Yajl)
-        advice << "yajl-ruby not installed - Speedtracer server events won't be available"
-      end
-      if not defined?(SQLite3)
-        advice << "sqlite3 not installed - Speedtracer will behave oddly if run behind a forking webserver"
-      end
-      render_template "panels/speedtracer/traces", :traces => traces, :advice => advice
-    end
-
-    def before(env)
-    end
-
-    def after(env, status, headers, body)
     end
   end
 end
-
-require 'rack/bug/panels/speedtracer_panel/instrument'

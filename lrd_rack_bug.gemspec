@@ -34,5 +34,6 @@ Gem::Specification.new do |s|
     middleware.  Rails 3 compatible version maintained by Logical Reality
     Design.  }
   s.add_dependency("uuid", "~> 2.3.1")
+  s.add_dependency("sqlite3", "~> 1.3.3")
   #s.test_files = Dir.glob("spec/**/*") gem test assumes Test::Unit
 end

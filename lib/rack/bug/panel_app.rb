@@ -19,8 +19,8 @@ module Rack
         @request.GET
       end
 
-      def not_found
-        [404, {}, []]
+      def not_found(message="")
+        [404, {}, [message]]
       end
 
       def validate_params

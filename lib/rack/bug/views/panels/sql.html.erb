@@ -21,9 +21,9 @@
         </td>
         <td>
           <% if query.inspectable? %>
-            <a href="/__rack_bug__/execute_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">SELECT</a> |
-            <a href="/__rack_bug__/explain_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">EXPLAIN</a> |
-            <a href="/__rack_bug__/profile_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">Profile</a>
+            <a href="/__rack_bug__/sql/execute?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">SELECT</a> |
+            <a href="/__rack_bug__/sql/explain?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">EXPLAIN</a> |
+            <a href="/__rack_bug__/sql/profile?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">Profile</a>
           <% end %>
         </td>
       </tr>

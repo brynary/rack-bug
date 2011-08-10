@@ -23,5 +23,5 @@ class Rack::Bug
   autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
   autoload :TimerPanel,             "rack/bug/panels/timer_panel"
   autoload :SphinxPanel,            "rack/bug/panels/sphinx_panel"
-  autoload :SpeedTracerPanel,       "rack/bug/panels/speedtracer_panel"
+  autoload :SpeedTracer,            "rack/bug/panels/speedtracer_panel"
 end

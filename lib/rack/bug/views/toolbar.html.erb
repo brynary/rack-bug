@@ -9,34 +9,20 @@
 <style type="text/css" media="screen">
   @import url(/__rack_bug__/bug.css);
 </style>
+<script>
+  $(function($) {
+    $.rackBug.request_id = <%= request_id %>
+  })
+</script>
 
 <div id="rack_bug" class="rb_top">
   <div id="rack_bug_toolbar">
     <ul class="panels">
-      <li id="rb_debug_button">Rack::Bug</li>
-    
-      <% panels.each do |panel| %>
-        <li>
-          <% if panel.has_content? %>
-            <a href="#" class="<%= panel.name %>">
-              <%= panel.heading %>
-            </a>
-          <% else %>
-            <%= panel.heading %>
-          <% end %>
-        </li>
-      <% end %>
+      <%= headers_fragment %>
     </ul>
   </div>
-  
-  <% panels.each do |panel| %>
-    <% if panel.has_content? %>
-      <div class="panel_content" id="<%= panel.name %>">
-        <a href="" class="rack_bug_close">Close</a>
-        <%= panel.content %>
-      </div>
-    <% end %>
-  <% end %>
-  
+
+  <%= request_fragment %>
+
   <div id="rack_bug_debug_window" class="panel_content"></div>
 </div>

@@ -1,13 +1,91 @@
 class Rack::Bug
-  module SpeedTrace
+  module SpeedTracer
+    class Tracer
+      def initialize(table)
+        @pstack = []
+        @table = table
+        @event_id = 0
+      end
+
+      def request_start(env, start)
+        id, method, uri = env.values_at("rack-bug.speedtracer-id", "REQUEST_METHOD", "PATH_INFO")
+        @pstack.push RequestRecord.new(id, method, uri)
+      end
+
+      def request_finish(env, status, headers, body, timing)
+        env["rack-bug.speedtracer-record"] = @pstack.pop
+      end
+
+      def before_detect(method_call, arguments)
+        @event_id += 1
+
+        arguments_string = make_string_of(arguments)
+        #XXX ServerEvent use method call...
+        event = ServerEvent.new(method_call, arguments_string)
+        @pstack.push event
+      end
+
+      def after_detect(method_call, timing, arguments, result)
+        event = @pstack.pop
+        if event.nil?
+        else
+          event.finish
+
+          unless (parent = @pstack.last).nil?
+            parent.children.push event
+          else
+            @children.push event
+          end
+        end
+      end
+
+      def make_string_of(array)
+        array.map do |item|
+          short_string(item)
+        end.join(",")
+      end
+
+      def short_string(item, max_per_elem = 50)
+        begin
+          string = item.inspect
+          if string.length > max_per_elem
+            case item
+            when NilClass
+              "nil"
+            when Hash
+              "{ " + item.map do |key, value|
+                short_string(key, 15) + "=>" + short_string(value, 30)
+              end.join(", ") + " }"
+            when find_constant("ActionView::Base")
+              tmpl = item.template
+              if tmpl.nil?
+                item.path.inspect
+              else
+                [tmpl.base_path, tmpl.name].join("/")
+              end
+            when find_constant("ActiveRecord::Base")
+              string = "#{item.class.name}(#{item.id})"
+            else
+              string = item.class.name
+            end
+          else
+            string
+          end
+        rescue Exception => ex
+          "..."
+        end
+      end
+
+    end
+
     class TraceRecord
       include Render
-      def initialize(id)
-        @id = id
+      def initialize
         @start = Time.now
         @children = []
       end
 
+      attr_accessor :children
       attr_reader :start
 
       def finish
@@ -49,24 +127,17 @@ class Rack::Bug
     end
 
     class ServerEvent < TraceRecord
-      attr_accessor :children
       attr_reader :name
 
-      def initialize(id, file, line, method, context, arguments)
-        super(id)
-
-        @file = file
-        @line = line
-        @method = method
-        @context = context
+      def initialize(method_call, arguments)
+        super()
         @arguments = arguments
-        @name = [context, method, "(", arguments, ")"].join("")
+        @name = "#{method_call.context}#{method_call.kind == :instance ? "#" : "::"}#{method_call.method}(#{arguments})"
       end
 
       def hash_representation
         {
           'range' => range(@start, @finish),
-          #'id' =>  @id,
           'operation' =>  {
           #          'sourceCodeLocation' =>  {
           #          'className'   =>  @file,
@@ -81,97 +152,31 @@ class Rack::Bug
       end
 
       def to_html
-        render_template('panels/speedtracer/serverevent', 
+        render_template('panels/speedtracer/serverevent',
                         {:self_time => duration - time_in_children}.merge(symbolize_hash(hash_representation)))
       end
     end
 
-    class Tracer < TraceRecord
-      def initialize(id, method, uri)
-        super(id)
 
+    class RequestRecord < TraceRecord
+      def initialize(id, method, uri)
+        super()
+
+        @id = id
         @method = method
         @uri = uri
         @event_id = 0
-        @pstack = []
       end
 
-      #TODO: Threadsafe
-      def run(context="::", called_at = caller[0], args=[], &blk)
-        file, line, method = called_at.split(':')
-
-        method = method.gsub(/^in|[^\w]+/, '') if method
-
-        start_event(file, line, method, context, args)
-        blk.call      # execute the provided code block
-        finish_event
-      end
-
-      def short_string(item, max_per_elem = 50)
-        begin
-          string = item.inspect
-          if string.length > max_per_elem
-            case item
-            when NilClass
-              "nil"
-            when Hash
-              "{ " + item.map do |key, value|
-                short_string(key, 15) + "=>" + short_string(value, 30)
-              end.join(", ") + " }"
-            when find_constant("ActionView::Base")
-              tmpl = item.template
-              if tmpl.nil?
-                item.path.inspect
-              else
-                [tmpl.base_path, tmpl.name].join("/")
-              end
-            when find_constant("ActiveRecord::Base")
-              string = "#{item.class.name}(#{item.id})" 
-            else
-              string = item.class.name
-            end
-          else
-            string
-          end
-        rescue Exception => ex
-          "..."
-        end
-      end
-
-      def make_string_of(array)
-        array.map do |item|
-          short_string(item)
-        end.join(",")
-      end
-
-      def start_event(file, line, method, context, arguments)
-        @event_id += 1
-
-        arguments_string = make_string_of(arguments)
-        event = ServerEvent.new(@event_id, file, line, method, context, arguments_string)
-        @pstack.push event
-      end
-
-      def finish_event
-        event = @pstack.pop
-        if event.nil?
-        else
-          event.finish
-
-
-          unless (parent = @pstack.last).nil?
-            parent.children.push event
-          else
-            @children.push event
-          end
-        end
+      def uuid
+        @id
       end
 
       def hash_representation
         finish
         { 'trace' =>  {
 
-          'url' => "/speedtracer?id=#@id",
+          'url' => "/__rack_bug__/speedtracer?id=#@id",
 
           'frameStack' => {
 
@@ -197,17 +202,8 @@ class Rack::Bug
       def to_html
         hash = hash_representation
         extra = {:self_time => duration - time_in_children}
-        "<a href='#{hash['trace']['url']}'>Raw JSON</a>\n" + 
+        "<a href='#{hash['trace']['url']}'>Raw JSON</a>\n" +
           render_template('panels/speedtracer/serverevent', extra.merge(symbolize_hash(hash['trace']['frameStack'])))
-      end
-
-      def finish
-        super()
-
-        until @pstack.empty?
-          finish_event
-        end
-        self
       end
     end
   end
