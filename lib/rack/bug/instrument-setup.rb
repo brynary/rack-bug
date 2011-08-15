@@ -9,6 +9,7 @@ class Rack::Bug
     def call(env)
       instrument = Instrumentation::Instrument.new
 
+      Instrumentation::PackageDefinition.start
       instrument.start(env)
 
       env["rack-bug.instrument"] = instrument

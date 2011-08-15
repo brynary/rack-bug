@@ -11,8 +11,11 @@ module Rack
       def initialize(app)
         super
         probe(self) do
-          instrument "ActiveRecord::ConnectionAdapters::AbstractAdapter" do
-            instance_probe :log
+          %w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
+            Mysql2Adapter OracleEnhancedAdapter }.each do |adapter|
+            instrument "ActiveRecord::ConnectionAdapters::#{adapter}" do
+              instance_probe :execute
+            end
           end
         end
         table_setup("sql_queries")
@@ -24,55 +27,27 @@ module Rack
       end
 
       def after_detect(method_call, timing, arguments, results)
-        QueryResult.new(arguments.first, timing.duration, method_call.backtrace, results)
+        store(@env, QueryResult.new(arguments.first, timing.duration, method_call.backtrace, results))
       end
 
-      def self.record(sql, backtrace = [])
-        return yield unless Rack::Bug.enabled?
-
-        start_time = Time.now
-
-        result = nil
-        begin
-          result = yield
-        ensure
-          queries << QueryResult.new(sql, Time.now - start_time, backtrace, result)
-        end
-
-        return result
-      end
-
-      def self.record_event(sql, duration, backtrace = [])
-        return unless Rack::Bug.enabled?
-        queries << QueryResult.new(sql, duration, backtrace)
-      end
-
-      def self.reset
-        Thread.current["rack.test.queries"] = []
-      end
-
-      def self.queries
-        Thread.current["rack.test.queries"] ||= []
-      end
-
-      def self.total_time
+      def total_time(queries)
         (queries.inject(0) do |memo, query|
           memo + query.time
-        end) * 1_000
+        end)
       end
 
       def name
         "sql"
       end
 
-      def heading
-        "#{self.class.queries.size} Queries (%.2fms)" % self.class.total_time
+      def heading_for_request(number)
+        queries = retrieve(number)
+        "#{queries.size} Queries (%.2fms)" % total_time(queries)
       end
 
-      def content
-        result = render_template "panels/sql", :queries => self.class.queries
-        self.class.reset
-        return result
+      def content_for_request(number)
+        queries = retrieve(number)
+        render_template "panels/sql", :queries => queries
       end
 
     end

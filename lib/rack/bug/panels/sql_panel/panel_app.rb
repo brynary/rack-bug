@@ -7,10 +7,11 @@ module Rack
       class PanelApp < ::Rack::Bug::PanelApp
 
         def dispatch
+          Rails.logger.debug{ {:path => request.path_info}.inspect }
           case request.path_info
-          when "explain" then explain_sql
-          when "profile" then profile_sql
-          when "execute" then execute_sql
+          when "/explain" then explain_sql
+          when "/profile" then profile_sql
+          when "/execute" then execute_sql
           else not_found
           end
         end

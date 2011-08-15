@@ -24,6 +24,7 @@ module Rack
       end
 
       def call(env)
+        @env = env
         before(env)
         status, headers, body = @app.call(env)
         @request = Request.new(env)

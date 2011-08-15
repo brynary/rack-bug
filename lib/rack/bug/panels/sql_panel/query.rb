@@ -41,7 +41,7 @@ module Rack
         end
 
         def human_time
-          "%.2fms" % (@time * 1_000)
+          "%.2fms" % (@time)
         end
 
         def inspectable?

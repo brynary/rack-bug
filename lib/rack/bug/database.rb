@@ -1,4 +1,5 @@
 require 'sqlite3'
+require 'base64'
 require 'rack/bug'
 
 # XXX ARel?  Worthwhile?
@@ -14,10 +15,14 @@ class Rack::Bug
       end
 
       def store(env, *keys_and_value)
+        return if env.nil?
+        request_id = env["rack-bug.request-id"]
+        return if request_id.nil?
+
         value = keys_and_value[-1]
         keys = keys_and_value[0...-1]
 
-        @table.store(env["rack-bug.request-id"], value, @key_sql_template % keys)
+        @table.store(request_id, value, @key_sql_template % keys)
       end
 
       def retrieve(request_id)
@@ -70,7 +75,7 @@ class Rack::Bug
       end
 
       def execute(*args)
-        Rails.logger.info{ args }
+        #Rails.logger.info{ args }
         db.execute(*args)
       end
 
@@ -143,14 +148,22 @@ class Rack::Bug
       end
 
       def store(request_id, value, keys_sql = "")
-        sql = "'#{YAML.dump(value)}'"
+        sql = "'#{encode_value(value)}'"
         sql = keys_sql + ", " + sql unless keys_sql.empty?
         sql = "#{request_id}, #{sql}"
         insert(sql)
       end
 
+      def encode_value(value)
+        Base64.encode64(YAML.dump(value))
+      end
+
+      def decode_value(value)
+        YAML.load(Base64.decode64(value))
+      end
+
       def retrieve(key_sql)
-        select("value", key_sql).map{|value| YAML.load(value.first)}
+        select("value", key_sql).map{|value| decode_value(value.first)}
       end
 
       def for_request(id)
@@ -159,7 +172,7 @@ class Rack::Bug
 
       def to_a
         super.map do |row|
-          row[-1] = YAML.load(row[-1])
+          row[-1] = decode_value(row[-1])
         end
       end
     end

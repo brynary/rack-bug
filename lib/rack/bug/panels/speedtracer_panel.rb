@@ -66,6 +66,7 @@ class Rack::Bug
 
       def content_for_request(request_id)
         trace = retrieve(request_id).first
+        return "" if trace.nil?
         advice = []
         if not defined?(Yajl)
           advice << "yajl-ruby not installed - Speedtracer server events won't be available"

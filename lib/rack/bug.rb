@@ -63,11 +63,7 @@ class Rack::Bug
   private
 
   def rack_bug_active?
-    return (toolbar_requested? && ip_authorized? && password_authorized? && toolbar_xhr?)
-  end
-
-  def toolbar_xhr?
-    !@original_request.xhr? || @original_request.path =~ RACK_BUG_REGEX
+    return (toolbar_requested? && ip_authorized? && password_authorized?)
   end
 
   def make_bug_app(app)
