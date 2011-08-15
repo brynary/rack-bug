@@ -66,7 +66,6 @@ class Rack::Bug
 
       module ProbeRunner
         def probe_run(context = "::", kind=:instance, called_at=caller[1], args=[])
-          Rails.logger.debug [context, kind, called_at].inspect
           instrument = Thread.current['rack-bug.instrument']
           result = nil
           if instrument.nil?
@@ -164,7 +163,6 @@ class Rack::Bug
           @collectors[name.to_sym].uniq!
         end
 
-        Rails.logger.debug(methods.inspect)
         safe_method_names(methods).each do |method_name, old_method|
           @probe_orders << [method_name, old_method]
         end
@@ -181,7 +179,6 @@ class Rack::Bug
           end
 
           @unsafe_names << hidden_name
-          Rails.logger.debug([name,hidden_name].inspect)
           [name, hidden_name]
         end
       end

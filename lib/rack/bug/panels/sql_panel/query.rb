@@ -9,7 +9,6 @@ module Rack
         attr_reader :time
 
         def initialize(sql, time, backtrace = [], result=nil)
-          Rails.logger.debug{ "QueryResult: #{sql}" }
           @sql = sql
           @time = time
           @backtrace = backtrace
