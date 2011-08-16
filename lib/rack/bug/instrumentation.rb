@@ -61,17 +61,31 @@ class Rack::Bug
       end
     end
 
+    module Backstage
+      def backstage
+        Thread.current["instrumented_backstage"] = true
+        yield
+      ensure
+        Thread.current["instrumented_backstage"] = false
+      end
+    end
+
+
     class Probe
       @@class_list = nil
 
       module ProbeRunner
+        include Backstage
+
         def probe_run(context = "::", kind=:instance, called_at=caller[1], args=[])
+          return yield if Thread.current['instrumented_backstage']
           instrument = Thread.current['rack-bug.instrument']
           result = nil
           if instrument.nil?
-            #Rails.logger.debug{"No instrument in thread - #{context} /
-            ##{called_at}"}
-            result = yield
+            backstage do
+              Rails.logger.debug{"No instrument in thread - #{context} / #{called_at}"}
+              result = yield
+            end
           else
             instrument.run(context, kind, called_at, args){ result = yield }
           end
@@ -317,15 +331,21 @@ class Rack::Bug
         @collectors = nil
       end
 
+      include Backstage
+
       def run(context="::", kind=:instance, called_at = caller[0], args=[], &blk)
         file, line, method = called_at.split(':')
         method = method.gsub(/^in|[^\w]+/, '') if method
-        call_number = self.class.seq_number
-        method_call = MethodCall.new(call_number, caller(1), file, line, context, kind, method, Thread::current)
+        call_number = backstage{ self.class.seq_number }
+        method_call = backstage{ MethodCall.new(call_number, caller(1), file, line, context, kind, method, Thread::current) }
         start_time = Time.now
-        start_event(method_call, args)
+        backstage do
+          start_event(method_call, args)
+        end
         result = blk.call      # execute the provided code block
-        finish_event(method_call, args, start_time, result)
+        backstage do
+          finish_event(method_call, args, start_time, result)
+        end
       end
 
       def collectors_for(method_call)
