@@ -19,7 +19,6 @@ module Rack
           end
         end
         table_setup("sql_queries")
-        key_sql_template("")
       end
 
       def self.panel_mappings

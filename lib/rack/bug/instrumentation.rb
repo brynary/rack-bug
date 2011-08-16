@@ -69,7 +69,8 @@ class Rack::Bug
           instrument = Thread.current['rack-bug.instrument']
           result = nil
           if instrument.nil?
-            Rails.logger.debug{"No instrument in thread - #{context} / #{called_at}"}
+            #Rails.logger.debug{"No instrument in thread - #{context} /
+            ##{called_at}"}
             result = yield
           else
             instrument.run(context, kind, called_at, args){ result = yield }
@@ -157,7 +158,13 @@ class Rack::Bug
         :instance
       end
 
+      def log(msg)
+        #Rails.logger.debug msg
+      end
+
       def probe(collector, *methods)
+        log "probe #{@const.name}: #{methods.join(" ")}"
+
         methods.each do |name|
           @collectors[name.to_sym] << collector
           @collectors[name.to_sym].uniq!
@@ -200,8 +207,11 @@ class Rack::Bug
       end
 
       def fulfill_probe_orders
+        log "Setup for #{@const.name}"
         @probe_orders.each do |method_name, old_method|
+          log "  #{method_name}"
           descendants_that_define(method_name).each do |klass|
+            log "  actual class: #{klass.name}"
             build_tracing_wrappers(target(klass), method_name, old_method)
           end
         end
@@ -214,6 +224,7 @@ class Rack::Bug
       def build_tracing_wrappers(target, method_name, old_method)
         return if @probed.has_key?(method_name)
         @probed[method_name] = true
+        #Rails.logger.debug "Trace wrapper for: #{target} - #{method_name}"
 
         #TODO: nicer chaining
         target.class_eval <<-EOC, __FILE__, __LINE__
@@ -278,14 +289,18 @@ class Rack::Bug
 
       MethodCall = Struct.new(:call_number, :backtrace, :file, :line, :context, :kind, :method, :thread)
       class Timing
-        def initialize(start, finish)
-          @start, @finish = start, finish
+        def initialize(request_start, start, finish)
+          @request_start, @start, @finish = request_start, start, finish
         end
 
-        attr_reader :start, :finish
+        attr_reader :request_start, :start, :finish
 
         def duration
           @duration ||= ((@finish - @start) * 1000).to_i
+        end
+
+        def delta_t
+          @delta_t ||= ((@start - @request_start) * 1000).to_i
         end
       end
 
@@ -307,7 +322,6 @@ class Rack::Bug
         method = method.gsub(/^in|[^\w]+/, '') if method
         call_number = self.class.seq_number
         method_call = MethodCall.new(call_number, caller(1), file, line, context, kind, method, Thread::current)
-
         start_time = Time.now
         start_event(method_call, args)
         result = blk.call      # execute the provided code block
@@ -333,7 +347,7 @@ class Rack::Bug
       end
 
       def finish_event(method_call, arguments, start_time, result)
-        timing = Timing.new(start_time, Time.now)
+        timing = Timing.new(@start, start_time, Time.now)
         collectors_for(method_call).each do |collector|
           collector.after_detect(method_call, timing, arguments, result)
         end
@@ -352,7 +366,7 @@ class Rack::Bug
       end
 
       def finish(env, status, headers, body)
-        @timing = Timing.new(@start, Time.now)
+        @timing = Timing.new(@start, @start, Time.now)
         @collectors.each do |collector|
           collector.request_finish(env, status, headers, body, @timing)
         end

@@ -12,6 +12,9 @@ class Rack::Bug
 
       def table_setup(name, *keys)
         @table = DataTable.new(name, *keys)
+        if keys.empty?
+          @key_sql_template = ""
+        end
       end
 
       def store(env, *keys_and_value)
@@ -28,6 +31,7 @@ class Rack::Bug
       def retrieve(request_id)
         @table.for_request(request_id)
       end
+      alias retreive retrieve #JDL cannot spell
 
       def table_length
         @table.length

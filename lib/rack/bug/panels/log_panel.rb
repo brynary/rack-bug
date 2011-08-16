@@ -1,8 +1,6 @@
-require "rack/bug/panels/log_panel/logger_extension"
 
 module Rack
   class Bug
-
     class LogPanel < Panel
       class LogEntry
         attr_reader :level, :time, :message
@@ -19,29 +17,26 @@ module Rack
         end
       end
 
-      def self.record(message, log_level)
-        return unless Rack::Bug.enabled?
-        return unless message
-        Thread.current["rack.bug.logs.start"] ||= Time.now
-        timestamp = ((Time.now - Thread.current["rack.bug.logs.start"]) * 1000).to_i
-        logs << LogEntry.new(log_level, timestamp, message)
-      end
 
-      def self.reset
-        Thread.current["rack.bug.logs"] = []
-        Thread.current["rack.bug.logs.start"] = nil
-      end
-
-      def self.logs
-        Thread.current["rack.bug.logs"] ||= []
+      def after_detect(method_call, timing, args, message)
+        message = args[1] || args[2] unless message.is_a?(String)
+        log_level = args[0]
+        store(@env, LogEntry.new(log_level, timing.delta_t, message))
       end
 
       def initialize(app)
-        if Rails.logger and not Rails.logger.class.include?(Rack::Bug::LoggerExtension)
-          Rails.logger.class.class_eval do
-            include Rack::Bug::LoggerExtension
+        probe(self) do
+          instrument "ActiveSupport::BufferedLogger" do
+            instance_probe :add
+          end
+
+          instrument "Logger" do
+            instance_probe :add
           end
         end
+
+        table_setup("log_entries")
+
         super
       end
 
@@ -53,12 +48,9 @@ module Rack
         "Log"
       end
 
-      def content
-        result = render_template "panels/log", :logs => self.class.logs
-        self.class.reset
-        return result
+      def content_for_request(number)
+        render_template "panels/log", :logs => retrieve(number)
       end
-
     end
 
   end
