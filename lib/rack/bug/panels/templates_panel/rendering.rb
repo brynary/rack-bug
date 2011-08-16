@@ -4,17 +4,23 @@ module Rack
 
       class Rendering
         attr_accessor :name
-        attr_accessor :start_time
-        alias_method :time, :start_time
-        attr_accessor :end_time
         attr_accessor :parent
+        attr_accessor :timing
         attr_reader :children
 
-        def initialize(name, start_time = nil, end_time = nil)
+        def initialize(name, timing = nil)
           @name = name
-          @start_time = start_time || Time.now
-          @end_time = end_time
+          @timing = timing
           @children = []
+        end
+
+        def start_time
+          @timing.start
+        end
+        alias_method :time, :start_time
+
+        def end_time
+          @timing.end
         end
 
         def add(rendering)
@@ -25,10 +31,10 @@ module Rack
         def delete(rendering)
           @children.delete(rendering)
         end
-        
+
         def duration
-          if @end_time
-            @end_time - @start_time
+          if @timing
+            @timing.duration
           else
             child_duration
           end
@@ -44,9 +50,9 @@ module Rack
 
         def duration_summary
           if children.any?
-            "%.2fms, %.2f exclusive" % [duration * 1_000, exclusive_duration * 1_000]
+            "%.2fms, %.2f exclusive" % [duration, exclusive_duration]
           else
-            "%.2fms" % (duration * 1_000)
+            "%.2fms" % (duration)
           end
         end
         def html
