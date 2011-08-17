@@ -1,42 +1,45 @@
-require "rack/bug/panels/active_record_panel/activerecord_extensions"
-
 module Rack
   class Bug
-
     class ActiveRecordPanel < Panel
+      def initialize(app)
+        super
 
-      def self.record(class_name)
-        return unless Rack::Bug.enabled?
-        records[class_name] += 1
-      end
+        table_setup("active_record")
 
-      def self.reset
-        Thread.current["rack.bug.active_records"] = Hash.new { 0 }
-      end
-
-      def self.records
-        Thread.current["rack.bug.active_records"] ||= Hash.new { 0 }
-      end
-
-      def self.total
-        records.inject(0) do |memo, (key, value)|
-          memo + value
+        probe(self) do
+          instrument "ActiveRecord::Base" do
+            class_probe :allocate
+          end
         end
+      end
+
+      def request_start(env, start)
+        @records = Hash.new{ 0 }
+      end
+
+      def after_detect(method_call, timing, results, args)
+        @records[method_call.object.base_class.name] += 1
+      end
+
+      def request_finish(env, status, headers, body, timing)
+        store(env, @records)
       end
 
       def name
         "active_record"
       end
 
-      def heading
-        "#{self.class.total} AR Objects"
+      def heading_for_request(number)
+        record = retrieve(number).first
+        total = record.inject(0) do |memo, (key, value)|
+          memo + value
+        end
+        "#{total} AR Objects"
       end
 
-      def content
-        records = self.class.records.to_a.sort_by { |key, value| value }.reverse
-        result = render_template "panels/active_record", :records => records
-        self.class.reset
-        result
+      def content_for_request(number)
+        records = retreive(number).first.to_a.sort_by { |key, value| value }.reverse
+        render_template "panels/active_record", :records => records
       end
 
     end

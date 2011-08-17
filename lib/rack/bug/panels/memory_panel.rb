@@ -3,18 +3,26 @@ module Rack
   class Bug
 
     class MemoryPanel < Panel
+      def initialize(app)
+        super
+        table_setup("memory_records")
+      end
 
       def before(env)
         @original_memory = `ps -o rss= -p #{$$}`.to_i
       end
 
       def after(env, status, headers, body)
-        @total_memory = `ps -o rss= -p #{$$}`.to_i
-        @memory_increase = @total_memory - @original_memory
+        total_memory = `ps -o rss= -p #{$$}`.to_i
+        store(env, {:total_memory => total_memory,
+              :memory_increase => total_memory - @original_memory,
+              :original_memory => @original_memory})
       end
 
-      def heading
-        "#{@memory_increase} KB &#916;, #{@total_memory} KB total"
+      def heading_for_request(number)
+        record = retrieve(number).first
+
+        "#{record[:memory_increase]} KB &#916;, #{record[:total_memory]} KB total"
       end
 
       def has_content?

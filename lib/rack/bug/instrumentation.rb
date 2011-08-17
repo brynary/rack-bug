@@ -83,7 +83,8 @@ class Rack::Bug
           result = nil
           if instrument.nil?
             backstage do
-              Rails.logger.debug{"No instrument in thread - #{context} / #{called_at}"}
+             # Rails.logger.debug{"No instrument in thread - #{context} /
+              # #{called_at}"}
               result = yield
             end
           else
@@ -209,14 +210,22 @@ class Rack::Bug
       end
 
       def descendants_that_define(method_name)
+        log{{ :descendants => descendants }}
         descendants.find_all do |klass|
           (@const == klass or local_method_defs(klass).include?(method_name))
         end
       end
 
+      def log &block
+        $stderr.puts block.call.inspect
+      end
+
       def fulfill_probe_orders
+        log{{:probes_for => @const.name, :kind => kind }}
         @probe_orders.each do |method_name, old_method|
+          log{{ :method => method_name }}
           descendants_that_define(method_name).each do |klass|
+            log{{ :subclass => klass.name }}
             build_tracing_wrappers(target(klass), method_name, old_method)
           end
         end
@@ -328,6 +337,7 @@ class Rack::Bug
         method = method.gsub(/^in|[^\w]+/, '') if method
         call_number = backstage{ self.class.seq_number }
         method_call = backstage{ MethodCall.new(call_number, caller(1), file, line, object, context, kind, method, Thread::current) }
+        $stderr.puts [method_call.context, method_call.method].inspect
         start_time = Time.now
         backstage do
           start_event(method_call, args)

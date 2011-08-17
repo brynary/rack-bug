@@ -5,6 +5,12 @@ module Rack
 
     class TimerPanel < Panel
 
+      def initialize(app)
+        super
+
+        table_setup("timer")
+      end
+
       def name
         "timer"
       end
@@ -15,23 +21,24 @@ module Rack
           status, headers, body = @app.call(env)
         end
 
-        @measurements = [
+        store(env, [
           ["User CPU time",   "%.2fms" % (@times.utime * 1_000)],
           ["System CPU time", "%.2fms" % (@times.stime * 1_000)],
           ["Total CPU time",  "%.2fms" % (@times.total * 1_000)],
           ["Elapsed time",    "%.2fms" % (@times.real  * 1_000)]
-        ]
+        ])
 
-        env["rack-bug.panels"] << self
         return [status, headers, body]
       end
 
-      def heading
-        "%.2fms" % (@times.real * 1_000)
+      def heading_for_request(number)
+        measurements = retreive(number).first
+
+        measurements.last.last
       end
 
-      def content
-        render_template "panels/timer", :measurements => @measurements
+      def content_for_request(number)
+        render_template "panels/timer", :measurements => retrieve(number).first
       end
 
     end
