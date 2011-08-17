@@ -15,11 +15,7 @@
         <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
           <td><%=h key %></td>
           <td class="code"><div>
-          <% if val.is_a?(Hash) %>
-            <%=h val.inspect %>
-          <% else %>
-            <%=h val.to_s %>
-          <% end %>
+              <%=h val%>
           </div></td>
         </tr>
         <% i += 1 %>

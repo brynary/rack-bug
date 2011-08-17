@@ -38,8 +38,12 @@ module Rack
           @keys = []
         end
 
-        def record_call(method, time, hit, *keys)
-          @queries << Query.new(method, time, hit, keys)
+        def record_call(method, time, hit, key)
+          if Array === key
+            @queries << Query.new(:get_multi, time, hit, key)
+          else
+            @queries << Query.new(method, time, hit, [key])
+          end
           @calls += 1
           @time += time
           @keys += keys

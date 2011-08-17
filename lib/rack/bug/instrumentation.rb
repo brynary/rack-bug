@@ -15,7 +15,18 @@ class Rack::Bug
           InstanceProbe.all_probes + ClassProbe.all_probes
         end
 
+        def all_collectors
+          @all_collectors ||= []
+        end
+
+        def add_collector(collector)
+          unless all_collectors.include?(collector)
+            all_collectors << collector
+          end
+        end
+
         def probe(collector, &block)
+          add_collector(collector)
           definer = self.new(collector)
           definer.instance_eval &block
         end
@@ -217,7 +228,7 @@ class Rack::Bug
       end
 
       def log &block
-        $stderr.puts block.call.inspect
+        #$stderr.puts block.call.inspect
       end
 
       def fulfill_probe_orders
@@ -337,7 +348,7 @@ class Rack::Bug
         method = method.gsub(/^in|[^\w]+/, '') if method
         call_number = backstage{ self.class.seq_number }
         method_call = backstage{ MethodCall.new(call_number, caller(1), file, line, object, context, kind, method, Thread::current) }
-        $stderr.puts [method_call.context, method_call.method].inspect
+        #$stderr.puts [method_call.context, method_call.method].inspect
         start_time = Time.now
         backstage do
           start_event(method_call, args)
@@ -374,9 +385,7 @@ class Rack::Bug
       end
 
       def all_collectors
-        @collectors ||= PackageDefinition.probes.map do |probe|
-                            probe.all_collectors
-                          end.flatten.uniq
+        PackageDefinition.all_collectors
       end
 
       def start(env)
@@ -387,7 +396,7 @@ class Rack::Bug
 
       def finish(env, status, headers, body)
         @timing = Timing.new(@start, @start, Time.now)
-        @collectors.each do |collector|
+        all_collectors.each do |collector|
           collector.request_finish(env, status, headers, body, @timing)
         end
       end
