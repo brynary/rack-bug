@@ -9,7 +9,7 @@
   <tbody>
     <% i = 1 %>
     <% Rails::Info.properties.each do |key, val| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <tr>
         <td><%=h key %></td>
         <td class="code"><div><%=h val %></div></td>
       </tr>

@@ -27,7 +27,7 @@
   <tbody>
     <% i = 1 %>
     <% result.each do |row| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <tr>
         <% row.each do |value| %>
           <td><%= value %></td>
         <% end %>

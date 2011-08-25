@@ -11,26 +11,24 @@
   <tbody>
     <% i = 1 %>
     <% queries.each do |query| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <tr>
         <td><%= query.human_time %></td>
-        <td class="syntax"><%= query.sql %></td>
-        <td>
-          <% if query.has_backtrace? %>
-            <a href="#" class="reveal_backtrace">Show Backtrace</a>
-          <% end %>
-        </td>
-        <td>
-          <% if query.inspectable? %>
-            <a href="/__rack_bug__/execute_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">SELECT</a> |
-            <a href="/__rack_bug__/explain_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">EXPLAIN</a> |
-            <a href="/__rack_bug__/profile_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">Profile</a>
-          <% end %>
-        </td>
-      </tr>
-      <tr style="display:none">
-        <td></td>
-        <td colspan="3">
-          <ul>
+        <td class="syntax">
+          <%= query.sql %>
+          <div class='opts'>
+            <% if query.has_backtrace? %>
+              <a href="#" class="reveal_backtrace">Show Backtrace</a>
+            <% end %>
+            <% if query.inspectable? && query.has_backtrace? %>
+               | 
+            <% end %>
+            <% if query.inspectable? %>
+              <a href="/__rack_bug__/execute_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">SELECT</a> |
+              <a href="/__rack_bug__/explain_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">EXPLAIN</a> |
+              <a href="/__rack_bug__/profile_sql?<%= signed_params("query" => query.sql, "time" => query.time) %>" class="remote_call">Profile</a>
+            <% end %>
+          </div>
+          <ul style="display:none" class='backtrace'>
             <% query.filtered_backtrace.each do |line| %>
               <li><%=h line %></li>
             <% end %>
