@@ -10,7 +10,7 @@
   <tbody>
     <% i = 1 %>
     <% logs.each do |entry| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <tr>
         <td><%= entry.level %></td>
         <td><%= entry.time %>ms</td>
         <td><%= entry.cleaned_message %></td>
