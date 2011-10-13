@@ -22,6 +22,11 @@ module Rack
 
         return result
       end
+      
+      def self.record_event(sql, duration, backtrace = [])
+        return unless Rack::Bug.enabled?
+        queries << Query.new(sql, duration, backtrace)
+      end
 
       def self.reset
         Thread.current["rack.test.queries"] = []
