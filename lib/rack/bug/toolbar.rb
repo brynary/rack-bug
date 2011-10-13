@@ -43,7 +43,11 @@ module Rack
 
       def inject_toolbar
         full_body = @response.body.join
-        full_body.sub! /<\/body>/, render + "</body>"
+
+        toolbar = render
+        toolbar.force_encoding('UTF-8') if RUBY_VERSION > '1.9.0'
+
+        full_body.sub! /<\/body>/, toolbar + "</body>"
 
         @response["Content-Length"] = full_body.size.to_s
 
