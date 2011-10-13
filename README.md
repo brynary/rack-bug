@@ -33,7 +33,13 @@ Features
 Rails quick start
 ---------------------------
 
-    script/plugin install git://github.com/brynary/rack-bug.git
+Install as plugins
+
+    rails plugin install git://github.com/brynary/rack-bug.git -r rails3
+
+Or install via bundler
+
+    gem 'rack-bug', :require => 'rack/bug', :git => 'git://github.com/brynary/rack-bug.git', :branch => 'rails3'
 
 In config/environments/development.rb, add:
 
