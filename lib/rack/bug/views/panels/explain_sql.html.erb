@@ -13,7 +13,7 @@
 <table class="sortable">
   <thead>
     <tr>
-      <% if defined?(Mysql2) %>
+      <% if defined?(Mysql2) || defined?(PGresult) %>
         <% result.fields.each do |field| %>
           <th><%= field.upcase %></th>
         <% end %>
@@ -27,7 +27,7 @@
   <tbody>
     <% i = 1 %>
     <% result.each do |row| %>
-      <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <tr>
         <% row.each do |value| %>
           <td><%= value %></td>
         <% end %>

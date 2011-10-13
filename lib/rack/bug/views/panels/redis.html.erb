@@ -22,7 +22,7 @@
     <tbody>
       <% i = 1 %>
       <% stats.queries.each do |query| %>
-        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+        <tr>
           <td><%= query.display_time %></td>
           <td><%= query.command %></td>
           <td><%= "<a href='#' class='reveal_backtrace'>Show Backtrace</a>" if query.has_backtrace? %></td>

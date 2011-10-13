@@ -12,7 +12,7 @@
     <tbody>
       <% i = 1 %>
       <% sections[header].each do |key, val| %>
-        <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+        <tr>
           <td><%=h key %></td>
           <td class="code"><div>
           <% if val.is_a?(Hash) %>

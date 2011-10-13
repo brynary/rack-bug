@@ -170,7 +170,12 @@
   color: #000;
   vertical-align: top;
 }
-#rack_bug .panel_content table tr.odd td {
+
+#rack_bug .panel_content table tr:nth-child(even) td {
+  background: #fff;
+}
+
+#rack_bug .panel_content table tr:nth-child(odd) td {
   background: #eee;
 }
 
@@ -187,8 +192,7 @@
   margin-left: 10px;
 }
 
-#rack_bug .panel_content table tr.odd td.rack_bug_spinner,
-#rack_bug .panel_content table tr.even td.rack_bug_spinner,
+#rack_bug .panel_content table tr td.rack_bug_spinner,
 #rack_bug .panel_content table td.rack_bug_spinner,
 #rack_bug .rack_bug_spinner {
   background-image: url(/__rack_bug__/spinner.gif);
