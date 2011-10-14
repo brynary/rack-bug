@@ -72,7 +72,7 @@ describe Rack::Bug do
 
     it "should provide a link to the target URL" do
       response = get "/redirect", {}, "rack-bug.intercept_redirects" => true
-      response.should have_selector("a[href='/']")
+      response.should have_selector("a[href='http://example.org/']")
     end
     
     it "inserts the toolbar if requested" do
