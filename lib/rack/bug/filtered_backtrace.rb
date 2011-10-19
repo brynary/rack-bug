@@ -31,7 +31,7 @@ module Rack
             nil
           end
           sub_path ? ::File.join(root, sub_path) : root
-        end
+        end.to_s
       end
     end
   end
