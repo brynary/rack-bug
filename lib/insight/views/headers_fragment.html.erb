@@ -1,0 +1,11 @@
+<% panels.each do |panel| %>
+  <li>
+  <% if panel.has_content? %>
+    <a href="#" class="<%= panel.name %>">
+      <%= panel.heading_for_request(request_id) %>
+    </a>
+  <% else %>
+    <%= panel.heading_for_request(request_id) %>
+  <% end %>
+  </li>
+<% end %>

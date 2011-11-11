@@ -1,0 +1,24 @@
+}
+</script>
+<script type="text/javascript" src="/__insight__/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="/__insight__/bug.js"></script>
+<style type="text/css" media="screen">
+  @import url(/__insight__/bug.css);
+</style>
+<script>
+  $(function($) {
+    $.rackBug.request_id = <%= request_id %>
+  })
+</script>
+
+<div id="insight" class="rb_top">
+  <div id="insight_toolbar">
+    <ul class="panels">
+      <%= headers_fragment %>
+    </ul>
+  </div>
+
+  <%= request_fragment %>
+
+  <div id="insight_debug_window" class="panel_content"></div>
+</div>

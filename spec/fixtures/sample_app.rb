@@ -1,6 +1,3 @@
-$LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
-require "rack/bug"
-
 require "sinatra/base"
 require 'logger'
 
@@ -9,13 +6,13 @@ log_to = RAILS_ENV == "test" ? StringIO.new : STDOUT
 LOGGER = Logger.new(log_to)
 
 class SampleApp < Sinatra::Base
-  use Rack::Bug#, :intercept_redirects => true, :password => 'secret'
+  use Insight#, :intercept_redirects => true, :password => 'secret'
   set :environment, 'test'
 
   configure :test do
     set :raise_errors, true
   end
-  
+
   get "/redirect" do
     redirect "/"
   end
@@ -35,9 +32,8 @@ class SampleApp < Sinatra::Base
         </head>
         <body>
           <p>Hello</p>
-          <p><a href="__rack_bug__/bookmarklet.html">Page with bookmarklet for enabling Rack::Bug</a></p>
-          <p><a href="/redirect">Page with a redirect - turn on intercept_redirects to see Rack::Bug catch it</a></p>
-          <p><a href="/error">Page with an error to check rack-bug not rescuing errors</a></p>
+          <p><a href="__insight__/bookmarklet.html">Page with bookmarklet for enabling Insight</a></p>
+          <p><a href="/error">Page with an error to check insight not rescuing errors</a></p>
         </body>
       </html>
     HTML

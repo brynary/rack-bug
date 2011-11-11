@@ -1,0 +1,8 @@
+<% unless children.empty? %>
+  <ul>
+    <% children.each do |child|%>
+      <li><%=child.to_html%></li>
+    <%end%>
+  </ul>
+<% end %>
+</div>

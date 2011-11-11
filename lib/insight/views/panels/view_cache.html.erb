@@ -1,0 +1,17 @@
+<h3>Cache Read</h3>
+
+<dl>
+  <dt>Key</dt>
+  <dd><pre><%=h key %></pre></dd>
+
+  <dt>Time</dt>
+  <dd><%=h "%.2f" % (0.0 * 1_000) %>ms</dd>
+</dl>
+
+<p>
+<% if value.is_a?(String )%>
+  <%=h value %>
+<% else %>
+  <%=h value.inspect %>
+<% end %>
+</p>

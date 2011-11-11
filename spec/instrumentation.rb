@@ -1,4 +1,3 @@
-require 'rack/bug/instrumentation/probe'
 
 describe "Setting up probes" do
   class One
@@ -41,7 +40,6 @@ describe "Setting up probes" do
 
   let :test_collector do
     collector = Object.new
-    collector.extend Rack::Bug::Instrumentation::Client
     def collector.after_detect(method_call, timing, arguments, results)
       method_calls << [method_call, timing, arguments, results]
     end
