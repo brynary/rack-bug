@@ -1,6 +1,9 @@
 module Insight
   module Instrumentation
     class Probe
+      module Interpose
+      end
+
       @@class_list = nil
 
       module ProbeRunner
@@ -77,9 +80,6 @@ module Insight
         @probed = {}
         @collectors = Hash.new{|h,k| h[k] = []}
         @probe_orders = []
-        @unsafe_names = (target(@const).public_instance_methods(true) +
-                         target(@const).protected_instance_methods(true) +
-                         target(@const).private_instance_methods(true)).sort.uniq
       end
 
       def collectors(key)
@@ -90,41 +90,12 @@ module Insight
         @collectors.values
       end
 
-      def target(const)
-        const
-      end
-
-      def context_string
-        '#{self.class.name}'
-      end
-
-      def kind
-        :instance
-      end
-
       def probe(collector, *methods)
         methods.each do |name|
-          @collectors[name.to_sym] << collector
-          @collectors[name.to_sym].uniq!
-        end
-
-        safe_method_names(methods).each do |method_name, old_method|
-          @probe_orders << [method_name, old_method]
-        end
-      end
-
-      def safe_method_names(method_names)
-        method_names.map do |name|
-          name = name.to_s
-          prefix = "0"
-          hidden_name = ["_", prefix, name].join("_")
-          while @unsafe_names.include?(hidden_name)
-            prefix = prefix.next
-            hidden_name = ["_", prefix, name].join("_")
+          unless @collectors[name.to_sym].include?(collector)
+            @collectors[name.to_sym] << collector
           end
-
-          @unsafe_names << hidden_name
-          [name, hidden_name]
+          @probe_orders << name
         end
       end
 
@@ -150,120 +121,75 @@ module Insight
       end
 
       def fulfill_probe_orders
-        log{{:probes_for => @const.name, :kind => kind }}
-        @probe_orders.each do |method_name, old_method|
+        log{{:probes_for => @const.name}}
+        @probe_orders.each do |method_name|
           log{{ :method => method_name }}
           descendants_that_define(method_name).each do |klass|
             log{{ :subclass => klass.name }}
-            build_tracing_wrappers(target(klass), method_name, old_method)
+            build_tracing_wrappers(klass, method_name)
           end
         end
       end
 
-      def absolute_method_name(method_name)
-        "#@const##{method_name}"
+      def interposition_module_name
+        @interposition_module_name ||= (@const.name.gsub(/::/, "") + "Instance").to_sym
       end
 
-      if(defined? awesomeness)
-        def trace_class_methods(*methods_names)
-          @class_interpose ||=
-            begin
-              mod = Module.new do
-                include TraceRunner
-              end
-              Interpose::const_set((@const.name.gsub(/::/, "") + "Class").to_sym, mod)
-              mod
-            end
-          build_tracing_wrappers((
-            class << @const; self; end), @class_interpose, '#{self.name}::', *methods_names)
-        end
-
-        def trace_methods(*methods)
-          @instance_interpose ||=
-            begin
-              mod = Module.new do
-                include TraceRunner
-              end
-              Interpose::const_set((@const.name.gsub(/::/, "") + "Instance").to_sym, mod)
-              mod
-            end
-          build_tracing_wrappers(@const, @instance_interpose, '#{self.class.name}#', *methods)
-        end
-
-        def build_tracing_wrappers(target, interpose_module, context, *methods)
-          unless target.include?(interpose_module)
-            target.class_eval do
-              include interpose_module
-            end
-          end
-
-          methods.each do |method_name|
-            next if @traced.has_key?(method_name)
-            @traced[method_name] = true
-
-            if target.instance_methods(false).include?(method_name.to_s)
-              meth = target.instance_method(method_name)
-
-              interpose_module.instance_eval do
-                define_method(method_name, meth)
-              end
-            end
-
-            require 'ruby-debug'
-
-            target.class_eval do
-              define_method(method_name) do |*args|
-                trace_run(context, caller(0)[0], args) do
-                  super
-                end
-              end
-            end
-          end
-
-          return nil
-        end
-
-      end
-
-      def build_tracing_wrappers(target, method_name, old_method)
-        return if @probed.has_key?(method_name)
-        @probed[method_name] = true
-
-        #TODO: nicer chaining
-        target.class_eval <<-EOC, __FILE__, __LINE__
-          alias #{old_method} #{method_name}
-          def #{method_name}(*args, &block)
-            ProbeRunner::probe_run(self, "#{context_string}", :#{kind}, caller(0)[0], args) do
-          #{old_method}(*args, &block)
-            end
-          end
-          EOC
+      def interpose_module
+        return Interpose::const_get(interposition_module_name)
       rescue NameError
-        warn "Probed target method #{absolute_method_name(method_name)} isn't definied"
+        mod = Module.new
+        Interpose::const_set(interposition_module_name, mod)
+        retry
+      end
+
+      def build_tracing_wrappers(target, method_name)
+        return if @probed.has_key?([target,method_name])
+        @probed[[target,method_name]] = true
+
+        mod = interpose_module
+        unless target.include?(mod)
+          target.class_eval do
+            include mod
+          end
+        end
+
+        if target.instance_methods(false).include?(method_name.to_s)
+          meth = target.instance_method(method_name)
+
+          interpose_module.module_eval do
+            define_method(method_name, meth)
+          end
+
+          target.class_exec() do
+            define_method(method_name) do |*args, &block|
+              ProbeRunner::probe_run(self, self.class.name, :instance, caller(0)[0], args) do
+                super(*args, &block)
+              end
+            end
+          end
+        end
       end
     end
 
     class ClassProbe < Probe
-      def target(const)
-        class << const
-          self;
-        end
-      end
-
       def local_method_defs(klass)
         klass.singleton_methods(false)
       end
 
-      def context_string
-        '#{self.name}'
-      end
+      def build_tracing_wrappers(target, method_name)
+        return if @probed.has_key?([target, method_name])
+        @probed[[target, method_name]] = true
 
-      def absolute_method_name(method_name)
-        "#@const::#{method_name}"
-      end
+        method = target.method(method_name)
 
-      def kind
-        :class
+        (class << target; self; end).class_exec(method) do |method|
+          define_method(method_name) do |*args, &block|
+            ProbeRunner::probe_run(self, self.name, :class, caller(0)[0], args) do
+              method.call(*args, &block)
+            end
+          end
+        end
       end
     end
 

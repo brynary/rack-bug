@@ -1,4 +1,6 @@
-module LogicalInsight
+require 'insight/instrumentation/backstage'
+
+module Insight
   module Instrumentation
     class Instrument
       MethodCall = Struct.new(:call_number, :backtrace, :file, :line, :object, :context, :kind, :method, :thread)

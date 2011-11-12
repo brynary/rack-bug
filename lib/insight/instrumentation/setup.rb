@@ -1,26 +1,32 @@
-class InstrumentSetup
-  def initialize(app)
-    @app = app
-  end
+module Insight::Instrumentation
+  class InstrumentSetup
+    def initialize(app)
+      @app = app
+    end
 
-  def call(env)
-    instrument = Instrumentation::Instrument.new
+    def setup(env)
+      instrument = Instrument.new
 
-    Instrumentation::PackageDefinition.start
-    instrument.start(env)
+      PackageDefinition.start
+      instrument.start(env)
 
-    env["insight.instrument"] = instrument
-    Thread::current["insight.instrument"] = instrument
+      env["insight.instrument"] = instrument
+      Thread::current["insight.instrument"] = instrument
+    end
 
-    status, headers, body = @app.call(env)
+    def teardown(env, status, headers, body)
+      instrument, env["insight.instrument"] = env["insight.instrument"], nil
+      instrument.finish(env, status, headers, body)
+      Thread::current["insight.instrument"] = nil
 
-    instrument.finish(env, status, headers, body)
+      env["insight.duration"] = instrument.duration
+    end
 
-    env["insight.instrument"] = nil
-    Thread::current["insight.instrument"] = nil
-
-    env["insight.duration"] = instrument.duration
-
-    return [status, headers, body]
+    def call(env)
+      setup(env)
+      status, headers, body = @app.call(env)
+      teardown(env, status, headers, body)
+      return [status, headers, body]
+    end
   end
 end
