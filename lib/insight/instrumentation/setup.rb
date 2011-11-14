@@ -1,5 +1,5 @@
 module Insight::Instrumentation
-  class InstrumentSetup
+  class Setup
     def initialize(app)
       @app = app
     end

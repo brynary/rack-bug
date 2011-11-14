@@ -1,6 +1,8 @@
 module CustomMatchers
-  def have_row(container, key, value = nil)
-    simple_matcher("contain row") do |response|
+  extend RSpec::Matchers::DSL
+
+  define :have_row do |container, key, value|
+    def match(container, key, value)
       if value
         response.should have_selector("#{container} tr", :content => key) do |row|
           row.should contain(value)
@@ -11,8 +13,8 @@ module CustomMatchers
     end
   end
 
-  def have_heading(text)
-    simple_matcher("have heading") do |response|
+  define :have_heading do |text|
+    def match(text)
       response.should have_selector("#insight_toolbar li") do |heading|
         heading.should contain(text)
       end

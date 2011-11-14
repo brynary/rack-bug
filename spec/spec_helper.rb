@@ -21,6 +21,7 @@ RSpec.configure do |config|
 
   config.before do
     # This allows specs to record data outside the request
+    system(%w{rm insight.sqlite})
     Insight.enable
 
     set_cookie "insight_enabled=1"

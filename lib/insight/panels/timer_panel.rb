@@ -1,10 +1,9 @@
+require 'benchmark'
+
 module Insight
-
   class TimerPanel < Panel
-
     def initialize(app)
       super
-
       table_setup("timer")
     end
 
@@ -37,7 +36,5 @@ module Insight
     def content_for_request(number)
       render_template "panels/timer", :measurements => retrieve(number).first
     end
-
   end
-
 end

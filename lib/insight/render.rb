@@ -3,6 +3,7 @@ require 'erb'
 module Insight
   module Render
     include ERB::Util
+    include Logging
 
     def signed_params(hash)
       ParamsSignature.sign(request, hash)
@@ -31,17 +32,25 @@ module Insight
       locals_code = local_assigns.keys.map { |key| "#{key} = local_assigns[:#{key}];" }.join
 
       source = <<-end_src
-          def #{render_symbol}(local_assigns)
-      #{locals_code}
-      #{compiled_source(filename)}
-          end
+      def #{render_symbol}(local_assigns)
+        #{locals_code}
+        #{compiled_source(filename)}
+      end
       end_src
 
-      CompiledTemplates.module_eval(source, filename, 0)
+      begin
+        CompiledTemplates.module_eval(source, filename, 0)
+      rescue Object => ex
+        logger.debug do
+          "#{ex.class.name}: #{ex.message} in\n" +
+          source +
+            ex.backtrace.join("\n")
+        end
+      end
     end
 
     def compiled_source(filename)
-      ::ERB.new(::File.read(::File.dirname(__FILE__) + "/../bug/views/#{filename}.html.erb"), nil, "-").src
+      ::ERB.new(::File.read(::File.dirname(__FILE__) + "/views/#{filename}.html.erb"), nil, "-").src
     end
 
     def method_name(filename, local_assigns)

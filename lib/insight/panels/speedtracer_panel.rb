@@ -9,6 +9,7 @@ require 'insight/panels/speedtracer_panel/tracer'
 
 module Insight
   module SpeedTracer
+    class Panel < ::Insight::Panel
 
     def initialize(app)
       @app = app
@@ -70,6 +71,7 @@ module Insight
         advice << "yajl-ruby not installed - Speedtracer server events won't be available"
       end
       render_template "panels/speedtracer/traces", :trace => trace, :advice => advice
+      end
     end
   end
 end

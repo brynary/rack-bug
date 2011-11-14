@@ -1,7 +1,7 @@
 module Insight
-  class PanelsHeader
-    def initialize(bug_app)
-      @bug_app = bug_app
+  class PanelsHeader < PanelApp
+    def initialize(insight_app)
+      @insight_app = insight_app
       @request_table = Database::RequestTable.new
     end
 
@@ -12,7 +12,7 @@ module Insight
       return not_found("id not found") if request.nil?
       render_template("headers_fragment",
                       :request_id => params['request_id'].to_i,
-                      :panels => @bug_app.panels)
+                      :panels => @insight_app.panels)
     end
   end
 end

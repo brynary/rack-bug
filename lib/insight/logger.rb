@@ -16,29 +16,36 @@ module Insight
     UNKNOWN  =  5
 
     def log(severity, message)
-      if defined? Rails and not Rails.logger.nil?
-
-        if severity >= @level
-          logfile.puts(message)
-        end
+      if defined? Rails and
+        Rails.respond_to? :logger
+        not Rails.logger.nil?
+        Rails.logger.add(severity, "[Insight]: " + message)
       end
 
-      def logfile
-        @logfile ||= File::open(path, "a+")
-      rescue
-        $stderr
+      if severity >= @level
+        logfile.puts(message)
       end
-
-      def debug;   log(DEBUG,   yield) if @level >= DEBUG;   end
-      def info;    log(INFO,    yield) if @level >= INFO;    end
-      def warn;    log(WARN,    yield) if @level >= WARN;    end
-      def error;   log(ERROR,   yield) if @level >= ERROR;   end
-      def fatal;   log(FATAL,   yield) if @level >= FATAL;   end
-      def unknown; log(UNKNOWN, yield) if @level >= UNKNOWN; end
     end
 
-    module Logging
-      def logger(env)
+    def logfile
+      @logfile ||= File::open(path, "a+")
+    rescue
+      $stderr
+    end
+
+    def debug;   log(DEBUG,   yield) if @level >= DEBUG;   end
+    def info;    log(INFO,    yield) if @level >= INFO;    end
+    def warn;    log(WARN,    yield) if @level >= WARN;    end
+    def error;   log(ERROR,   yield) if @level >= ERROR;   end
+    def fatal;   log(FATAL,   yield) if @level >= FATAL;   end
+    def unknown; log(UNKNOWN, yield) if @level >= UNKNOWN; end
+  end
+
+  module Logging
+    def logger(env = nil)
+      if env.nil?
+        Thread.current['insight.logger']
+      else
         env["insight.logger"]
       end
     end

@@ -1,7 +1,7 @@
 module Insight
   class PanelsContent < PanelApp
-    def initialize(bug_app)
-      @bug_app = bug_app
+    def initialize(insight_app)
+      @insight_app = insight_app
       @request_table = Database::RequestTable.new
     end
 
@@ -16,7 +16,7 @@ module Insight
       render_template("request_fragment",
                       :request_id => params['request_id'].to_i,
                       :requests => requests,
-                      :panels => @bug_app.panels)
+                      :panels => @insight_app.panels)
     end
   end
 end

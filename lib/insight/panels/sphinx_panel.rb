@@ -16,11 +16,11 @@ module Insight
     end
 
     def self.reset
-      Thread.current["rack.bug.sphinx"] = Stats.new
+      Thread.current["insight.sphinx"] = Stats.new
     end
 
     def self.stats
-      Thread.current["rack.bug.sphinx"] ||= Stats.new
+      Thread.current["insight.sphinx"] ||= Stats.new
     end
 
     def name

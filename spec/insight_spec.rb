@@ -12,7 +12,7 @@ describe Insight do
   end
 
   it "serves the Insight assets under /__insight__/" do
-    response = get "/__insight__/bug.css"
+    response = get "/__insight__/insight.css"
     response.should be_ok
   end
 

@@ -9,6 +9,7 @@ module Insight
     include Render
     include ERB::Util
     include Database::RequestDataClient
+    include Logging
     include Instrumentation::Client
 
     attr_reader :request
@@ -26,7 +27,7 @@ module Insight
       @env = env
       before(env)
       status, headers, body = @app.call(env)
-      @request = Request.new(env)
+      @request = Rack::Request.new(env)
       after(env, status, headers, body)
       env["insight.panels"] << self
       return [status, headers, body]

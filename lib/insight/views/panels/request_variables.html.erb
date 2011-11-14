@@ -1,4 +1,6 @@
+<% ["GET", "POST", "Session", "Cookies", "SERVER VARIABLES", "Rack ENV"].each do |header|
 next unless sections.has_key?(header)
+%>
 <h3><%=header%></h3>
 <table id="request_variables">
   <thead>

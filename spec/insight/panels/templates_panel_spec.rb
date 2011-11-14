@@ -1,7 +1,6 @@
 module Insight
   describe TemplatesPanel do
     before do
-      TemplatesPanel.reset
       rack_env "insight.panel_classes", [TemplatesPanel]
     end
 

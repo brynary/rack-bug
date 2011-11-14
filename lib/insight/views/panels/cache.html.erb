@@ -1,3 +1,5 @@
+<h3>Cache Usage</h3>
+<table id="cache_usage">
 <colgroup>
   <col width="12%"/>
   <col width="12%"/>
@@ -46,7 +48,7 @@
         <th>Parameters</th>
         <th>Function</th>
         <th>
-          <a href="/__insight__/delete_cache_list?<%= signed_params(stats.queries_to_param) %>" class="rb_delete_cache">
+          <a href="/__insight__/delete_cache_list?<%= signed_params(stats.queries_to_param) %>" class="insight_delete_cache">
             Delete All
           </a>
         </th>
@@ -62,7 +64,7 @@
           <td></td>
           <td>
             <a href="/__insight__/view_cache?<%= signed_params("key" => query.keys.first) %>" class="remote_call">View</a> |
-            <a href="/__insight__/delete_cache?<%= signed_params("key" => query.keys.first) %>" class="rb_delete_cache">Delete</a>
+            <a href="/__insight__/delete_cache?<%= signed_params("key" => query.keys.first) %>" class="insight_delete_cache">Delete</a>
           </td>
         </tr>
         <% i += 1 %>
@@ -73,7 +75,7 @@
 
 <script type="text/javascript" charset="utf-8">
   jQuery(function () {
-      jQuery("#insight .rb_delete_cache").click(function (evt) {
+      jQuery("#insight .insight_delete_cache").click(function (evt) {
         jQuery.ajax({
 url: this.href,
 beforeSend: function() {

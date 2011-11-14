@@ -4,9 +4,9 @@ module Insight
 
     MIME_TYPES = ["text/html", "application/xhtml+xml"]
 
-    def initialize(app, bug)
+    def initialize(app, insight)
       @app = app
-      @bug = bug
+      @insight = insight
       @request_table = Database::RequestTable.new
     end
 
@@ -47,13 +47,13 @@ module Insight
         { :id => row[0], :method => row[1], :path => row[2] }
       end
       headers_fragment = render_template("headers_fragment",
-                                         :panels => @bug.panels,
+                                         :panels => @insight.panels,
                                          :request_id => req_id)
 
       current_request_fragment = render_template("request_fragment",
                                                  :request_id => req_id,
                                                  :requests => requests,
-                                                 :panels => @bug.panels)
+                                                 :panels => @insight.panels)
       render_template("toolbar",
                       :request_fragment => current_request_fragment,
                       :headers_fragment => headers_fragment,

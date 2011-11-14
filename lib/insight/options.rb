@@ -1,3 +1,4 @@
+require 'ipaddr'
 module Insight
   module Options
     class << self

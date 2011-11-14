@@ -1,3 +1,5 @@
+require "digest"
+
 module Insight
 
   class SQLPanel < Panel

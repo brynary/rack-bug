@@ -1,4 +1,6 @@
 require 'insight'
+require 'sqlite3'
+require 'base64'
 
 module Insight
   class Database
@@ -36,6 +38,7 @@ module Insight
     end
 
     class << self
+      include Logging
       def db
         @db ||= open_database
       end
@@ -45,12 +48,8 @@ module Insight
         @db.execute("pragma foreign_keys = on")
         @db
       rescue Object => ex
-        msg = "Speedtracer issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect
-        if Rails.logger
-          Rails.logger.debug msg
-        else
-          puts msg
-        end
+        msg = "Issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect
+        logger.debug{ msg }
 
         return {}
       end
@@ -63,7 +62,10 @@ module Insight
     end
 
     class Table
+      include Logging
+
       def db
+        Insight::Database.db
       end
 
       def create_keys_clause
@@ -76,6 +78,7 @@ module Insight
 
       def execute(*args)
         #Rails.logger.info{ args }
+        logger.debug{ args }
         db.execute(*args)
       end
 
@@ -84,9 +87,8 @@ module Insight
         @keys = keys
         if(execute("select * from sqlite_master where name = ?", table_name).empty?)
           execute(create_sql)
-          if Rails.logger
-            Rails.logger.debug{ "Initializing a table called #{table_name}" }
-          end
+
+          logger.debug{ "Initializing a table called #{table_name}" }
         end
       end
 

@@ -1,3 +1,4 @@
+
 module Insight
 
   class CachePanel < Panel
@@ -30,7 +31,7 @@ module Insight
     end
 
     def request_finish(env, st, hd, bd, timing)
-      Rails.logger.debug "Stats: #@stats"
+      logger(env).debug{ "Stats: #@stats" }
       store(env, @stats)
     end
 

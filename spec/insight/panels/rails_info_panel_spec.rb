@@ -1,3 +1,5 @@
+require File::expand_path("../../../spec_helper", __FILE__)
+require 'insight/panels/rails_info_panel'
 module Insight
   describe RailsInfoPanel do
     before do

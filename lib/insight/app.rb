@@ -16,19 +16,6 @@ module Insight
 
     class SecurityError < StandardError
     end
-
-    def self.enable
-      Thread.current["insight.enabled"] = true
-    end
-
-    def self.disable
-      Thread.current["insight.enabled"] = false
-    end
-
-    def self.enabled?
-      Thread.current["insight.enabled"] == true
-    end
-
     def initialize(app, options = {}, &block)
       initialize_options options
       @app = asset_server(app)
@@ -36,6 +23,7 @@ module Insight
       instance_eval(&block) if block_given?
 
       @logger = Logger.new(read_option(:log_level), read_option(:log_path))
+      Thread.current['insight.logger'] = @logger
       @bug_app = make_bug_app(app)
     end
     attr_reader :logger
@@ -73,7 +61,7 @@ module Insight
     def panel_mappings
       classes = read_option(:panel_classes)
       root = INSIGHT_ROOT
-      bug = self
+      insight = self
       builder = Rack::Builder.new do
         classes.each do |panel_class|
           panel_class.panel_mappings.each do |path, app|
@@ -83,10 +71,10 @@ module Insight
           end
         end
         map root + "/panels_content" do
-          run PanelsContent.new(bug)
+          run PanelsContent.new(insight)
         end
         map root + "/panels_header" do
-          run PanelsHeader.new(bug)
+          run PanelsHeader.new(insight)
         end
       end
       return asset_mapped(builder)
@@ -106,7 +94,7 @@ module Insight
           end)
         end
         use RedirectInterceptor
-        use InstrumentSetup
+        use Instrumentation::Setup
         run app
       end
     end
@@ -124,7 +112,7 @@ module Insight
     end
 
     def public_path
-      ::File.expand_path(::File.dirname(__FILE__) + "/bug/public/__insight__")
+      ::File.expand_path(::File.dirname(__FILE__) + "/insight/public/__insight__")
     end
 
     def toolbar_requested?

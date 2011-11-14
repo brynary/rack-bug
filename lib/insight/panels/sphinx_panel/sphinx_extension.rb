@@ -1,3 +1,5 @@
+require 'riddle'
+
 if defined?(Riddle)
   Riddle::Client.class_eval do
     def request_with_insight(command, messages)

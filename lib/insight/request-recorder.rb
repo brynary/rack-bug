@@ -1,3 +1,6 @@
+require 'insight'
+require 'insight/database'
+
 module Insight
   class RequestRecorder
     def initialize(app)

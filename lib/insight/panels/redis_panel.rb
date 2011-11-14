@@ -16,11 +16,11 @@ module Insight
     end
 
     def self.reset
-      Thread.current["rack.bug.redis"] = Stats.new
+      Thread.current["insight.redis"] = Stats.new
     end
 
     def self.stats
-      Thread.current["rack.bug.redis"] ||= Stats.new
+      Thread.current["insight.redis"] ||= Stats.new
     end
 
     def name
