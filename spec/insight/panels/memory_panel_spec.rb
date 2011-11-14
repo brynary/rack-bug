@@ -12,7 +12,7 @@ module Insight
 
       it "displays the memory change during the request" do
         response = get_via_rack "/"
-        response.should have_heading(/\d+ KB Δ/)
+        response.should have_heading(/\d+ KB/)
       end
     end
   end

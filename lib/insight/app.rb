@@ -3,7 +3,7 @@ require "digest/sha1"
 require "insight/autoloading"
 require 'insight/logger'
 require 'insight/request-recorder'
-require 'insight/instrument-setup'
+require 'insight/instrumentation/setup'
 require 'insight/panels-content'
 require 'insight/panels-header'
 module Insight

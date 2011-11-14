@@ -6,4 +6,6 @@ gemspec
 
 group :development do
   gem "rspec"
+  gem "sinatra"
+  gem "webrat"
 end

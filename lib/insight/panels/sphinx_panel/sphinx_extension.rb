@@ -18,4 +18,3 @@ if defined?(Sphinx::Client)
 
   alias_method_chain :PerformRequest, :insight
 end
-end

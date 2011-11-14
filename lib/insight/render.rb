@@ -1,5 +1,6 @@
-module Insight
+require 'erb'
 
+module Insight
   module Render
     include ERB::Util
 

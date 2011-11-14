@@ -1,3 +1,5 @@
+require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+
 describe Insight do
   it "inserts the Insight toolbar" do
     response = get "/"
@@ -114,20 +116,21 @@ describe Insight do
       rack_env "insight.password", "secret"
     end
 
-    sha = "545049d1c5e2a6e0dfefd37f9a9e0beb95241935"
-    set_cookie ["insight_enabled=1", "insight_password=#{sha}"]
-    response = get_via_rack "/"
-    response.should have_selector("div#insight")
-  end
+    it "should insert the Insight toolbar when the password matches" do
+      sha = "545049d1c5e2a6e0dfefd37f9a9e0beb95241935"
+      set_cookie ["insight_enabled=1", "insight_password=#{sha}"]
+      response = get_via_rack "/"
+      response.should have_selector("div#insight")
+    end
 
-  response = get_via_rack "/"
-  response.should_not have_selector("div#insight")
-end
-
-it "doesn't use any panels" do
-  DummyPanel.should_not_receive(:new)
-  rack_env "insight.panel_classes", [DummyPanel]
-  get_via_rack "/"
-end
+    it "should be disabled when the password doesn't match" do
+      response = get_via_rack "/"
+      response.should_not have_selector("div#insight")
+    end
+    it "doesn't use any panels" do
+      DummyPanel.should_not_receive(:new)
+      rack_env "insight.panel_classes", [DummyPanel]
+      get_via_rack "/"
+    end
   end
 end

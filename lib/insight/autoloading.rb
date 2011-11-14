@@ -1,5 +1,4 @@
 module Insight
-
   autoload :FilteredBacktrace,      "insight/filtered_backtrace"
   autoload :Options,                "insight/options"
   autoload :Logger,                 "insight/logger"

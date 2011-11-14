@@ -1,3 +1,4 @@
+require 'mongo'
 if defined?(Mongo)
   Mongo::Connection.class_eval do
 
@@ -20,4 +21,4 @@ if defined?(Mongo)
   end
   alias_method_chain :receive_message, :insight
 end
-end
+

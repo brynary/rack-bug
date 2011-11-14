@@ -21,4 +21,3 @@ if defined?(Redis)
     end
   end
 end
-end

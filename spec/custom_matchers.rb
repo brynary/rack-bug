@@ -1,4 +1,4 @@
-module Insight
+module CustomMatchers
   def have_row(container, key, value = nil)
     simple_matcher("contain row") do |response|
       if value

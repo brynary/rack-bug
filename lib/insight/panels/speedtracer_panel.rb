@@ -1,4 +1,5 @@
-require 'yajl'
+begin
+  require 'yajl'
 rescue LoadError
   #Means no Chrome Speedtracer...
 end

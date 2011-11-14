@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
 require "sinatra/base"
 require 'logger'
 
@@ -6,7 +7,7 @@ log_to = RAILS_ENV == "test" ? StringIO.new : STDOUT
 LOGGER = Logger.new(log_to)
 
 class SampleApp < Sinatra::Base
-  use Insight#, :intercept_redirects => true, :password => 'secret'
+  use Insight::App#, :intercept_redirects => true, :password => 'secret'
   set :environment, 'test'
 
   configure :test do
