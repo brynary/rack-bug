@@ -20,6 +20,18 @@ RSpec.configure do |config|
   config.include CustomMatchers
 
   config.before do
+    app.prototype
+    @added_constants = []
+  end
+
+  config.after do
+    @added_constants.each do |parent, added|
+      parent.send :remove_const, added
+    end
+    @added_constants.clear
+  end
+
+  def reset_insight
     system(*%w{rm -f insight.sqlite})
     Insight.enable
 
@@ -42,15 +54,6 @@ RSpec.configure do |config|
     end
 
     set_cookie "insight_enabled=1"
-
-    @added_constants = []
-  end
-
-  config.after do
-    @added_constants.each do |parent, added|
-      parent.send :remove_const, added
-    end
-    @added_constants.clear
   end
 
   def app

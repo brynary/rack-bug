@@ -2,11 +2,11 @@ require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe SQLPanel do
     before do
-      rack_env "insight.panel_classes", [SQLPanel]
+      app.insight_app.set :panel_classes, [SQLPanel]
 
       mock_constant("ActiveRecord::Base")
-      mock_constant("MysqlAdapter")
       mock_constant("ActiveRecord::ConnectionAdapters::MysqlAdapter")
+      reset_insight
     end
 
     describe "heading" do

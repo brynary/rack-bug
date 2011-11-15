@@ -2,8 +2,9 @@ require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe ActiveRecordPanel do
     before do
-      rack_env "insight.panel_classes", [ActiveRecordPanel]
+      app.insight_app.set :panel_classes, [ActiveRecordPanel]
       mock_constant("ActiveRecord::Base")
+      reset_insight
     end
 
     def mock_model(name)

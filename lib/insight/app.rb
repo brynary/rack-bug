@@ -88,6 +88,7 @@ module Insight
 
     def collection_stack(app)
       classes = read_option(:panel_classes)
+      p :classes => classes
       insight_id = self.object_id
       panels = self.panels
       Rack::Builder.app do
