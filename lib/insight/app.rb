@@ -39,6 +39,7 @@ module Insight
       @env = env
       @original_request = Rack::Request.new(@env)
       env['insight.logger'] = @logger
+      Thread.current['insight.logger'] = @logger
 
       if insight_active?
         Insight.enable
