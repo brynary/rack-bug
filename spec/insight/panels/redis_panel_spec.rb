@@ -1,8 +1,8 @@
+require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe RedisPanel do
     before do
-      RedisPanel.reset
-      rack_env "insight.panel_classes", [RedisPanel]
+      reset_insight :panel_classes => [RedisPanel]
     end
 
     describe "heading" do

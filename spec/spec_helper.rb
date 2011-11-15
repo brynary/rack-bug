@@ -20,7 +20,6 @@ RSpec.configure do |config|
   config.include CustomMatchers
 
   config.before do
-    app.prototype
     @added_constants = []
   end
 
@@ -31,27 +30,15 @@ RSpec.configure do |config|
     @added_constants.clear
   end
 
-  def reset_insight
+  def reset_insight(options=nil)
     system(*%w{rm -f insight.sqlite})
-    Insight.enable
 
     Insight::Database.reset
 
-    Insight::Instrumentation::ClassProbe::all_probes.each do |probe|
-      probe.clear_collectors
-    end
-    Insight::Instrumentation::InstanceProbe::all_probes.each do |probe|
-      probe.clear_collectors
-    end
-    Insight::Instrumentation::PackageDefinition.clear_collectors
+    app.prototype
+    app.insight_app.reset(options)
 
-
-    if app.insight_app.nil?
-    else
-      app.insight_app.instance_eval do
-        build_debug_stack
-      end
-    end
+    Insight.enable
 
     set_cookie "insight_enabled=1"
   end
@@ -81,6 +68,8 @@ RSpec.configure do |config|
   end
 
   def mock_method_call(context, method, args=[], kind=:instance, object=Object.new, &block)
+    mock_constant(context)
+
     called_at = caller[0]
     file, line, real_method = called_at.split(":")
     called_at = [file,line,method].join(":")

@@ -1,7 +1,7 @@
 module Insight
   describe TimerPanel do
     before do
-      rack_env "insight.panel_classes", [TimerPanel]
+      reset_insight :panel_classes => [TimerPanel]
     end
 
     describe "heading" do

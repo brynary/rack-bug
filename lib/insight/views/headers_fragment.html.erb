@@ -2,12 +2,17 @@
 
 <% panels.each do |panel| %>
   <li>
-  <% if panel.has_content? %>
-    <a href="#" class="<%= panel.name %>">
+  <% begin %>
+    <% if panel.has_content? %>
+      <a href="#" class="<%= panel.name %>">
+        <%= panel.heading_for_request(request_id) %>
+      </a>
+    <% else %>
       <%= panel.heading_for_request(request_id) %>
-    </a>
-  <% else %>
-    <%= panel.heading_for_request(request_id) %>
+    <% end %>
+  <% rescue Object => ex %>
+    Err: <%= panel.name rescue "xxx" %>
+    <!-- <%= ([ex.class.name, ex.message] + ex.backtrace[0..5]).join("\n") %> -->
   <% end %>
   </li>
 <% end %>

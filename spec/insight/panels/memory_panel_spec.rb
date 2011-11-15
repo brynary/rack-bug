@@ -1,7 +1,7 @@
 module Insight
   describe MemoryPanel do
     before do
-      rack_env "insight.panel_classes", [MemoryPanel]
+      reset_insight :panel => [MemoryPanel]
     end
 
     describe "heading" do

@@ -37,9 +37,10 @@ module Insight
 
     def after_detect(method_call, timing, args, result)
       method, key = method_call.method, args.first
-      if defined? Dalli && Dalli::Client === method_call.object
+      if(defined? Dalli and Dalli::Client === method_call.object)
         method, key = args[0], args[1]
       end
+      logger.info{ "Cache panel got #{method} #{key.inspect}" }
       @stats.record_call(method, timing.duration, !result.nil?, key)
     end
 
@@ -58,6 +59,7 @@ module Insight
     end
 
     def content_for_request(number)
+      logger.debug{{ :req_num => number }}
       stats = retreive(number).first
       render_template "panels/cache", :stats => stats
     end

@@ -33,12 +33,12 @@ module Insight
       $stderr
     end
 
-    def debug;   log(DEBUG,   yield) if @level >= DEBUG;   end
-    def info;    log(INFO,    yield) if @level >= INFO;    end
-    def warn;    log(WARN,    yield) if @level >= WARN;    end
-    def error;   log(ERROR,   yield) if @level >= ERROR;   end
-    def fatal;   log(FATAL,   yield) if @level >= FATAL;   end
-    def unknown; log(UNKNOWN, yield) if @level >= UNKNOWN; end
+    def debug;   log(DEBUG,   yield) end
+    def info;    log(INFO,    yield) end
+    def warn;    log(WARN,    yield) end
+    def error;   log(ERROR,   yield) end
+    def fatal;   log(FATAL,   yield) end
+    def unknown; log(UNKNOWN, yield) end
   end
 
   module Logging

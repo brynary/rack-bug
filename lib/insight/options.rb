@@ -62,7 +62,7 @@ module Insight
       end
     end
 
-    def initialize_options(options={})
+    def initialize_options(options=nil)
       @default_options = {
         'insight.ip_masks'             =>  [IPAddr.new("127.0.0.1")],
         'insight.password'             =>  nil,
@@ -84,7 +84,7 @@ module Insight
           Insight::MemoryPanel
       ]
       }
-      self.options = options
+      self.options = options || {}
     end
 
   end

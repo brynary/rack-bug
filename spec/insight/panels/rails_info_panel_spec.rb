@@ -1,23 +1,10 @@
-require File::expand_path("../../../spec_helper", __FILE__)
-require 'insight/panels/rails_info_panel'
 module Insight
   describe RailsInfoPanel do
     before do
-      rack_env "insight.panel_classes", [RailsInfoPanel]
+      mock_constant("Rails::Info")
+      reset_insight :panel_classes => [RailsInfoPanel]
 
-      unless defined?(Rails)
-        @added_rails = true
-        Object.const_set :Rails, Module.new
-        Rails::Info = Class.new do
-          def self.properties
-            []
-          end
-        end
-      end
-    end
-
-    after do
-      Object.send :remove_const, :Rails if @added_rails
+      Rails::Info.stub!(:properties => [])
     end
 
     describe "heading" do

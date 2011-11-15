@@ -3,7 +3,7 @@ require File::expand_path('../../../spec_helper', __FILE__)
 module Insight
   describe LogPanel do
     before do
-      rack_env "insight.panel_classes", [LogPanel]
+      reset_insight :panel_classes => [LogPanel]
     end
 
     describe "heading" do

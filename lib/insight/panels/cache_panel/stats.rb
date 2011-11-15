@@ -41,7 +41,7 @@ module Insight
         if Array === key
           @queries << Query.new(:get_multi, time, hit, key)
         else
-          @queries << Query.new(method, time, hit, [key])
+          @queries << Query.new(method.to_sym, time, hit, [key])
         end
         @calls += 1
         @time += time

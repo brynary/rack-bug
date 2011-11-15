@@ -14,7 +14,11 @@
           </form>
           <a href="" class="insight_close">Close</a>
         </div>
-        <%= panel.content_for_request(request_id) %>
+        <% begin %>
+          <%=  panel.content_for_request(request_id) %>
+        <% rescue Object => ex %>
+          <%= "Error #{ex.class.name}: #{ex.message} <!-- #{ex.backtrace[0..5]} -->" %>
+        <% end %>
       </div>
     <% end %>
   <% end %>

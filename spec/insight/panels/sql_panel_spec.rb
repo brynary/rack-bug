@@ -2,11 +2,8 @@ require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe SQLPanel do
     before do
-      app.insight_app.set :panel_classes, [SQLPanel]
-
-      mock_constant("ActiveRecord::Base")
       mock_constant("ActiveRecord::ConnectionAdapters::MysqlAdapter")
-      reset_insight
+      reset_insight :panel_classes => [SQLPanel]
     end
 
     describe "heading" do
@@ -57,6 +54,7 @@ module Insight
 
     def expect_query(sql, results)
       conn = stub("connection")
+      mock_constant("ActiveRecord::Base")
       ActiveRecord::Base.stub!(:connection => conn)
       conn.should_receive(:execute).with(sql).and_return(stub_result(results))
     end

@@ -49,6 +49,21 @@ module Insight
       end
     end
 
+
+    def reset(new_options=nil)
+      initialize_options(new_options)
+
+      Insight::Instrumentation::ClassProbe::all_probes.each do |probe|
+        probe.clear_collectors
+      end
+      Insight::Instrumentation::InstanceProbe::all_probes.each do |probe|
+        probe.clear_collectors
+      end
+      Insight::Instrumentation::PackageDefinition.clear_collectors
+
+      build_debug_stack
+    end
+
     private
 
     def insight_active?
@@ -88,7 +103,6 @@ module Insight
 
     def collection_stack(app)
       classes = read_option(:panel_classes)
-      p :classes => classes
       insight_id = self.object_id
       panels = self.panels
       Rack::Builder.app do

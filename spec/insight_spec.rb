@@ -1,6 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Insight do
+  before :each do
+    reset_insight
+  end
+
   it "inserts the Insight toolbar" do
     response = get "/"
     response.should have_selector("div#insight")
