@@ -16,6 +16,7 @@ module Insight
     UNKNOWN  =  5
 
     def log(severity, message)
+      message = message.inspect unless String === message
       if defined? Rails and
         Rails.respond_to? :logger
         not Rails.logger.nil?

@@ -64,7 +64,7 @@ module Insight
     end
 
     def method_name_without_locals(filename)
-      filename.split("/").join("_")
+      filename.split("/").join("_").tr("-", "_")
     end
 
   end

@@ -16,15 +16,16 @@ module Insight
 
     class SecurityError < StandardError
     end
+
     def initialize(app, options = {}, &block)
       initialize_options options
       @base_app = app
-      @app = asset_server(@base_app)
       @panels = []
       instance_eval(&block) if block_given?
 
       @logger = Logger.new(read_option(:log_level), read_option(:log_path))
       Thread.current['insight.logger'] = @logger
+      build_normal_stack
       build_debug_stack
       if options[:on_initialize]
         options[:on_initialize].call(self)
@@ -45,7 +46,7 @@ module Insight
         result = @debug_stack.call(env)
         result
       else
-        @app.call(env)
+        @normal_stack.call(env)
       end
     end
 
@@ -68,6 +69,13 @@ module Insight
 
     def insight_active?
       return (toolbar_requested? && ip_authorized? && password_authorized?)
+    end
+
+    def build_normal_stack
+      builder = Rack::Builder.new
+      builder.use EnableButton, self
+      builder.run Rack::Cascade.new([ asset_mapped(Rack::Builder.new), @base_app ])
+      @normal_stack = builder.to_app
     end
 
     def build_debug_stack
@@ -126,10 +134,6 @@ module Insight
         run Rack::File.new(path)
       end
       builder.to_app
-    end
-
-    def asset_server(app)
-      Rack::Cascade.new [ asset_mapped(Rack::Builder.new), app ]
     end
 
     def public_path

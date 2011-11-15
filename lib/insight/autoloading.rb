@@ -9,6 +9,7 @@ module Insight
   autoload :RedirectInterceptor,    "insight/redirect_interceptor"
   autoload :Render,                 "insight/render"
   autoload :Toolbar,                "insight/toolbar"
+  autoload :EnableButton,           "insight/enable-button"
 
   # Panels
   autoload :ActiveRecordPanel,      "insight/panels/active_record_panel"
