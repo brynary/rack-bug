@@ -7,7 +7,36 @@ log_to = RAILS_ENV == "test" ? StringIO.new : STDOUT
 LOGGER = Logger.new(log_to)
 
 class SampleApp < Sinatra::Base
-  use Insight::App#, :intercept_redirects => true, :password => 'secret'
+  class OneLastThing
+    def initialize(app)
+      @app = app
+    end
+
+    def call(env)
+      st,hd,bd = @app.call(env)
+      unless SampleApp.before_returning.nil?
+        SampleApp.before_returning.call
+        SampleApp.before_returning = nil
+      end
+      return st,hd,bd
+    end
+  end
+
+  class << self
+    attr_accessor :insight_app
+    attr_accessor :before_returning
+    def before_return(&block)
+      self.before_returning = block
+    end
+  end
+
+
+
+  use Insight::App, :log_path => "insight-test.log", :on_initialize => proc {|app|
+    self.insight_app = app
+  }
+  use OneLastThing
+
   set :environment, 'test'
 
   configure :test do

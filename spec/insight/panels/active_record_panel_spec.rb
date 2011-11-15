@@ -1,14 +1,26 @@
+require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe ActiveRecordPanel do
     before do
-      ActiveRecordPanel.reset
       rack_env "insight.panel_classes", [ActiveRecordPanel]
+      mock_constant("ActiveRecord::Base")
+    end
+
+    def mock_model(name)
+      model = stub("model")
+      model.stub!(:name => name)
+      obj = stub(name)
+      obj.stub!(:base_class => model)
+      obj
     end
 
     describe "heading" do
       it "displays the total number of instantiated AR objects" do
-        ActiveRecordPanel.record("User")
-        ActiveRecordPanel.record("Group")
+        app.before_return do
+          mock_method_call("ActiveRecord::Base", "allocate", [], :class, mock_model("User"))
+          mock_method_call("ActiveRecord::Base", "allocate", [], :class, mock_model("Group"))
+        end
+
         response = get_via_rack "/"
         response.should have_heading("2 AR Objects")
       end
@@ -16,9 +28,11 @@ module Insight
 
     describe "content" do
       it "displays the count of instantiated objects for each class" do
-        ActiveRecordPanel.record("User")
-        ActiveRecordPanel.record("User")
-        ActiveRecordPanel.record("Group")
+        app.before_return do
+          mock_method_call("ActiveRecord::Base", "allocate", [], :class, mock_model("User"))
+          mock_method_call("ActiveRecord::Base", "allocate", [], :class, mock_model("User"))
+          mock_method_call("ActiveRecord::Base", "allocate", [], :class, mock_model("Group"))
+        end
         response = get_via_rack "/"
         response.should have_row("#active_record", "User", "2")
         response.should have_row("#active_record", "Group", "1")

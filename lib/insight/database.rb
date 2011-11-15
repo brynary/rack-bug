@@ -43,6 +43,10 @@ module Insight
         @db ||= open_database
       end
 
+      def reset
+        @db = nil
+      end
+
       def open_database
         @db = SQLite3::Database.new("insight.sqlite")
         @db.execute("pragma foreign_keys = on")
@@ -79,6 +83,7 @@ module Insight
       def execute(*args)
         #Rails.logger.info{ args }
         logger.debug{ args }
+        #logger.debug{ [args, caller] }
         db.execute(*args)
       end
 

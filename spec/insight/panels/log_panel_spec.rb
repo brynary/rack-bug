@@ -1,7 +1,8 @@
+require File::expand_path('../../../spec_helper', __FILE__)
+
 module Insight
   describe LogPanel do
     before do
-      LogPanel.reset
       rack_env "insight.panel_classes", [LogPanel]
     end
 
@@ -14,7 +15,9 @@ module Insight
 
     describe "content" do
       it "displays recorded log lines" do
-        LogPanel.record("This is a logged message", 0)
+        app.before_return do
+          mock_method_call("Logger", "add", [0, "This is a logged message"])
+        end
         response = get_via_rack "/"
         response.should contain("This is a logged message")
         response.should contain("DEBUG")
@@ -33,7 +36,7 @@ module Insight
       it "does not err out" do
         logger = LOGGER
         Object.send :remove_const, :LOGGER
-        lambda{ load("insight/panels/log_panel/logger_extension.rb") }.should_not raise_error
+        lambda{ load("insight/panels/log_panel.rb") }.should_not raise_error
         ::LOGGER = logger
       end
     end

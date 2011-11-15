@@ -1,29 +1,27 @@
+require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
   describe SQLPanel do
     before do
-      SQLPanel.reset
       rack_env "insight.panel_classes", [SQLPanel]
 
-      unless defined?(ActiveRecord)
-        @added_rails = true
-        Object.const_set :ActiveRecord, Module.new
-        ActiveRecord.const_set :Base, Class.new
-      end
-    end
-
-    after do
-      Object.send :remove_const, :ActiveRecord if @added_active_record
+      mock_constant("ActiveRecord::Base")
+      mock_constant("MysqlAdapter")
+      mock_constant("ActiveRecord::ConnectionAdapters::MysqlAdapter")
     end
 
     describe "heading" do
       it "displays the total SQL query count" do
-        SQLPanel.record("SELECT NOW();") { }
+        app.before_return do
+          mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
+        end
         response = get_via_rack "/"
         response.should have_heading("1 Queries")
       end
 
       it "displays the total SQL time" do
-        SQLPanel.record("SELECT NOW();") { }
+        app.before_return do
+          mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
+        end
         response = get_via_rack "/"
         response.should have_heading(/Queries \(\d+\.\d{2}ms\)/)
       end
@@ -31,13 +29,17 @@ module Insight
 
     describe "content" do
       it "displays each executed SQL query" do
-        SQLPanel.record("SELECT NOW();") { }
+        app.before_return do
+          mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
+        end
         response = get_via_rack "/"
         response.should have_row("#sql", "SELECT NOW();")
       end
 
       it "displays the time of each executed SQL query" do
-        SQLPanel.record("SELECT NOW();") { }
+        app.before_return do
+          mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
+        end
         response = get_via_rack "/"
         response.should have_row("#sql", "SELECT NOW();", TIME_MS_REGEXP)
       end
@@ -49,7 +51,7 @@ module Insight
       rows = results[1..-1]
 
       result = stub("result", :fetch_fields => fields)
-      result.stub!(:each).and_yield(*rows)
+      result.stub!(:map).and_yield(rows)
       return result
     end
 
@@ -59,15 +61,15 @@ module Insight
       conn.should_receive(:execute).with(sql).and_return(stub_result(results))
     end
 
-    describe "execute_sql" do
+    describe "sql/execute" do
       it "displays the query results" do
         rack_env "insight.secret_key", "abc"
         expect_query "SELECT username FROM users",
           [["username"],
             ["bryan"]]
 
-        response = get_via_rack "/__insight__/execute_sql", {:query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"}, {:xhr => true}
+        response = get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
+          :hash => Digest::SHA1.hexdigest("abc:SELECT username FROM users")}, {:xhr => true}
         response.should contain("SELECT username FROM users")
         response.should be_ok
       end
@@ -76,7 +78,7 @@ module Insight
         rack_env "insight.secret_key", 'abc'
 
         lambda {
-          get_via_rack "/__insight__/execute_sql", {:query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
             :hash => "foobar"}, {:xhr => true}
         }.should raise_error(SecurityError)
       end
@@ -85,7 +87,7 @@ module Insight
         rack_env "insight.secret_key", nil
 
         lambda {
-          get_via_rack "/__insight__/execute_sql", {:query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
             :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"}, {:xhr => true}
         }.should raise_error(SecurityError)
       end
@@ -94,21 +96,22 @@ module Insight
         rack_env "insight.secret_key", ""
 
         lambda {
-          get_via_rack "/__insight__/execute_sql", {:query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
             :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"}, {:xhr => true}
         }.should raise_error(SecurityError)
       end
     end
 
-    describe "explain_sql" do
+    describe "sql/explain" do
       it "displays the query explain plan" do
         rack_env "insight.secret_key", "abc"
         expect_query "EXPLAIN SELECT username FROM users",
           [["table"],
             ["users"]]
 
-        response = get_via_rack "/__insight__/explain_sql", :query => "SELECT username FROM users",
-          :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
+
+        response = get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
+          :hash => Digest::SHA1.hexdigest("abc:SELECT username FROM users")
         response.should contain("SELECT username FROM users")
         response.should be_ok
       end
@@ -117,7 +120,7 @@ module Insight
         rack_env "insight.secret_key", 'abc'
 
         lambda {
-          get_via_rack "/__insight__/explain_sql", :query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
           :hash => "foobar"
         }.should raise_error(SecurityError)
       end
@@ -126,7 +129,7 @@ module Insight
         rack_env "insight.secret_key", nil
 
         lambda {
-          get_via_rack "/__insight__/explain_sql", :query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
           :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
         }.should raise_error(SecurityError)
       end
@@ -135,7 +138,7 @@ module Insight
         rack_env "insight.secret_key", ""
 
         lambda {
-          get_via_rack "/__insight__/explain_sql", :query => "SELECT username FROM users",
+          get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
           :hash => "6f286f55b75716e5c91f16d77d09fa73b353ebc1"
         }.should raise_error(SecurityError)
       end

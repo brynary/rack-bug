@@ -9,7 +9,7 @@ module Insight
       module ProbeRunner
         include Backstage
 
-        def probe_run(object, context = "::", kind=:instance, called_at=caller[1], args=[])
+        def probe_run(object, context = "::", kind=:instance, args=[], called_at=caller[1])
           return yield if Thread.current['instrumented_backstage']
           instrument = Thread.current['insight.instrument']
           result = nil
@@ -28,6 +28,8 @@ module Insight
       end
 
       class << self
+        include Logging
+
         def class_list
           @@class_list ||= begin
                              classes = []
@@ -61,7 +63,7 @@ module Insight
             begin
               h[k] = self.new(const_from_name(k))
             rescue NameError
-              warn "Cannot find constant: #{k}"
+              logger.info{ "Cannot find constant: #{k}" }
             end
           end
         end
@@ -88,6 +90,10 @@ module Insight
 
       def all_collectors
         @collectors.values
+      end
+
+      def clear_collectors
+        @collectors.clear
       end
 
       def probe(collector, *methods)
@@ -129,6 +135,7 @@ module Insight
             build_tracing_wrappers(klass, method_name)
           end
         end
+        @probe_orders.clear
       end
 
       def interposition_module_name
@@ -163,7 +170,7 @@ module Insight
 
           target.class_exec() do
             define_method(method_name) do |*args, &block|
-              ProbeRunner::probe_run(self, self.class.name, :instance, caller(0)[0], args) do
+              ProbeRunner::probe_run(self, self.class.name, :instance, args, caller(0)[0]) do
                 super(*args, &block)
               end
             end
@@ -185,7 +192,7 @@ module Insight
 
         (class << target; self; end).class_exec(method) do |method|
           define_method(method_name) do |*args, &block|
-            ProbeRunner::probe_run(self, self.name, :class, caller(0)[0], args) do
+            ProbeRunner::probe_run(self, self.name, :class, args, caller(0)[0]) do
               method.call(*args, &block)
             end
           end

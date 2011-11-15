@@ -45,6 +45,10 @@ module Insight
       true
     end
 
+    def name
+      "Unnamed panel: #{__FILE__}" #for shame
+    end
+
     def heading_for_request(number)
       heading rescue "xxx" #XXX: no panel should need this
     end

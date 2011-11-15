@@ -28,7 +28,7 @@ module Insight
     end
 
     def logfile
-      @logfile ||= File::open(path, "a+")
+      @logfile ||= File::open(@log_path, "a+")
     rescue
       $stderr
     end

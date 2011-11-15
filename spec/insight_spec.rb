@@ -74,7 +74,7 @@ describe Insight do
 
     it "should provide a link to the target URL" do
       response = get "/redirect", {}, "insight.intercept_redirects" => true
-      response.should have_selector("a[href='/']")
+      response.should have_selector("a[href='http://example.org/']")
     end
 
     it "inserts the toolbar if requested" do
@@ -117,7 +117,7 @@ describe Insight do
     end
 
     it "should insert the Insight toolbar when the password matches" do
-      sha = "545049d1c5e2a6e0dfefd37f9a9e0beb95241935"
+      sha = Digest::SHA1.hexdigest ["insight", "secret"].join(":")
       set_cookie ["insight_enabled=1", "insight_password=#{sha}"]
       response = get_via_rack "/"
       response.should have_selector("div#insight")

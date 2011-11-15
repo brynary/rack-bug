@@ -53,6 +53,7 @@ module Insight
 
     def heading_for_request(number)
       stats = retreive(number).first
+
       "Cache: %.2fms (#{stats.queries.size} calls)" % stats.time
     end
 

@@ -14,6 +14,10 @@ module Insight::Instrumentation
         InstanceProbe.all_probes + ClassProbe.all_probes
       end
 
+      def clear_collectors
+        all_collectors.clear
+      end
+
       def all_collectors
         @all_collectors ||= []
       end

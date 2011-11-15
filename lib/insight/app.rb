@@ -18,13 +18,17 @@ module Insight
     end
     def initialize(app, options = {}, &block)
       initialize_options options
-      @app = asset_server(app)
+      @base_app = app
+      @app = asset_server(@base_app)
       @panels = []
       instance_eval(&block) if block_given?
 
       @logger = Logger.new(read_option(:log_level), read_option(:log_path))
       Thread.current['insight.logger'] = @logger
-      @bug_app = make_bug_app(app)
+      build_debug_stack
+      if options[:on_initialize]
+        options[:on_initialize].call(self)
+      end
     end
     attr_reader :logger
     attr_accessor :panels
@@ -38,7 +42,7 @@ module Insight
       if insight_active?
         Insight.enable
         env["insight.panels"] = []
-        result = @bug_app.call(env)
+        result = @debug_stack.call(env)
         result
       else
         @app.call(env)
@@ -51,11 +55,12 @@ module Insight
       return (toolbar_requested? && ip_authorized? && password_authorized?)
     end
 
-    def make_bug_app(app)
+    def build_debug_stack
+      @panels.clear
       builder = Rack::Builder.new
       builder.use Toolbar, self
-      builder.run Rack::Cascade.new([panel_mappings, collection_stack(app)])
-      builder.to_app
+      builder.run Rack::Cascade.new([panel_mappings, collection_stack(@base_app)])
+      @debug_stack = builder.to_app
     end
 
     def panel_mappings
@@ -83,6 +88,7 @@ module Insight
 
     def collection_stack(app)
       classes = read_option(:panel_classes)
+      insight_id = self.object_id
       panels = self.panels
       Rack::Builder.app do
         use RequestRecorder
@@ -112,7 +118,7 @@ module Insight
     end
 
     def public_path
-      ::File.expand_path(::File.dirname(__FILE__) + "/insight/public/__insight__")
+      ::File.expand_path("../../insight/public/__insight__", __FILE__)
     end
 
     def toolbar_requested?
