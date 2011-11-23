@@ -70,7 +70,7 @@ module Insight
         'insight.secret_key'           =>  nil,
         'insight.intercept_redirects'  =>  false,
         'insight.panels'               =>  [],
-        'insight.log_level'            =>  Logger::DEBUG,
+        'insight.log_level'            =>  Logger::INFO,
         'insight.log_path'             =>  "log/insight.log",
         'insight.panel_classes'        =>  [
           Insight::RailsInfoPanel,

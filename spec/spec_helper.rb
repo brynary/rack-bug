@@ -77,7 +77,7 @@ RSpec.configure do |config|
     block ||= proc {}
 
     Insight::Instrumentation::Probe::ProbeRunner.probe_run(
-      object, context, kind, args, called_at, &block)
+      object, context, kind, args, called_at, method, &block)
   end
 
   def rack_env(key, value)

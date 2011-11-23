@@ -35,9 +35,8 @@ module Insight
 
       include Backstage
 
-      def run(object, context="::", kind=:instance, called_at = caller[0], args=[], &blk)
-        file, line, method = called_at.split(':')
-        method = method.gsub(/^in|[^\w]+/, '') if method
+      def run(object, context="::", kind=:instance, called_at = caller[0], method = "<unknown>", args=[], &blk)
+        file, line, rest = called_at.split(':')
         call_number = backstage{ self.class.seq_number }
         method_call = backstage{ MethodCall.new(call_number, caller(1), file, line, object, context, kind, method, Thread::current) }
         #$stderr.puts [method_call.context, method_call.method].inspect

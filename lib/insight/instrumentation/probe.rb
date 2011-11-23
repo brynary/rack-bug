@@ -9,7 +9,7 @@ module Insight
       module ProbeRunner
         include Backstage
 
-        def probe_run(object, context = "::", kind=:instance, args=[], called_at=caller[1])
+        def probe_run(object, context = "::", kind=:instance, args=[], called_at=caller[1], method_name = nil)
           return yield if Thread.current['instrumented_backstage']
           instrument = Thread.current['insight.instrument']
           result = nil
@@ -20,7 +20,7 @@ module Insight
               result = yield
             end
           else
-            instrument.run(object, context, kind, called_at, args){ result = yield }
+            instrument.run(object, context, kind, called_at, method_name, args){ result = yield }
           end
           result
         end
@@ -138,43 +138,28 @@ module Insight
         @probe_orders.clear
       end
 
-      def interposition_module_name
-        @interposition_module_name ||= (@const.name.gsub(/::/, "") + "Instance").to_sym
+      def get_method(klass, method_name)
+        klass.instance_method(method_name)
       end
 
-      def interpose_module
-        return Interpose::const_get(interposition_module_name)
-      rescue NameError
-        mod = Module.new
-        Interpose::const_set(interposition_module_name, mod)
-        retry
+      def define_trace_method(target, method)
+        target.class_exec() do
+          define_method(method.name) do |*args, &block|
+            ProbeRunner::probe_run(self, method.owner.name, :instance, args, caller(0)[0], method.name) do
+              method.bind(self).call(*args, &block)
+            end
+          end
+        end
       end
 
       def build_tracing_wrappers(target, method_name)
         return if @probed.has_key?([target,method_name])
         @probed[[target,method_name]] = true
 
-        mod = interpose_module
-        unless target.include?(mod)
-          target.class_eval do
-            include mod
-          end
-        end
+        if local_method_defs(target).find{|local_method| local_method.to_sym == method_name.to_sym}
+          meth = get_method(target, method_name)
 
-        if target.instance_methods(false).include?(method_name.to_s)
-          meth = target.instance_method(method_name)
-
-          interpose_module.module_eval do
-            define_method(method_name, meth)
-          end
-
-          target.class_exec() do
-            define_method(method_name) do |*args, &block|
-              ProbeRunner::probe_run(self, self.class.name, :instance, args, caller(0)[0]) do
-                super(*args, &block)
-              end
-            end
-          end
+          define_trace_method(target, meth)
         end
       end
     end
@@ -184,17 +169,16 @@ module Insight
         klass.singleton_methods(false)
       end
 
-      def build_tracing_wrappers(target, method_name)
-        return if @probed.has_key?([target, method_name])
-        @probed[[target, method_name]] = true
+      def get_method(klass, method_name)
+        (class << klass; self; end).instance_method(method_name)
+      end
 
-        method = target.method(method_name)
-
-        (class << target; self; end).class_exec(method) do |method|
-          define_method(method_name) do |*args, &block|
-            ProbeRunner::probe_run(self, self.name, :class, args, caller(0)[0]) do
-              method.call(*args, &block)
-            end
+      def define_trace_method(target, method)
+        (class << target; self; end).class_exec() do
+          define_method(method.name) do |*args, &block|
+          ProbeRunner::probe_run(self, target.name, :class, args, caller(0)[0], method.name) do
+            method.bind(self).call(*args, &block)
+          end
           end
         end
       end
