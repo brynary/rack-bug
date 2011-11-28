@@ -1,5 +1,5 @@
 module Insight
-  describe MemoryPanel do
+  describe "MemoryPanel" do
     before do
       reset_insight :panel => [MemoryPanel]
     end

@@ -3,7 +3,7 @@ module Insight
   class RedisPanel < Panel
     require "insight/panels/redis_panel/redis_extension"
 
-    autoload :Stats, "insight/panels/redis_panel/stats"
+    require "insight/panels/redis_panel/stats"
 
     def self.record(redis_command_args, backtrace, &block)
       return block.call unless Insight.enabled?

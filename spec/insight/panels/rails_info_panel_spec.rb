@@ -1,5 +1,5 @@
 module Insight
-  describe RailsInfoPanel do
+  describe "RailsInfoPanel" do
     before do
       mock_constant("Rails::Info")
       reset_insight :panel_classes => [RailsInfoPanel]

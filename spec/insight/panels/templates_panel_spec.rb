@@ -1,5 +1,5 @@
 module Insight
-  describe TemplatesPanel do
+  describe "TemplatesPanel" do
     before do
       mock_constant("ActionView::Template")
       reset_insight :panel_classes => [TemplatesPanel]

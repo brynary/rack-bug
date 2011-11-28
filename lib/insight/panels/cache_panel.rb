@@ -2,8 +2,8 @@
 module Insight
 
   class CachePanel < Panel
-    autoload :PanelApp, "insight/panels/cache_panel/panel_app"
-    autoload :Stats,    "insight/panels/cache_panel/stats"
+    require "insight/panels/cache_panel/panel_app"
+    require "insight/panels/cache_panel/stats"
 
     def initialize(app)
       super

@@ -1,6 +1,6 @@
 require File::expand_path("../../../spec_helper", __FILE__)
 module Insight
-  describe ActiveRecordPanel do
+  describe "ActiveRecordPanel" do
     before do
       mock_constant("ActiveRecord::Base")
       reset_insight :panel_classes => [ActiveRecordPanel]

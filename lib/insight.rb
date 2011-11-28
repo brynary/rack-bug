@@ -14,5 +14,4 @@ module Insight
   end
 end
 
-require 'insight/autoloading'
 require 'insight/app'

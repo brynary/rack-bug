@@ -1,8 +1,7 @@
 module Insight
 
   class TemplatesPanel < Panel
-    autoload :Trace,      "insight/panels/templates_panel/trace"
-    autoload :Rendering,  "insight/panels/templates_panel/rendering"
+    require "insight/panels/templates_panel/rendering"
 
     def initialize(app)
       super

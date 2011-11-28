@@ -1,6 +1,7 @@
 require "erb"
 require 'insight/database'
 require 'insight/instrumentation'
+require 'insight/render'
 
 module Insight
 
@@ -13,6 +14,53 @@ module Insight
     include Instrumentation::Client
 
     attr_reader :request
+
+    class << self
+      def file_index
+        return @file_index ||= Hash.new do |h,k|
+          h[k] = []
+        end
+      end
+
+      def panel_exclusion
+        return @panel_exclusion ||= []
+      end
+
+      def from_file(rel_path)
+        old_rel, Thread::current['panel_file'] = Thread::current['panel_file'], rel_path
+        require File::join('insight', 'panels', rel_path)
+        return (file_index[rel_path] - panel_exclusion)
+      ensure
+        Thread::current['panel_file'] = old_rel
+      end
+
+      def current_panel_file
+        return Thread::current['panel_file'] ||
+          begin
+            file_name = nil
+            caller.each do |line|
+              md = %r{^[^:]*insight/panels/([^:]*)\.rb:}.match line
+              unless md.nil?
+                file_name = md[1]
+              end
+            end
+            file_name
+          end
+      end
+
+      def inherited(sub)
+        if filename = current_panel_file
+          Panel::file_index[current_panel_file] << sub
+        else
+          warn "Insight::Panel inherited by #{sub.name} outside of an insight/panels/* file.  Discarded"
+        end
+      end
+
+      def excluded(klass = nil)
+        Panel::panel_exclusion << klass || self
+      end
+
+    end
 
     def initialize(app)
       if panel_app

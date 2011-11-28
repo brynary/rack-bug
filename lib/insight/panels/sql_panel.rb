@@ -4,8 +4,8 @@ module Insight
 
   class SQLPanel < Panel
 
-    autoload :PanelApp, "insight/panels/sql_panel/panel_app"
-    autoload :QueryResult,    "insight/panels/sql_panel/query"
+    require "insight/panels/sql_panel/panel_app"
+    require "insight/panels/sql_panel/query"
 
     def initialize(app)
       super

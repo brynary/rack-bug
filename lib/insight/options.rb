@@ -62,6 +62,16 @@ module Insight
       end
     end
 
+    def process_options
+      if(file_list = read_option('insight.panel_files'))
+        class_list = read_option('insight.panel_classes') || []
+        file_list.each do |file|
+          class_list |= Insight::Panel.from_file(file)
+        end
+        write_option('insight.panel_classes', class_list)
+      end
+    end
+
     def initialize_options(options=nil)
       @default_options = {
         'insight.ip_masks'             =>  [IPAddr.new("127.0.0.1")],
@@ -72,19 +82,20 @@ module Insight
         'insight.panels'               =>  [],
         'insight.log_level'            =>  Logger::INFO,
         'insight.log_path'             =>  "log/insight.log",
-        'insight.panel_classes'        =>  [
-          Insight::RailsInfoPanel,
-          Insight::TimerPanel,
-          Insight::RequestVariablesPanel,
-          Insight::SQLPanel,
-          Insight::ActiveRecordPanel,
-          Insight::CachePanel,
-          Insight::TemplatesPanel,
-          Insight::LogPanel,
-          Insight::MemoryPanel
-      ]
+        'insight.panel_files'          =>  %w{
+          rails_info_panel
+          timer_panel
+          request_variables_panel
+          sql_panel
+          active_record_panel
+          cache_panel
+          templates_panel
+          log_panel
+          memory_panel
+        }
       }
       self.options = options || {}
+      process_options
     end
 
   end

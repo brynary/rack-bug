@@ -2,8 +2,7 @@ module Insight
 
   class SphinxPanel < Panel
     require "insight/panels/sphinx_panel/sphinx_extension"
-
-    autoload :Stats, "insight/panels/sphinx_panel/stats"
+    require "insight/panels/sphinx_panel/stats"
 
     def self.record(*sphinx_command_args, &block)
       return block.call unless Insight.enabled?

@@ -1,6 +1,6 @@
 if defined? Mongo
   module Insight
-    describe MongoPanel do
+    describe "MongoPanel" do
       before do
         MongoPanel.reset
         rack_env "insight.panel_classes", [MongoPanel]

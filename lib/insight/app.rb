@@ -1,11 +1,22 @@
 require "rack"
 require "digest/sha1"
-require "insight/autoloading"
+require "insight/filtered_backtrace"
+require "insight/options"
+require "insight/logger"
+require "insight/panel"
+require "insight/panel_app"
+require "insight/params_signature"
+require "insight/rack_static_bug_avoider"
+require "insight/redirect_interceptor"
+require "insight/render"
+require "insight/toolbar"
+require "insight/enable-button"
 require 'insight/logger'
 require 'insight/request-recorder'
 require 'insight/instrumentation/setup'
 require 'insight/panels-content'
 require 'insight/panels-header'
+
 module Insight
   class App
     include Options

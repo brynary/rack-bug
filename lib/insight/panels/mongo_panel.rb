@@ -2,8 +2,7 @@ module Insight
 
   class MongoPanel < Panel
     require "insight/panels/mongo_panel/mongo_extension"
-
-    autoload :Stats, "insight/panels/mongo_panel/stats"
+    require "insight/panels/mongo_panel/stats"
 
     def self.record(command, &block)
       return block.call unless Insight.enabled?

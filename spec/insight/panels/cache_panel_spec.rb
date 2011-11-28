@@ -1,5 +1,5 @@
 module Insight
-  describe CachePanel do
+  describe "CachePanel" do
     before do
       mock_constant("Rails")
       mock_constant("Memcached")

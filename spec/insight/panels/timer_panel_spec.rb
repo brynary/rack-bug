@@ -1,5 +1,5 @@
 module Insight
-  describe TimerPanel do
+  describe "TimerPanel" do
     before do
       reset_insight :panel_classes => [TimerPanel]
     end
