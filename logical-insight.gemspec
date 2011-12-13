@@ -2,16 +2,26 @@
 
 Gem::Specification.new do |s|
   s.name = %q{logical-insight}
-  s.version = "0.4.0"
+  s.version = "0.4.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]
-  s.date = %q{2011-05-02}
+  s.date = %q{2011-12-13}
   s.email = %q{evan@lrdesign.com judson@lrdesign.com}
   s.extra_rdoc_files = [
     "README.md",
     "MIT-LICENSE.txt"
   ]
+  s.homepage = %q{https://github.com/LRDesign/logical-insight}
+  s.require_paths = ["lib"]
+  s.rubygems_version = %q{1.3.7}
+  s.summary = %q{Debugging toolbar for Rack applications implemented as
+    middleware.  Rails 3 compatible version maintained by Logical Reality
+    Design.  }
+  s.description = %q{Debugging toolbar for Rack applications implemented as
+    middleware.  Rails 3 compatible version maintained by Logical Reality
+    Design.  }
+
   s.files = %w[
     lib/logical-insight.rb
     lib/insight.rb
@@ -129,15 +139,6 @@ Legacy files: would like to re-include them, but they need work
     lib/insight/panels/speedtracer_panel/profiling.rb
 =end
 
-  s.homepage = %q{http://github.com/lrdesign/lrd_rack_bug}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Debugging toolbar for Rack applications implemented as
-    middleware.  Rails 3 compatible version maintained by Logical Reality
-    Design.  }
-  s.description = %q{Debugging toolbar for Rack applications implemented as
-    middleware.  Rails 3 compatible version maintained by Logical Reality
-    Design.  }
   s.add_dependency("uuid", "~> 2.3.1")
   s.add_dependency("sqlite3", "~> 1.3.3")
   #s.test_files = Dir.glob("spec/**/*") gem test assumes Test::Unit

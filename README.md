@@ -1,17 +1,14 @@
-Rack::Bug (Logical Reality Design Fork)
+Insight
 =========
 
-LRDesign fork of Rack::Bug.  We maintain our own fork because the base (by brynary)
-seems focussed on Rails 2, and we want to improve Rails 3 compatibility and add features.
-
-* Repository: [http://github.com/lrdesign/rack-bug](http://github.com/lrdesign/rack-bug)
+Insight began life as an LRDesign fork of Insight.  We started a fork because the main project wasn't making progress on Rails 3 support.  Having made really significant archetectural changes, we'll be keeping Insight a separate project for the forseeable future.
 
 * Forked From: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
 
 Description
 -----------
 
-Rack::Bug adds a diagnostics toolbar to Rack apps. When enabled, it injects a floating div
+Insight adds a diagnostics toolbar to Rack apps. When enabled, it injects a floating div
 allowing exploration of logging, database queries, template rendering times, etc.
 
 Features
@@ -19,7 +16,7 @@ Features
 
 * Password-based security
 * IP-based security
-* Rack::Bug instrumentation/reporting is broken up into panels.
+* Insight instrumentation/reporting is broken up into panels.
     * Panels in default configuration:
         * Rails Info
         * Timer
@@ -32,27 +29,33 @@ Features
         * Memory
     * Other bundled panels:
         * Redis
+        * Speedtracer
+    * Retired panels - if needed they could come back quickly:
         * Sphinx
-    * The API for adding your own panels is simple and powerful
+        * Mongo
+    * The API for adding your own panels is simple and very powerful
+        * Consistent interface to instrument application code
+        * Consistent timing across panels
+        * Easy to add sub-applications for more detailed reports (c.f. SQLPanel)
+        * The documentation is scarce, so there's a feeling of adventure :/
 
 Rails quick start
 ---------------------------
 
-    script/plugin install git://github.com/brynary/rack-bug.git
+Add this to your Gemfile
+    gem "logical-insight"
 
 In config/environments/development.rb, add:
 
-    config.middleware.use "Rack::Bug",
+    config.middleware.use "Insight",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
 
-Add the bookmarklet to your browser:
-
-    open http://RAILS_APP/__rack_bug__/bookmarklet.html
+Any environment with Insight loaded will have a link to "Insight" in the upper left.  Clicking that link will load the toolbar.
 
 Using with non-Rails Rack apps
 ------------------------------
 
-Just 'use Rack::Bug' as any other middleware.  See the SampleApp in the spec/fixtures folder for an example Sinatra app.
+Just 'use Insight' as any other middleware.  See the SampleApp in the spec/fixtures folder for an example Sinatra app.
 
 If you wish to use the logger panel define the LOGGER constant that is a ruby Logger or ActiveSupport::BufferedLogger
 
@@ -63,22 +66,23 @@ Specify the set of panels you want, in the order you want them to appear:
 
     require "rack/bug"
 
-    ActionController::Dispatcher.middleware.use Rack::Bug,
+    ActionController::Dispatcher.middleware.use Insight,
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
-      :panel_classes => [
-        Rack::Bug::TimerPanel,
-        Rack::Bug::RequestVariablesPanel,
-        Rack::Bug::RedisPanel,
-        Rack::Bug::TemplatesPanel,
-        Rack::Bug::LogPanel,
-        Rack::Bug::MemoryPanel
+      :panel_files => %w[
+        timer_panel
+        request_variables_panel
+        redis_panel
+        templates_panel
+        log_panel
+        memory_panel
       ]
 
+Files are looked up by prepending "insight/panels/" and requiring them.  Subclasses of Insight::Panel are loaded and added to the toolbar.  This makes it easier to work with the configuration and extend Insight with plugin gems.
 
-Running Rack::Bug in staging or production
+Running Insight in staging or production
 ------------------------------------------
 
-We have have found that Rack::Bug is fast enough to run in production for specific troubleshooting efforts.
+We have have found that Insight is fast enough to run in production for specific troubleshooting efforts.
 
 ### Configuration ####
 
@@ -90,13 +94,13 @@ Restrict access to particular IP addresses:
 
     require "ipaddr"
 
-    ActionController::Dispatcher.middleware.use "Rack::Bug"
+    ActionController::Dispatcher.middleware.use "Insight"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :ip_masks   => [IPAddr.new("2.2.2.2/0")]
 
 Restrict access using a password:
 
-    ActionController::Dispatcher.middleware.use "Rack::Bug",
+    ActionController::Dispatcher.middleware.use "Insight",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :password   => "yourpassword"
 
@@ -104,14 +108,14 @@ Restrict access using a password:
 Authors
 -------
 
-- Maintained by [Evan Dorn](mailto:bryan@brynary.com)
+- Maintained by [Judson Lester](mailto:judson@lrdesign.com)
 - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
 
 Thanks
 ------
-Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink, and Rack::Cache
+Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.
 
-Thanks to Weplay.com for supporting the development of Rack::Bug
+Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink, and Rack::Cache
 
 Development
 -----------
