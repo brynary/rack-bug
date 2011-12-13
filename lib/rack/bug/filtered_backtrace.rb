@@ -13,7 +13,7 @@ module Rack
       def filtered_backtrace
         @filtered_backtrace ||= @backtrace.map{|l| l.to_s.strip }.select do |line|
           root_for_backtrace_filtering.nil? ||
-          (line.index(root_for_backtrace_filtering) == 0) && !(line.index(root_for_backtrace_filtering("vendor")) == 0)
+          (line.index(root_for_backtrace_filtering.to_s) == 0) && !(line.index(root_for_backtrace_filtering("vendor").to_s) == 0)
         end
       end
 
