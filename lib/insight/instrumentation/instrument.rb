@@ -1,4 +1,5 @@
 require 'insight/instrumentation/backstage'
+require 'insight/logger'
 
 module Insight
   module Instrumentation

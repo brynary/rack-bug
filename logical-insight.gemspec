@@ -29,9 +29,7 @@ Gem::Specification.new do |s|
     lib/insight/views/panels/speedtracer/traces.html.erb
     lib/insight/views/panels/speedtracer/servertrace.html.erb
     lib/insight/views/panels/sql.html.erb
-    lib/insight/views/panels/sphinx.html.erb
     lib/insight/views/panels/templates.html.erb
-    lib/insight/views/panels/mongo.html.erb
     lib/insight/views/panels/explain_sql.html.erb
     lib/insight/views/panels/log.html.erb
     lib/insight/views/panels/active_record.html.erb
@@ -56,23 +54,15 @@ Gem::Specification.new do |s|
     lib/insight/panels/rails_info_panel.rb
     lib/insight/panels/sql_panel/panel_app.rb
     lib/insight/panels/sql_panel/query.rb
-    lib/insight/panels/mongo_panel/mongo_extension.rb
-    lib/insight/panels/mongo_panel/stats.rb
     lib/insight/panels/cache_panel/panel_app.rb
     lib/insight/panels/cache_panel/stats.rb
     lib/insight/panels/timer_panel.rb
-    lib/insight/panels/sphinx_panel/stats.rb
     lib/insight/panels/redis_panel/redis_extension.rb
     lib/insight/panels/redis_panel/stats.rb
     lib/insight/panels/sql_panel.rb
-    lib/insight/panels/sphinx_panel.rb
     lib/insight/panels/templates_panel.rb
-    lib/insight/panels/mongo_panel.rb
     lib/insight/panels/log_panel.rb
-    lib/insight/panels/speedtracer_panel/profiling.rb
-    lib/insight/panels/speedtracer_panel/instrument.rb
     lib/insight/panels/speedtracer_panel/trace-app.rb
-    lib/insight/panels/speedtracer_panel/render.rb
     lib/insight/panels/speedtracer_panel/tracer.rb
     lib/insight/panels/active_record_panel.rb
     lib/insight/panels/cache_panel.rb
@@ -123,6 +113,21 @@ Gem::Specification.new do |s|
     Rakefile
     Thorfile
   ]
+
+=begin
+Legacy files: would like to re-include them, but they need work
+    lib/insight/views/panels/mongo.html.erb
+    lib/insight/panels/mongo_panel/mongo_extension.rb
+    lib/insight/panels/mongo_panel/stats.rb
+    lib/insight/panels/mongo_panel.rb
+
+    lib/insight/views/panels/sphinx.html.erb
+    lib/insight/panels/sphinx_panel/stats.rb
+    lib/insight/panels/sphinx_panel.rb
+
+    This one is mostly just a curiousity
+    lib/insight/panels/speedtracer_panel/profiling.rb
+=end
 
   s.homepage = %q{http://github.com/lrdesign/lrd_rack_bug}
   s.require_paths = ["lib"]

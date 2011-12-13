@@ -9,7 +9,7 @@ module Corundum
     sanity = GemspecSanity.new(tk)
     rspec = RSpec.new(tk)
     cov = SimpleCov.new(tk, rspec) do |cov|
-      cov.threshold = 70
+      cov.threshold = 90
     end
     gem = GemBuilding.new(tk)
     cutter = GemCutter.new(tk,gem)
