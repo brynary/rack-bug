@@ -12,16 +12,117 @@ Gem::Specification.new do |s|
     "README.md",
     "MIT-LICENSE.txt"
   ]
-  s.files = [
-    ".gitignore",
-    "History.txt",
-    "MIT-LICENSE.txt",
-    "README.md",
-    "Rakefile",
-    "Thorfile",
+  s.files = %w[
+    lib/logical-insight.rb
+    lib/insight.rb
+    lib/insight/rack_static_bug_avoider.rb
+    lib/insight/toolbar.rb
+    lib/insight/views/request_fragment.html.erb
+    lib/insight/views/enable-button.html.erb
+    lib/insight/views/redirect.html.erb
+    lib/insight/views/headers_fragment.html.erb
+    lib/insight/views/panels/rails_info.html.erb
+    lib/insight/views/panels/execute_sql.html.erb
+    lib/insight/views/panels/timer.html.erb
+    lib/insight/views/panels/view_cache.html.erb
+    lib/insight/views/panels/speedtracer/serverevent.html.erb
+    lib/insight/views/panels/speedtracer/traces.html.erb
+    lib/insight/views/panels/speedtracer/servertrace.html.erb
+    lib/insight/views/panels/sql.html.erb
+    lib/insight/views/panels/sphinx.html.erb
+    lib/insight/views/panels/templates.html.erb
+    lib/insight/views/panels/mongo.html.erb
+    lib/insight/views/panels/explain_sql.html.erb
+    lib/insight/views/panels/log.html.erb
+    lib/insight/views/panels/active_record.html.erb
+    lib/insight/views/panels/cache.html.erb
+    lib/insight/views/panels/request_variables.html.erb
+    lib/insight/views/panels/profile_sql.html.erb
+    lib/insight/views/panels/redis.html.erb
+    lib/insight/views/toolbar.html.erb
+    lib/insight/views/error.html.erb
+    lib/insight/options.rb
+    lib/insight/panel.rb
+    lib/insight/logger.rb
+    lib/insight/database.rb
+    lib/insight/panels-header.rb
+    lib/insight/filtered_backtrace.rb
+    lib/insight/panels-content.rb
+    lib/insight/enable-button.rb
+    lib/insight/instrumentation.rb
+    lib/insight/app.rb
+    lib/insight/panels/request_variables_panel.rb
+    lib/insight/panels/redis_panel.rb
+    lib/insight/panels/rails_info_panel.rb
+    lib/insight/panels/sql_panel/panel_app.rb
+    lib/insight/panels/sql_panel/query.rb
+    lib/insight/panels/mongo_panel/mongo_extension.rb
+    lib/insight/panels/mongo_panel/stats.rb
+    lib/insight/panels/cache_panel/panel_app.rb
+    lib/insight/panels/cache_panel/stats.rb
+    lib/insight/panels/timer_panel.rb
+    lib/insight/panels/sphinx_panel/stats.rb
+    lib/insight/panels/redis_panel/redis_extension.rb
+    lib/insight/panels/redis_panel/stats.rb
+    lib/insight/panels/sql_panel.rb
+    lib/insight/panels/sphinx_panel.rb
+    lib/insight/panels/templates_panel.rb
+    lib/insight/panels/mongo_panel.rb
+    lib/insight/panels/log_panel.rb
+    lib/insight/panels/speedtracer_panel/profiling.rb
+    lib/insight/panels/speedtracer_panel/instrument.rb
+    lib/insight/panels/speedtracer_panel/trace-app.rb
+    lib/insight/panels/speedtracer_panel/render.rb
+    lib/insight/panels/speedtracer_panel/tracer.rb
+    lib/insight/panels/active_record_panel.rb
+    lib/insight/panels/cache_panel.rb
+    lib/insight/panels/speedtracer_panel.rb
+    lib/insight/panels/templates_panel/rendering.rb
+    lib/insight/panels/memory_panel.rb
+    lib/insight/request-recorder.rb
+    lib/insight/public/__insight__/bookmarklet.html
+    lib/insight/public/__insight__/bookmarklet.js
+    lib/insight/public/__insight__/spinner.gif
+    lib/insight/public/__insight__/insight.css
+    lib/insight/public/__insight__/jquery.tablesorter.min.js
+    lib/insight/public/__insight__/insight.js
+    lib/insight/public/__insight__/jquery-1.3.2.js
+    lib/insight/redirect_interceptor.rb
+    lib/insight/panel_app.rb
+    lib/insight/instrumentation/instrument.rb
+    lib/insight/instrumentation/package-definition.rb
+    lib/insight/instrumentation/backstage.rb
+    lib/insight/instrumentation/client.rb
+    lib/insight/instrumentation/setup.rb
+    lib/insight/instrumentation/probe.rb
+    lib/insight/instrumentation/probe-definition.rb
+    lib/insight/params_signature.rb
+    lib/insight/render.rb
+    spec/custom_matchers.rb
+    spec/spec_helper.rb
+    spec/instrumentation_spec.rb
+    spec/fixtures/config.ru
+    spec/fixtures/dummy_panel.rb
+    spec/fixtures/sample_app.rb
+    spec/spec.opts
+    spec/insight_spec.rb
+    spec/insight/panels/mongo_panel_spec_pending.rb
+    spec/insight/panels/active_record_panel_spec.rb
+    spec/insight/panels/redis_panel_spec.rb
+    spec/insight/panels/templates_panel_spec.rb
+    spec/insight/panels/memory_panel_spec.rb
+    spec/insight/panels/timer_panel_spec.rb
+    spec/insight/panels/sql_panel_spec.rb
+    spec/insight/panels/rails_info_panel_spec.rb
+    spec/insight/panels/log_panel_spec.rb
+    spec/insight/panels/cache_panel_spec.rb
+    spec/rcov.opts
+    History.txt
+    MIT-LICENSE.txt
+    README.md
+    Rakefile
+    Thorfile
   ]
-  s.files += Dir.glob("lib/**/*")
-  s.files += Dir.glob("spec/**/*")
 
   s.homepage = %q{http://github.com/lrdesign/lrd_rack_bug}
   s.require_paths = ["lib"]

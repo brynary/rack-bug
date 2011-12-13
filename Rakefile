@@ -1,23 +1,24 @@
-require "rubygems"
-require "spec/rake/spectask"
+require 'corundum'
+require 'corundum/tasklibs'
 
-Spec::Rake::SpecTask.new do |t|
-  t.spec_opts = ['--options', "\"#{File.dirname(__FILE__)}/spec/spec.opts\""]
-end
+module Corundum
+  tk = Toolkit.new do |tk|
+  end
 
-desc "Run all specs in spec directory with RCov"
-Spec::Rake::SpecTask.new(:rcov) do |t|
-  t.spec_opts = ['--options', "\"#{File.dirname(__FILE__)}/spec/spec.opts\""]
-  t.rcov = true
-  t.rcov_opts = lambda do
-    IO.readlines(File.dirname(__FILE__) + "/spec/rcov.opts").map {|l| l.chomp.split " "}.flatten
+  tk.in_namespace do
+    sanity = GemspecSanity.new(tk)
+    rspec = RSpec.new(tk)
+    cov = SimpleCov.new(tk, rspec) do |cov|
+      cov.threshold = 70
+    end
+    gem = GemBuilding.new(tk)
+    cutter = GemCutter.new(tk,gem)
+    email = Email.new(tk)
+    vc = Git.new(tk) do |vc|
+      vc.branch = "master"
+    end
+    task tk.finished_files.build => vc["is_checked_in"]
+    docs = YARDoc.new(tk)
   end
 end
 
-desc "Run the specs"
-task :default => :spec
-
-desc 'Removes trailing whitespace'
-task :whitespace do
-  sh %{find . -name '*.rb' -exec sed -i '' 's/ *$//g' {} \\;}
-end
