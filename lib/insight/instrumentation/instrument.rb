@@ -35,6 +35,8 @@ module Insight
 
       include Backstage
 
+      include Logging
+
       def run(object, context="::", kind=:instance, called_at = caller[0], method = "<unknown>", args=[], &blk)
         file, line, rest = called_at.split(':')
         call_number = backstage{ self.class.seq_number }
@@ -59,10 +61,15 @@ module Insight
         collectors = probe_chain.inject([]) do |list, probe|
           probe.collectors(method_call.method)
         end
+        logger.debug do
+          "Probe chain for: #{method_call.context} #{method_call.kind} #{method_call.method}:\n  #{collectors.map{|col| col.class.name}.join(", ")}"
+        end
         collectors
       end
 
       def start_event(method_call, arguments)
+        logger.debug{ "Starting event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
+
         collectors_for(method_call).each do |collector|
           collector.before_detect(method_call, arguments)
         end
@@ -70,6 +77,7 @@ module Insight
 
       def finish_event(method_call, arguments, start_time, result)
         timing = Timing.new(@start, start_time, Time.now)
+        logger.debug{ "Finishing event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
         collectors_for(method_call).each do |collector|
           collector.after_detect(method_call, timing, arguments, result)
         end

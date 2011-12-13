@@ -77,9 +77,15 @@
   border-right: 1px solid #487858;
 }
 
+#insight_toolbar #insight_disable_button {
+  color: red;
+  font-weight: bold;
+  padding-left: 5px;
+}
+
 #insight_toolbar #insight_debug_button {
   color: #92ef3f;
-  padding-left: 20px;
+  padding-left: 5px;
 }
 
 #insight .panel_content {

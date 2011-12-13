@@ -17,15 +17,15 @@ module Insight
 
     def log(severity, message)
       message = message.inspect unless String === message
+      return unless severity >= @level
+
       if defined? Rails and
         Rails.respond_to? :logger
         not Rails.logger.nil?
         Rails.logger.add(severity, "[Insight]: " + message)
       end
 
-      if severity >= @level
-        logfile.puts(message)
-      end
+      logfile.puts(message)
     end
 
     def logfile
@@ -45,10 +45,11 @@ module Insight
   module Logging
     def logger(env = nil)
       if env.nil?
-        Thread.current['insight.logger']
+        Thread.current['insight.logger'] ||= Logger.new(Logger::DEBUG, "")
       else
         env["insight.logger"]
       end
     end
+    module_function :logger
   end
 end

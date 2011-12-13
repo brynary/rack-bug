@@ -9,6 +9,10 @@
   </ul>
 <% end %>
 <dl>
-  <dt><%= trace.uuid %> - <%= trace.start.strftime("%H:%M:%S") %></dt>
-  <dd><%= trace.to_html %></dd>
+  <% if trace.nil? %>
+    <dt>Problem</dt><dd>Trace is nil</dd>
+  <% else %>
+    <dt><%= trace.uuid %> - <%= trace.start.strftime("%H:%M:%S") %></dt>
+    <dd><%= trace.to_html %></dd>
+  <% end %>
 </dl>

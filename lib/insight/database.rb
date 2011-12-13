@@ -81,9 +81,7 @@ module Insight
       end
 
       def execute(*args)
-        #Rails.logger.info{ args }
-        logger.debug{ args }
-        #logger.debug{ [args, caller] }
+        logger.debug{ ins_args = args.inspect; "(#{[ins_args.length,120].min}/#{ins_args.length})" + ins_args[0..120] }
         db.execute(*args)
       end
 

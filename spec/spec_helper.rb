@@ -20,6 +20,7 @@ RSpec.configure do |config|
   config.include CustomMatchers
 
   config.before do
+    Thread.current["insight.logger"] = Insight::Logger.new(Logger::FATAL, "")
     @added_constants = []
   end
 

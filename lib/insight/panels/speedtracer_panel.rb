@@ -19,16 +19,28 @@ module Insight
 
       @tracer = Tracer.new(@table)
       probe(@tracer) do
+        instrument("ActiveSupport::Notifications") do
+          class_probe :instrument
+        end
+
         instrument("ActionView::Rendering") do
           instance_probe :render
         end
 
+        instrument("ActionView::Helpers::RecordTagHelper") do
+          instance_probe :content_tag_for
+        end
+
         instrument("ActionView::Partials::PartialRenderer") do
-          instance_probe :render
+          instance_probe :render, :find_template, :render_collection, :collection_with_template, :collection_without_template, :partial_path, :collection_paths
+        end
+
+        instrument("ActionView::Template") do
+          instance_probe :render, :compile
         end
 
         instrument("ActiveRecord::Base") do
-          class_probe :find, :all, :first, :last, :count, :delete_all
+          class_probe :find, :find_by_sql, :all, :first, :last, :count, :delete_all
           instance_probe :save, :save!, :destroy, :delete
         end
 

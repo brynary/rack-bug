@@ -8,9 +8,14 @@ module Insight
 
       module ProbeRunner
         include Backstage
+        include Logging
 
         def probe_run(object, context = "::", kind=:instance, args=[], called_at=caller[1], method_name = nil)
-          return yield if Thread.current['instrumented_backstage']
+          if Thread.current['instrumented_backstage']
+            #warn "probe_run while backstage: #{context}, #{kind},
+            ##{method_name}" unless method_name.to_sym == :add
+            return yield
+          end
           instrument = Thread.current['insight.instrument']
           result = nil
           if instrument.nil?
@@ -118,18 +123,21 @@ module Insight
       def descendants_that_define(method_name)
         log{{ :descendants => descendants }}
         descendants.find_all do |klass|
-          (@const == klass or local_method_defs(klass).include?(method_name))
+          (@const != klass and local_method_defs(klass).include?(method_name))
         end
       end
 
+      include Logging
       def log &block
+        logger.debug &block
         #$stderr.puts block.call.inspect
       end
 
       def fulfill_probe_orders
-        log{{:probes_for => @const.name}}
+        log{{:probes_for => @const.name, :type => self.class}}
         @probe_orders.each do |method_name|
           log{{ :method => method_name }}
+          build_tracing_wrappers(@const, method_name)
           descendants_that_define(method_name).each do |klass|
             log{{ :subclass => klass.name }}
             build_tracing_wrappers(klass, method_name)
@@ -156,11 +164,12 @@ module Insight
         return if @probed.has_key?([target,method_name])
         @probed[[target,method_name]] = true
 
-        if local_method_defs(target).find{|local_method| local_method.to_sym == method_name.to_sym}
-          meth = get_method(target, method_name)
+        meth = get_method(target, method_name)
 
-          define_trace_method(target, meth)
-        end
+        log{ {:tracing => meth } }
+        define_trace_method(target, meth)
+      rescue NameError => ne
+        log{ {:not_tracing => NameError } }
       end
     end
 

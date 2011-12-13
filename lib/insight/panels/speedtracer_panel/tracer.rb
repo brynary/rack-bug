@@ -117,12 +117,14 @@ module Insight
       end
 
       def symbolize_hash(hash)
+        symbolled_hash = {}
         hash.each_key do |key|
           if String === key
             next if hash.has_key?(key.to_sym)
-            hash[key.to_sym] = hash[key]
+            symbolled_hash[key.to_sym] = hash[key]
           end
         end
+        hash.merge!(symbolled_hash)
       end
     end
 

@@ -20,10 +20,10 @@ module Insight
       sections["SERVER VARIABLES"] = sort(server)
       sections["Rack ENV"] = sort(rack)
 
-      require 'pp'
-      ::File.open("sections.dump", "w") do |file|
-        PP.pp(sections, file)
-      end
+#      require 'pp'
+#      ::File.open("sections.dump", "w") do |file|
+#        PP.pp(sections, file)
+#      end
       store(env, sections)
     end
 
