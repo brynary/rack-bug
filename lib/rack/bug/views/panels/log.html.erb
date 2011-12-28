@@ -13,7 +13,7 @@
       <tr>
         <td><%= entry.level %></td>
         <td><%= entry.time %>ms</td>
-        <td><%= entry.cleaned_message %></td>
+        <td><%=h entry.cleaned_message %></td>
       </tr>
       <% i += 1 %>
     <% end %>
