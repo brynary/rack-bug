@@ -1,2 +1,10 @@
 *.sw?
 *.gem
+.bundle/
+.conductor/
+corundum/
+doc/
+insight-test.log
+insight.sqlite
+notions-and-tests/
+pkg/
