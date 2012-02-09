@@ -1,7 +1,7 @@
 Insight
 =========
 
-Insight began life as an LRDesign fork of Insight.  We started a fork because the main project wasn't making progress on Rails 3 support.  Having made really significant archetectural changes, we'll be keeping Insight a separate project for the forseeable future.
+Insight began life as an LRDesign fork of Rack::Bug.  We started a fork because the main project wasn't making progress on Rails 3 support.  Having made really significant archetectural changes, we'll be keeping Insight a separate project for the forseeable future.
 
 * Forked From: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
 
@@ -47,10 +47,10 @@ Add this to your Gemfile
 
 In config/environments/development.rb, add:
 
-    config.middleware.use "Insight",
+    config.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
 
-Any environment with Insight loaded will have a link to "Insight" in the upper left.  Clicking that link will load the toolbar.
+Any environment with Insight loaded will have a link to "Insight" added to as the last child of BODY to normal responses.  Clicking that link will load the toolbar.  It's set with an id of "logical-insight-enabler", so it can be styled to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
 
 Using with non-Rails Rack apps
 ------------------------------
