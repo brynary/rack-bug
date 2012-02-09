@@ -66,7 +66,7 @@ Specify the set of panels you want, in the order you want them to appear:
 
     require "rack/bug"
 
-    ActionController::Dispatcher.middleware.use Insight,
+    ActionController::Dispatcher.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :panel_files => %w[
         timer_panel
@@ -94,13 +94,13 @@ Restrict access to particular IP addresses:
 
     require "ipaddr"
 
-    ActionController::Dispatcher.middleware.use "Insight"
+    ActionController::Dispatcher.middleware.use "Insight::App"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :ip_masks   => [IPAddr.new("2.2.2.2/0")]
 
 Restrict access using a password:
 
-    ActionController::Dispatcher.middleware.use "Insight",
+    ActionController::Dispatcher.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :password   => "yourpassword"
 
@@ -110,10 +110,11 @@ Authors
 
 - Maintained by [Judson Lester](mailto:judson@lrdesign.com)
 - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
+- Based on Rack::Bug by Bryan Helmkamp
 
 Thanks
 ------
-Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.
+Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.  Many thanks to Bryan for building it.
 
 Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink, and Rack::Cache
 
