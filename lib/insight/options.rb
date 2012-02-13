@@ -1,4 +1,5 @@
 require 'ipaddr'
+
 module Insight
   module Options
     class << self
@@ -71,6 +72,8 @@ module Insight
         end
         write_option('insight.panel_classes', class_list)
       end
+
+      Insight::Database.database_path = read_option('insight.database_path')
     end
 
     def initialize_options(options=nil)
