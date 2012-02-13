@@ -4,7 +4,7 @@ source "http://gems.github.com"
 
 gemspec
 
-gem "corundum", :path => "../../gems/corundum"
+gem "corundum", "~> 0.0.13"
 
 group :development do
   gem "rspec"

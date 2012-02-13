@@ -1,3 +1,4 @@
+require 'yaml'
 require 'corundum'
 require 'corundum/tasklibs'
 
