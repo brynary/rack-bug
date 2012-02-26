@@ -124,6 +124,8 @@ Gem::Specification.new do |s|
     Thorfile
   ]
 
+  s.add_development_dependency "corundum", "~> 0.0.1"
+
 =begin
 Legacy files: would like to re-include them, but they need work
     lib/insight/views/panels/mongo.html.erb

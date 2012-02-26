@@ -4,8 +4,6 @@ source "http://gems.github.com"
 
 gemspec
 
-gem "corundum", :path => "../../gems/corundum"
-
 group :development do
   gem "rspec"
   gem "sinatra"
