@@ -1,7 +1,9 @@
 Insight
 =========
 
-Insight began life as an LRDesign fork of Rack::Bug.  We started a fork because the main project wasn't making progress on Rails 3 support.  Having made really significant archetectural changes, we'll be keeping Insight a separate project for the forseeable future.
+Insight began life as an LRDesign fork of Rack::Bug by brynary.  We started a fork because, at the time, the main project wasn't making progress on Rails 3 support.  Since then we've rewritten a lot of the code to make it more modular, easier to extend, and to store information about multiple requests so you can use it to inspect your AJAX requests (or any past request), not just previous page loads.
+
+Having made really significant architectural changes, we'll be keeping Insight a separate project for the forseeable future.
 
 * Forked From: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
 
@@ -9,7 +11,8 @@ Description
 -----------
 
 Insight adds a diagnostics toolbar to Rack apps. When enabled, it injects a floating div
-allowing exploration of logging, database queries, template rendering times, etc.
+allowing exploration of logging, database queries, template rendering times, etc.   Insight
+stores debugging info over many requests, incuding AJAX requests.
 
 Features
 --------
