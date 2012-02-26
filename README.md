@@ -50,10 +50,10 @@ Add this to your Gemfile
 
 In config/environments/development.rb, add:
 
-    config.middleware.use "Insight",
+    config.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
 
-Any environment with Insight loaded will have a link to "Insight" in the upper left.  Clicking that link will load the toolbar.
+Any environment with Insight loaded will have a link to "Insight" added to as the last child of BODY to normal responses.  Clicking that link will load the toolbar.  It's set with an id of "logical-insight-enabler", so it can be styled to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
 
 Using with non-Rails Rack apps
 ------------------------------
@@ -69,7 +69,7 @@ Specify the set of panels you want, in the order you want them to appear:
 
     require "rack/bug"
 
-    ActionController::Dispatcher.middleware.use Insight,
+    ActionController::Dispatcher.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :panel_files => %w[
         timer_panel
@@ -97,13 +97,13 @@ Restrict access to particular IP addresses:
 
     require "ipaddr"
 
-    ActionController::Dispatcher.middleware.use "Insight"
+    ActionController::Dispatcher.middleware.use "Insight::App"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :ip_masks   => [IPAddr.new("2.2.2.2/0")]
 
 Restrict access using a password:
 
-    ActionController::Dispatcher.middleware.use "Insight",
+    ActionController::Dispatcher.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :password   => "yourpassword"
 
@@ -113,10 +113,11 @@ Authors
 
 - Maintained by [Judson Lester](mailto:judson@lrdesign.com)
 - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
+- Based on Rack::Bug by Bryan Helmkamp
 
 Thanks
 ------
-Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.
+Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.  Many thanks to Bryan for building it.
 
 Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink, and Rack::Cache
 

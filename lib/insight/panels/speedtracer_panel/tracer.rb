@@ -19,7 +19,8 @@ module Insight
       def before_detect(method_call, arguments)
         @event_id += 1
 
-        arguments_string = make_string_of(arguments)
+        #arguments_string = make_string_of(arguments)
+        arguments_string = ""
         #XXX ServerEvent use method call...
         event = ServerEvent.new(method_call, arguments_string)
         @pstack.push event
