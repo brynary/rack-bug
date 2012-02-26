@@ -22,6 +22,9 @@ Gem::Specification.new do |s|
     middleware.  Rails 3 compatible version maintained by Logical Reality
     Design.  }
 
+    # Do this: y$@"
+    # !!find lib bin doc spec spec_help -not -regex '.*\.sw.' -type f 2>/dev/null
+    #
   s.files = %w[
     lib/logical-insight.rb
     lib/insight.rb
