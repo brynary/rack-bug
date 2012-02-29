@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{logical-insight}
-  s.version = "0.4.2"
+  s.version = "0.4.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]
@@ -127,7 +127,7 @@ Gem::Specification.new do |s|
     Thorfile
   ]
 
-  s.add_development_dependency "corundum", "~> 0.0.1"
+  s.add_development_dependency "corundum", "~> 0.0.13"
 
 =begin
 Legacy files: would like to re-include them, but they need work
