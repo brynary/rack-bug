@@ -142,6 +142,8 @@ describe Insight do
   context "configured with a SQLite database file path" do
     before do
       # We need to pass the SQLite database file path to the gem
+      require 'fileutils'
+      FileUtils.rm_rf("my_custom_db_path.sqlite") #because it doesn't count if it's already there
       reset_insight :database_path => 'my_custom_db_path.sqlite'
     end
 
@@ -150,7 +152,8 @@ describe Insight do
     end
 
     after do
-      File.delete("my_custom_db_path.sqlite")
+      FileUtils.rm_rf("my_custom_db_path.sqlite")
+      reset_insight :database_path => nil
     end
 
   end

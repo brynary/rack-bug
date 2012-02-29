@@ -23,7 +23,7 @@ module Insight
     INSIGHT_ROOT = "/__insight__"
     INSIGHT_REGEX = %r{^#{INSIGHT_ROOT}}
 
-    VERSION = "0.4.1"
+    VERSION = "0.4.4"
 
     class SecurityError < StandardError
     end

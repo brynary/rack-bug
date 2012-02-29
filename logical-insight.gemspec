@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{logical-insight}
-  s.version = "0.4.3"
+  s.version = "0.4.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]

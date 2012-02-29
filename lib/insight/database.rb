@@ -41,7 +41,7 @@ module Insight
       include Logging
 
       def database_path=(value)
-        @database_path = value
+        @database_path = value || "insight.sqlite"
       end
 
       def database_path
@@ -69,7 +69,7 @@ module Insight
 
       if defined?(PhusionPassenger)
         PhusionPassenger.on_event(:starting_worker_process) do |forked|
-          open_database if forked
+          Insight::Database::open_database if forked
         end
       end
     end
@@ -192,4 +192,3 @@ module Insight
     end
   end
 end
-
