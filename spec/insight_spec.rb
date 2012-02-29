@@ -138,4 +138,20 @@ describe Insight do
       get_via_rack "/"
     end
   end
+
+  context "configured with a SQLite database file path" do
+    before do
+      # We need to pass the SQLite database file path to the gem
+      reset_insight :database_path => 'my_custom_db_path.sqlite'
+    end
+
+    it "should create a database at the path specified in the options" do
+      File.exist?('my_custom_db_path.sqlite').should be_true
+    end
+
+    after do
+      File.delete("my_custom_db_path.sqlite")
+    end
+
+  end
 end

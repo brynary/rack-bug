@@ -39,6 +39,15 @@ module Insight
 
     class << self
       include Logging
+
+      def database_path=(value)
+        @database_path = value
+      end
+
+      def database_path
+        @database_path
+      end
+
       def db
         @db ||= open_database
       end
@@ -48,7 +57,7 @@ module Insight
       end
 
       def open_database
-        @db = SQLite3::Database.new("insight.sqlite")
+        @db = SQLite3::Database.new(database_path)
         @db.execute("pragma foreign_keys = on")
         @db
       rescue Object => ex

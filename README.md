@@ -67,7 +67,7 @@ Configuring custom panels
 
 Specify the set of panels you want, in the order you want them to appear:
 
-    require "rack/bug"
+    require "logical-insight"
 
     ActionController::Dispatcher.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
@@ -107,6 +107,13 @@ Restrict access using a password:
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :password   => "yourpassword"
 
+#### custom file path for the logging database ####
+
+Logical Insight uses SQLite to store data from requests, and outputs a database file in the root directory. If you need the file to be created at another location (i.e. Heroku), you can pass a custom file path.
+
+    ActionController::Dispatcher.middleware.use "Insight::App"
+      :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
+      :database_path => "tmp/my_insight_db.sqlite"
 
 Authors
 -------

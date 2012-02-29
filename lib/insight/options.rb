@@ -1,4 +1,5 @@
 require 'ipaddr'
+
 module Insight
   module Options
     class << self
@@ -15,6 +16,7 @@ module Insight
     option_accessor :password
     option_accessor :panel_classes
     option_accessor :intercept_redirects
+    option_accessor :database_path
 
     # The underlying options Hash. During initialization (or outside of a
     # request), this is a default values Hash. During a request, this is the
@@ -70,6 +72,8 @@ module Insight
         end
         write_option('insight.panel_classes', class_list)
       end
+
+      Insight::Database.database_path = read_option('insight.database_path')
     end
 
     def initialize_options(options=nil)
@@ -82,6 +86,7 @@ module Insight
         'insight.panels'               =>  [],
         'insight.log_level'            =>  Logger::INFO,
         'insight.log_path'             =>  "log/insight.log",
+        'insight.database_path'        =>  "insight.sqlite",
         'insight.panel_files'          =>  %w{
           rails_info_panel
           timer_panel
