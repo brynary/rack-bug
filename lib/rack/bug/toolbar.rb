@@ -1,3 +1,12 @@
+# we need 'bytesize' for String, which does not exists and is 'size' in Ruby 1.8
+unless String.instance_methods.include? :bytesize
+  class String
+    def bytesize
+      size
+    end
+  end
+end
+
 module Rack
   class Bug
     class Toolbar
@@ -49,7 +58,7 @@ module Rack
 
         full_body.sub! /<\/body>/, toolbar + "</body>"
 
-        @response["Content-Length"] = full_body.size.to_s
+        @response["Content-Length"] = full_body.bytesize.to_s
 
         # Ensure that browser does
         @response["Etag"] = ""
