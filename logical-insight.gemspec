@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{logical-insight}
-  s.version = "0.4.4"
+  s.version = "0.4.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]
@@ -62,6 +62,7 @@ Gem::Specification.new do |s|
     lib/insight/enable-button.rb
     lib/insight/instrumentation.rb
     lib/insight/app.rb
+    lib/insight/path-filter.rb
     lib/insight/panels/request_variables_panel.rb
     lib/insight/panels/redis_panel.rb
     lib/insight/panels/rails_info_panel.rb
