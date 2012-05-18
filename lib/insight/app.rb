@@ -11,6 +11,7 @@ require "insight/redirect_interceptor"
 require "insight/render"
 require "insight/toolbar"
 require "insight/enable-button"
+require "insight/path-filter"
 require 'insight/logger'
 require 'insight/request-recorder'
 require 'insight/instrumentation/setup'
@@ -46,17 +47,17 @@ module Insight
     attr_accessor :panels
 
     def call(env)
-      env.replace @default_options.merge(env)
-      @env = env
-      @original_request = Rack::Request.new(@env)
-      env['insight.logger'] = @logger
-      Thread.current['insight.logger'] = @logger
-
+      @original_request = Rack::Request.new(env)
       if insight_active?
+        @env = env
+        self.options = @default_options
+
+        env['insight.logger'] = @logger
+        Thread.current['insight.logger'] = @logger
+
         Insight.enable
         env["insight.panels"] = []
-        result = @debug_stack.call(env)
-        result
+        @debug_stack.call(env)
       else
         @normal_stack.call(env)
       end
@@ -64,6 +65,7 @@ module Insight
 
 
     def reset(new_options=nil)
+      @env = nil
       initialize_options(new_options)
 
       Insight::Instrumentation::ClassProbe::all_probes.each do |probe|
@@ -94,7 +96,8 @@ module Insight
       @panels.clear
       builder = Rack::Builder.new
       builder.use Toolbar, self
-      builder.run Rack::Cascade.new([panel_mappings, collection_stack(@base_app)])
+      builder.run Rack::Cascade.new([panel_mappings, shortcut_stack(@base_app), collection_stack(@base_app)])
+
       @debug_stack = builder.to_app
     end
 
@@ -120,24 +123,30 @@ module Insight
       return asset_mapped(builder)
     end
 
+    def shortcut_stack(app)
+      Rack::Builder.app do
+        use PathFilter
+        run app
+      end
+    end
 
     def collection_stack(app)
       classes = read_option(:panel_classes)
       insight_id = self.object_id
       panels = self.panels
-      Rack::Builder.app do
-        use RequestRecorder
-        classes.each do |panel_class|
-          run(lambda do |app|
-            panel = panel_class.new(app)
-            panels << panel
-            panel
-          end)
-        end
-        use RedirectInterceptor
-        use Instrumentation::Setup
-        run app
+
+      #Builder makes it impossible to access the panels
+
+      app = Instrumentation::Setup.new(app)
+      app = RedirectInterceptor.new(app)
+      #Reversed?  Does it matter?
+      app = classes.inject(app) do |app, panel_class|
+        panel = panel_class.new(app)
+        panels << panel
+        panel
       end
+      app = RequestRecorder.new(app)
+      return app
     end
 
     def asset_mapped(builder)

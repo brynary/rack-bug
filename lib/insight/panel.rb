@@ -73,9 +73,11 @@ module Insight
 
     def call(env)
       @env = env
+      logger.debug{ "Before call: #{self.name}" }
       before(env)
       status, headers, body = @app.call(env)
       @request = Rack::Request.new(env)
+      logger.debug{ "After call: #{self.name}" }
       after(env, status, headers, body)
       env["insight.panels"] << self
       return [status, headers, body]
@@ -94,7 +96,7 @@ module Insight
     end
 
     def name
-      "Unnamed panel: #{__FILE__}" #for shame
+      "Unnamed panel: #{self.class.name}" #for shame
     end
 
     def heading_for_request(number)

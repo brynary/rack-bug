@@ -112,7 +112,7 @@ module Insight
 
     describe "cache operations" do
       before do
-        rack_env "insight.secret_key", 'abc'
+        app.insight_app.secret_key = 'abc'
         response = get_via_rack "/"
       end
 

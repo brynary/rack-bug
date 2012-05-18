@@ -49,11 +49,19 @@ module Insight
     private
 
     def read_option(key)
-      options[option_name(key)]
+      key = option_name(key)
+      if @env and @env.has_key?(key)
+        @env[key]
+      else
+        @default_options[key]
+      end
     end
 
     def write_option(key, value)
-      options[option_name(key)] = value
+      @default_options[option_name(key)] = value
+      if @env.respond_to? :[]
+        @env[option_name(key)] = value
+      end
     end
 
     def option_name(key)
@@ -84,6 +92,7 @@ module Insight
         'insight.secret_key'           =>  nil,
         'insight.intercept_redirects'  =>  false,
         'insight.panels'               =>  [],
+        'insight.path_filters'         =>  %w{/assets/},
         'insight.log_level'            =>  Logger::INFO,
         'insight.log_path'             =>  "log/insight.log",
         'insight.database_path'        =>  "insight.sqlite",

@@ -20,8 +20,6 @@ module Insight
           result = nil
           if instrument.nil?
             backstage do
-              # Rails.logger.debug{"No instrument in thread - #{context} /
-              # #{called_at}"}
               result = yield
             end
           else
@@ -68,7 +66,7 @@ module Insight
             begin
               h[k] = self.new(const_from_name(k))
             rescue NameError
-              logger.info{ "Cannot find constant: #{k}" }
+              logger.warn{ "Cannot find constant: #{k}" }
             end
           end
         end
@@ -130,7 +128,6 @@ module Insight
       include Logging
       def log &block
         logger.debug &block
-        #$stderr.puts block.call.inspect
       end
 
       def fulfill_probe_orders

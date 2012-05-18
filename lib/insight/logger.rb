@@ -19,9 +19,7 @@ module Insight
       message = message.inspect unless String === message
       return unless severity >= @level
 
-      if defined? Rails and
-        Rails.respond_to? :logger
-        not Rails.logger.nil?
+      if defined? Rails and Rails.respond_to?(:logger) and not Rails.logger.nil?
         Rails.logger.add(severity, "[Insight]: " + message)
       end
 

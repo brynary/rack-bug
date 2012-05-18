@@ -72,31 +72,35 @@ describe Insight do
   end
 
   context "redirected when configured to intercept redirects" do
+    before :each do
+      app.insight_app.intercept_redirects = true
+    end
+
     it "shows the interception page" do
-      response = get "/redirect", {}, "insight.intercept_redirects" => true
+      response = get "/redirect"
       response.should have_selector("div#insight")
     end
 
     it "should provide a link to the target URL" do
-      response = get "/redirect", {}, "insight.intercept_redirects" => true
+      response = get "/redirect"
       response.should have_selector("a[href='http://example.org/']")
     end
 
     it "inserts the toolbar if requested" do
-      response = get "/redirect", {}, "insight.intercept_redirects" => true
+      response = get "/redirect"
       response.should have_selector("div#insight")
     end
 
     it "does not inserts the toolbar if not requested" do
       header 'cookie', ""
-      response = get "/redirect", {}, "insight.intercept_redirects" => true
+      response = get "/redirect"
       response.should_not have_selector("div#insight")
     end
   end
 
   context "configured with an IP address restriction" do
     before do
-      rack_env "insight.ip_masks", [IPAddr.new("127.0.0.1/255.255.255.0")]
+      app.insight_app.ip_masks = [IPAddr.new("127.0.0.1/255.255.255.0")]
     end
 
     it "inserts the Insight toolbar when the IP matches" do
@@ -111,14 +115,14 @@ describe Insight do
 
     it "doesn't use any panels" do
       DummyPanel.should_not_receive(:new)
-      rack_env "insight.panel_classes", [DummyPanel]
+      app.insight_app.panel_classes = [DummyPanel]
       get_via_rack "/", {}, "REMOTE_ADDR" => "128.0.0.1"
     end
   end
 
   context "configured with a password" do
     before do
-      rack_env "insight.password", "secret"
+      app.insight_app.password = "secret"
     end
 
     it "should insert the Insight toolbar when the password matches" do
@@ -134,7 +138,7 @@ describe Insight do
     end
     it "doesn't use any panels" do
       DummyPanel.should_not_receive(:new)
-      rack_env "insight.panel_classes", [DummyPanel]
+      app.insight_app.panel_classes = [DummyPanel]
       get_via_rack "/"
     end
   end

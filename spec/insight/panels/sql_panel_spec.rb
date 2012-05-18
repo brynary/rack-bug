@@ -61,7 +61,7 @@ module Insight
 
     describe "sql/execute" do
       it "displays the query results" do
-        rack_env "insight.secret_key", "abc"
+        app.insight_app.secret_key = "abc"
         expect_query "SELECT username FROM users",
           [["username"],
             ["bryan"]]
@@ -73,7 +73,7 @@ module Insight
       end
 
       it "is forbidden when the hash is missing or wrong" do
-        rack_env "insight.secret_key", 'abc'
+        app.insight_app.secret_key='abc'
 
         lambda {
           get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
@@ -82,7 +82,7 @@ module Insight
       end
 
       it "is not available when the insight.secret_key is nil" do
-        rack_env "insight.secret_key", nil
+        app.insight_app.secret_key = nil
 
         lambda {
           get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
@@ -91,7 +91,7 @@ module Insight
       end
 
       it "is not available when the insight.secret_key is an empty string" do
-        rack_env "insight.secret_key", ""
+        app.insight_app.secret_key = ""
 
         lambda {
           get_via_rack "/__insight__/sql/execute", {:query => "SELECT username FROM users",
@@ -102,7 +102,7 @@ module Insight
 
     describe "sql/explain" do
       it "displays the query explain plan" do
-        rack_env "insight.secret_key", "abc"
+        app.insight_app.secret_key = "abc"
         expect_query "EXPLAIN SELECT username FROM users",
           [["table"],
             ["users"]]
@@ -115,7 +115,7 @@ module Insight
       end
 
       it "is forbidden when the hash is missing or wrong" do
-        rack_env "insight.secret_key", 'abc'
+        app.insight_app.secret_key='abc'
 
         lambda {
           get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
@@ -124,7 +124,7 @@ module Insight
       end
 
       it "is not available when the insight.secret_key is nil" do
-        rack_env "insight.secret_key", nil
+        app.insight_app.secret_key=nil
 
         lambda {
           get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",
@@ -133,7 +133,7 @@ module Insight
       end
 
       it "is not available when the insight.secret_key is an empty string" do
-        rack_env "insight.secret_key", ""
+        app.insight_app.secret_key=""
 
         lambda {
           get_via_rack "/__insight__/sql/explain", :query => "SELECT username FROM users",

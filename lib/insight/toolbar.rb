@@ -1,6 +1,7 @@
 module Insight
   class Toolbar
     include Render
+    include Logging
 
     MIME_TYPES = ["text/html", "application/xhtml+xml"]
 
@@ -16,7 +17,9 @@ module Insight
 
       response = Rack::Response.new(body, status, headers)
 
-      inject_toolbar(response) if okay_to_modify?(env, response)
+      if okay_to_modify?(env, response)
+        inject_toolbar(response)
+      end
 
       return response.to_a
     end
@@ -46,6 +49,9 @@ module Insight
       requests = @request_table.to_a.map do |row|
         { :id => row[0], :method => row[1], :path => row[2] }
       end
+
+      logger.info{ "Injecting toolbar: active panels: #{@insight.panels.map{|pnl| pnl.class.name}.inspect}" }
+
       headers_fragment = render_template("headers_fragment",
                                          :panels => @insight.panels,
                                          :request_id => req_id)

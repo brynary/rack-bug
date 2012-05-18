@@ -15,7 +15,6 @@ module Insight
       end
     end
 
-
     def after_detect(method_call, timing, args, message)
       message = args[1] || args[2] unless message.is_a?(String)
       log_level = args[0]

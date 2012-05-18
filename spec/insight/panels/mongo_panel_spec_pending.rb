@@ -3,7 +3,7 @@ if defined? Mongo
     describe "MongoPanel" do
       before do
         MongoPanel.reset
-        rack_env "insight.panel_classes", [MongoPanel]
+        reset_insight :panel_files => %w{mongo_panel}
       end
 
       describe "heading" do

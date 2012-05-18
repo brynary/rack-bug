@@ -3,7 +3,7 @@ module Insight
   describe "ActiveRecordPanel" do
     before do
       mock_constant("ActiveRecord::Base")
-      reset_insight :panel_classes => [ActiveRecordPanel]
+      reset_insight :panel_files => %w{active_record_panel}
     end
 
     def mock_model(name)

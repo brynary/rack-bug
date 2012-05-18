@@ -31,7 +31,7 @@ module Insight
       full_body = response.body.join
       full_body.sub! /<\/body>/, render + "</body>"
 
-      response["Content-Length"] = full_body.size.to_s
+      response["Content-Length"] = full_body.bytesize.to_s
 
       response.body = [full_body]
     end

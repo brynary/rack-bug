@@ -27,6 +27,10 @@ module Insight
       false
     end
 
+    def name
+      "Memory"
+    end
+
   end
 
 end

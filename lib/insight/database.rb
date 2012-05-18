@@ -62,7 +62,7 @@ module Insight
         @db
       rescue Object => ex
         msg = "Issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect
-        logger.debug{ msg }
+        logger.error{ msg }
 
         return {}
       end
@@ -90,7 +90,7 @@ module Insight
       end
 
       def execute(*args)
-        logger.debug{ ins_args = args.inspect; "(#{[ins_args.length,120].min}/#{ins_args.length})" + ins_args[0..120] }
+        logger.info{ ins_args = args.inspect; "(#{[ins_args.length,120].min}/#{ins_args.length})" + ins_args[0..120] }
         db.execute(*args)
       end
 
@@ -98,9 +98,8 @@ module Insight
         @table_name = table_name
         @keys = keys
         if(execute("select * from sqlite_master where name = ?", table_name).empty?)
+          logger.warn{ "Initializing a table called #{table_name}" }
           execute(create_sql)
-
-          logger.debug{ "Initializing a table called #{table_name}" }
         end
       end
 
