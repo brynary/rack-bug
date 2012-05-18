@@ -1,11 +1,19 @@
 Insight
 =========
 
-Insight began life as an LRDesign fork of Rack::Bug by brynary.  We started a fork because, at the time, the main project wasn't making progress on Rails 3 support.  Since then we've rewritten a lot of the code to make it more modular, easier to extend, and to store information about multiple requests so you can use it to inspect your AJAX requests (or any past request), not just previous page loads.
+Insight began life as an LRDesign fork of Rack::Bug by brynary.  We started a
+fork because, at the time, the main project wasn't making progress on Rails 3
+support.  Since then we've rewritten a lot of the code to make it more modular,
+easier to extend, and to store information about multiple requests so you can
+use it to inspect your AJAX requests (or any past request), not just previous
+page loads.
 
-Having made really significant architectural changes, we'll be keeping Insight a separate project for the forseeable future.
+Having made really significant architectural changes, we'll be keeping Insight
+a separate project for the forseeable future.
 
-* Forked From: [http://github.com/brynary/rack-bug](http://github.com/brynary/rack-bug)
+* Forked From: [rack-bug](http://github.com/brynary/rack-bug)
+
+* [Full documentation](http://lrdesign.github.com/logical-insight/)
 
 Description
 -----------
@@ -53,14 +61,19 @@ In config/environments/development.rb, add:
     config.middleware.use "Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
 
-Any environment with Insight loaded will have a link to "Insight" added to as the last child of BODY to normal responses.  Clicking that link will load the toolbar.  It's set with an id of "logical-insight-enabler", so it can be styled to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
+Any environment with Insight loaded will have a link to "Insight" added to as
+the last child of BODY to normal responses.  Clicking that link will load the
+toolbar.  It's set with an id of "logical-insight-enabler", so it can be styled
+to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
 
 Using with non-Rails Rack apps
 ------------------------------
 
-Just 'use Insight' as any other middleware.  See the SampleApp in the spec/fixtures folder for an example Sinatra app.
+Just 'use Insight' as any other middleware.  See the SampleApp in the
+spec/fixtures folder for an example Sinatra app.
 
-If you wish to use the logger panel define the LOGGER constant that is a ruby Logger or ActiveSupport::BufferedLogger
+If you wish to use the logger panel define the LOGGER constant that is a ruby
+Logger or ActiveSupport::BufferedLogger
 
 Configuring custom panels
 -------------------------
@@ -80,7 +93,9 @@ Specify the set of panels you want, in the order you want them to appear:
         memory_panel
       ]
 
-Files are looked up by prepending "insight/panels/" and requiring them.  Subclasses of Insight::Panel are loaded and added to the toolbar.  This makes it easier to work with the configuration and extend Insight with plugin gems.
+Files are looked up by prepending "insight/panels/" and requiring them.
+Subclasses of Insight::Panel are loaded and added to the toolbar.  This makes
+it easier to work with the configuration and extend Insight with plugin gems.
 
 Running Insight in staging or production
 ------------------------------------------
@@ -89,7 +104,8 @@ We have have found that Insight is fast enough to run in production for specific
 
 ### Configuration ####
 
-Add the middleware configuration to an initializer or the appropriate environment files, taking the rest of this section into consideration.
+Add the middleware configuration to an initializer or the appropriate
+environment files, taking the rest of this section into consideration.
 
 ### Security ####
 
@@ -109,7 +125,9 @@ Restrict access using a password:
 
 #### custom file path for the logging database ####
 
-Logical Insight uses SQLite to store data from requests, and outputs a database file in the root directory. If you need the file to be created at another location (i.e. Heroku), you can pass a custom file path.
+Logical Insight uses SQLite to store data from requests, and outputs a database
+file in the root directory. If you need the file to be created at another
+location (i.e. Heroku), you can pass a custom file path.
 
     ActionController::Dispatcher.middleware.use "Insight::App"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
@@ -124,13 +142,13 @@ Authors
 
 Thanks
 ------
-Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart in there.  Many thanks to Bryan for building it.
+Insight owes a lot to Rack::Bug, as the basis project.  There's a lot of smart
+in there.  Many thanks to Bryan for building it.
 
-Inspiration for Rack::Bug is primarily from the Django debug toolbar. Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink, and Rack::Cache
+Inspiration for Rack::Bug is primarily from the Django debug toolbar.
+Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink,
+and Rack::Cache
 
-Development
------------
-For development, you'll need to install the following gems: rspec, rack-test, webrat, sinatra
 
 License
 -------

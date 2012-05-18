@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
   s.version = "0.4.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Bryan Helmkamp", "Evan Dorn", "Judson Lester"]
-  s.date = %q{2011-12-13}
-  s.email = %q{evan@lrdesign.com judson@lrdesign.com}
+  s.authors = ["Evan Dorn", "Judson Lester", "Bryan Helmkamp"]
+  s.date = %q{2012-05-17}
+  s.email = %w{evan@lrdesign.com judson@lrdesign.com bryan@brynary.com}
   s.extra_rdoc_files = [
     "README.md",
     "MIT-LICENSE.txt"
@@ -129,6 +129,7 @@ Gem::Specification.new do |s|
   ]
 
   s.add_development_dependency "corundum", "~> 0.0.13"
+  s.add_development_dependency "redcarpet"
 
 =begin
 Legacy files: would like to re-include them, but they need work

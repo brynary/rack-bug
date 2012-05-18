@@ -8,3 +8,6 @@ insight-test.log
 insight.sqlite
 notions-and-tests/
 pkg/
+.sass-cache/
+.yardoc/
+gh-pages/
