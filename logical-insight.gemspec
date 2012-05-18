@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{logical-insight}
-  s.version = "0.4.6"
+  s.version = "0.4.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Evan Dorn", "Judson Lester", "Bryan Helmkamp"]
@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
     lib/insight/views/panels/request_variables.html.erb
     lib/insight/views/panels/profile_sql.html.erb
     lib/insight/views/panels/redis.html.erb
+    lib/insight/views/panels/active_resource.html.erb
     lib/insight/views/toolbar.html.erb
     lib/insight/views/error.html.erb
     lib/insight/options.rb
@@ -83,6 +84,8 @@ Gem::Specification.new do |s|
     lib/insight/panels/speedtracer_panel.rb
     lib/insight/panels/templates_panel/rendering.rb
     lib/insight/panels/memory_panel.rb
+    lib/insight/panels/active_resource_panel.rb
+    lib/insight/panels/active_resource_panel/query.rb
     lib/insight/request-recorder.rb
     lib/insight/public/__insight__/bookmarklet.html
     lib/insight/public/__insight__/bookmarklet.js
