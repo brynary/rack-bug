@@ -31,7 +31,7 @@ module Insight
     end
 
     def name
-      "active_record"
+      "active_resource"
     end
 
     def heading_for_request(number)
