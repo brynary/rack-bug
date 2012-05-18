@@ -1,0 +1,47 @@
+<h3>ActiveResource HTTP Queries</h3>
+<table class="sortable">
+<thead>
+  <tr>
+    <th class="time">Time&nbsp;(ms)</th>
+    <th class="query">Query</th>
+    <th class="backtrace">Backtrace</th>
+    <th class="result">Result</th>
+  </tr>
+</thead>
+<tbody>
+  <% i = 1 %>
+  <% queries.each do |query| %>
+    <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
+      <td><%= query.human_time %></td>
+      <td class="syntax"><%= query.path %><%= query.args.inspect %></td>
+      <td>
+        <% if query.has_backtrace? %>
+          <a href="#" class="reveal_backtrace">Show Backtrace</a>
+        <% end %>
+      </td>
+      <td>
+        <a href="#" class="reveal_response">Show Response Body</a>
+      </td>
+    </tr>
+    <tr style="display:none">
+      <td></td>
+      <td colspan="3">
+        <ul>
+          <% query.filtered_backtrace.each do |line| %>
+            <li><%=h line %></li>
+          <% end %>
+        </ul>
+      </td>
+    </tr>
+    <tr id="response" style="display:none">
+      <td></td>
+      <td colspan="3">
+        <p><%= query.results %></p>
+        <!-- <%= query.inspect %> -->
+        <!-- <%= query.results.inspect %> -->
+      </td>
+    </tr>
+    <% i += 1 %>
+  <% end %>
+</tbody>
+</table>

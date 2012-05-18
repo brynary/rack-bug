@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
     "README.md",
     "MIT-LICENSE.txt"
   ]
-  s.homepage = %q{https://github.com/LRDesign/logical-insight}
+  s.homepage = %q{http://lrdesign.github.com/logical-insight/}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Debugging toolbar for Rack applications implemented as

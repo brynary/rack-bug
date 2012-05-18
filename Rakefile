@@ -24,6 +24,7 @@ module Corundum
     end
     all_docs = DocumentationAssembly.new(tk, yd, rspec, cov) do |da|
       da.external_docs["The Wiki"] = "https://github.com/LRDesign/logical-insight/wiki"
+      da.external_docs["Github page"] = "https://github.com/LRDesign/logical-insight/"
     end
     pages = GithubPages.new(all_docs)
   end
