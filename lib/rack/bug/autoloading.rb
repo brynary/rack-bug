@@ -20,6 +20,7 @@ class Rack::Bug
   autoload :RequestVariablesPanel,  "rack/bug/panels/request_variables_panel"
   autoload :SQLPanel,               "rack/bug/panels/sql_panel"
   autoload :TemplatesPanel,         "rack/bug/panels/templates_panel"
+  autoload :FiltersPanel,           "rack/bug/panels/filters_panel"
   autoload :TimerPanel,             "rack/bug/panels/timer_panel"
   autoload :SphinxPanel,            "rack/bug/panels/sphinx_panel"
 end
