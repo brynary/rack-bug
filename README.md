@@ -32,8 +32,17 @@ Features
 
 Rails quick start
 ---------------------------
+Install as a gem (recommended):
+
+    gem install rack-bug
+
+OR Install as a plugin:
 
     script/plugin install git://github.com/brynary/rack-bug.git
+
+If using the gem, add Rack::Bug to your Gemfile:
+
+    gem 'rack-bug', :require => 'rack/bug'
 
 In config/environments/development.rb, add:
 
