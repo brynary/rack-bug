@@ -21,6 +21,12 @@ class Rack::Bug
         response.should contain("This is a logged message")
         response.should contain("DEBUG")
       end
+
+      it 'HTML-escapes logs' do
+        LogPanel.record("This is a logged message with a <tag />", 0)
+        response = get_via_rack "/"
+        response.body.should include("This is a logged message with a &lt;tag /&gt;")
+      end
     end
     
     describe "Extended Logger" do
