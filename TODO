@@ -3,3 +3,5 @@ Speedtracer Resymbolization: seems like it would be possible to get Speedtracer 
 Speedtracer call tagging: right now we just say "everything is either HTTP or METHOD" - maybe more accurate tagging would be useful.
 
 Config: panels in required files automatically turned on - explicit exclude?
+
+Config: Explore other parts that may benefit from a config option.
