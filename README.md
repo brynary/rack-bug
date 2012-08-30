@@ -100,7 +100,7 @@ Subclasses of Rack::Insight::Panel are loaded and added to the toolbar.  This ma
 it easier to work with the configuration and extend Rack::Insight with plugin gems.
 
 If you need to customize the load paths where Rack::Insight will look for panels you can configure the load paths in an
-initializer.  Example config/initializers/rack_insight.rb:
+initializer, or in your gem prior to requiring your panels.  Example config/initializers/rack_insight.rb:
 
     Rack::Insight::Config.configure do |config|
 
@@ -114,6 +114,12 @@ initializer.  Example config/initializers/rack_insight.rb:
       config[:panel_load_paths] << 'custom/panels'
 
     end
+
+When you create custom panels use the render_template method and pass it the path to the view to be rendered
+*relative to the panel load path you added above*:
+
+    # with Example #2 from above, will try to render 'custom/panels/thunder_panel/views/thor.html.erb'
+    render_template 'thunder_panel/views/thor'
 
 Running Rack::Insight in staging or production
 ------------------------------------------
