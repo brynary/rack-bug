@@ -9,7 +9,8 @@ Gem::Specification.new do |s|
   s.email = %w{peter.boling@gmail.com evan@lrdesign.com judson@lrdesign.com bryan@brynary.com}
   s.extra_rdoc_files = [
     "README.md",
-    "MIT-LICENSE.txt"
+    "LICENSE",
+    "CHANGELOG"
   ]
 
   s.files         = `git ls-files`.split($\)
