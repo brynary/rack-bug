@@ -41,7 +41,7 @@ module Rack::Insight
       begin
         CompiledTemplates.module_eval(source, filename, 0)
       rescue Object => ex
-        logger.debug do
+        logger.error do
           "#{ex.class.name}: #{ex.message} in\n" +
           source +
             ex.backtrace.join("\n")
@@ -50,7 +50,29 @@ module Rack::Insight
     end
 
     def compiled_source(filename)
-      ::ERB.new(::File.read(::File.dirname(__FILE__) + "/views/#{filename}.html.erb"), nil, "-").src
+      primary_file_path = ::File.join(::File.dirname(__FILE__), "views/#{filename}.html.erb")
+      file = nil
+      begin
+        file = ::File.read(primary_file_path)
+      rescue Errno::ENOENT
+      end
+      if file.nil?
+        Rack::Insight::Config.config[:panel_load_paths].each do |load_path|
+          begin
+            file = ::File.read(::File.join(load_path, "#{filename}.html.erb"))
+            break # If no error is raised then the file was read!
+          rescue Errno::ENOENT
+          end
+        end
+      end
+      if file
+        message_src = ::ERB.new(file, nil, "-").src
+      else
+        message_src = "Rack::Insight: Unable to find expected view template #{primary_file_path} or a #{filename}.html.erb template in rack-insight's :panel_load_paths.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}"
+        logger.debug(message_src)
+        message_src = ('<p>' + message_src + '</p>').html_safe
+      end
+      message_src
     end
 
     def method_name(filename, local_assigns)
