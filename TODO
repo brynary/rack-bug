@@ -5,3 +5,5 @@ Speedtracer call tagging: right now we just say "everything is either HTTP or ME
 Config: panels in required files automatically turned on - explicit exclude?
 
 Config: Explore other parts that may benefit from a config option.
+
+UUID: Allow re-use of the Rails UUID set in middleware.  How?
