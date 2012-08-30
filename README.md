@@ -90,6 +90,7 @@ Specify the set of panels you want, in the order you want them to appear:
         request_variables_panel
         redis_panel
         templates_panel
+        cache_panel
         log_panel
         memory_panel
       ]
@@ -154,7 +155,7 @@ Authors
 -------
 
 - Maintained by [Peter Boling](mailto:peter.boling@gmail.com)
-- Based on logical_insight by Judson Lester
+- Based on LogicalInsight by Judson Lester
   - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
   - Which in turn was based on Rack::Bug by Bryan Helmkamp
 
@@ -170,21 +171,21 @@ and Rack::Cache
 License
 -------
 
-See LICENSE.txt in this directory.
+See LICENSE in this directory.
 
 Notes
 -----
 
 Legacy files: would like to re-include them, but they need work
 
-    lib/insight/views/panels/mongo.html.erb
-    lib/insight/panels/mongo_panel/mongo_extension.rb
-    lib/insight/panels/mongo_panel/stats.rb
-    lib/insight/panels/mongo_panel.rb
+    lib/rack/insight/views/panels/mongo.html.erb
+    lib/rack/insight/panels/mongo_panel/mongo_extension.rb
+    lib/rack/insight/panels/mongo_panel/stats.rb
+    lib/rack/insight/panels/mongo_panel.rb
 
-    lib/insight/views/panels/sphinx.html.erb
-    lib/insight/panels/sphinx_panel/stats.rb
-    lib/insight/panels/sphinx_panel.rb
+    lib/rack/insight/views/panels/sphinx.html.erb
+    lib/rack/insight/panels/sphinx_panel/stats.rb
+    lib/rack/insight/panels/sphinx_panel.rb
 
 This one is mostly just a curiosity
-    lib/insight/panels/speedtracer_panel/profiling.rb
+    lib/rack/insight/panels/speedtracer_panel/profiling.rb
