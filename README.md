@@ -153,9 +153,10 @@ location (i.e. Heroku), you can pass a custom file path.
 Authors
 -------
 
-- Maintained by [Judson Lester](mailto:judson@lrdesign.com)
-- Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
-- Based on Rack::Bug by Bryan Helmkamp
+- Maintained by [Peter Boling](mailto:peter.boling@gmail.com)
+- Based on logical_insight by Judson Lester
+  - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
+  - Which in turn was based on Rack::Bug by Bryan Helmkamp
 
 Thanks
 ------
