@@ -1,4 +1,4 @@
-source "http://gemcutter.org"
+source 'https://rubygems.org'
 
 gemspec
 
