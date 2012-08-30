@@ -30,5 +30,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<reek>, [">= 1.2.8"])
   s.add_development_dependency(%q<roodi>, [">= 2.1.0"])
   s.add_development_dependency(%q<rake>, [">= 0"])
+  s.add_development_dependency "rspec", ">= 2.11.0"
+  s.add_development_dependency "sinatra"
+  s.add_development_dependency "webrat"
+  s.add_development_dependency "ruby-debug19"
+
 
 end
