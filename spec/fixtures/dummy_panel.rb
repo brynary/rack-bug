@@ -1,2 +1,2 @@
-class DummyPanel < Insight::Panel
+class DummyPanel < Rack::Insight::Panel
 end

@@ -32,7 +32,7 @@ class SampleApp < Sinatra::Base
 
 
 
-  use Insight::App, :log_path => "insight-test.log", :on_initialize => proc {|app|
+  use Rack::Insight::App, :log_path => "rack-insight-test.log", :on_initialize => proc {|app|
     self.insight_app = app
   }
   use OneLastThing
@@ -62,7 +62,7 @@ class SampleApp < Sinatra::Base
         </head>
         <body>
           <p>Hello</p>
-          <p><a href="__insight__/bookmarklet.html">Page with bookmarklet for enabling Insight</a></p>
+          <p><a href="__insight__/bookmarklet.html">Page with bookmarklet for enabling Rack::Insight</a></p>
           <p><a href="/error">Page with an error to check insight not rescuing errors</a></p>
         </body>
       </html>

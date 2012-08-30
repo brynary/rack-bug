@@ -1,14 +1,13 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-require 'logical-insight'
+require 'spec_helper'
 
-describe Insight do
+describe Rack::Insight do
   before :each do
     reset_insight
   end
 
-  it "inserts the Insight toolbar" do
+  it "inserts the Rack::Insight toolbar" do
     response = get "/"
-    response.should have_selector("div#insight")
+    response.should have_selector("div#rack-insight")
   end
 
   it "updates the Content-Length" do
@@ -16,36 +15,36 @@ describe Insight do
     response["Content-Length"].should == response.body.size.to_s
   end
 
-  it "serves the Insight assets under /__insight__/" do
+  it "serves the Rack::Insight assets under /__insight__/" do
     response = get "/__insight__/insight.css"
     response.should be_ok
   end
 
   it "modifies HTML responses with a charset" do
     response = get "/", :content_type => "application/xhtml+xml; charset=utf-8"
-    response.should have_selector("div#insight")
+    response.should have_selector("div#rack-insight")
   end
 
   it "does not modify XMLHttpRequest responses" do
     response = get "/", {}, { :xhr => true }
-    response.should_not have_selector("div#insight")
+    response.should_not have_selector("div#rack-insight")
   end
 
   it "modifies XHTML responses" do
     response = get "/", :content_type => "application/xhtml+xml"
-    response.should have_selector("div#insight")
+    response.should have_selector("div#rack-insight")
   end
 
   it "does not modify non-HTML responses" do
     response = get "/", :content_type => "text/csv"
-    response.should_not have_selector("div#insight")
+    response.should_not have_selector("div#rack-insight")
   end
 
   it "does not modify server errors" do
     app.disable :raise_errors
     response = get "/error"
     app.enable :raise_errors
-    response.should_not have_selector("div#insight")
+    response.should_not have_selector("div#rack-insight")
   end
 
   context "redirected when not configured to intercept redirects" do
@@ -62,12 +61,12 @@ describe Insight do
     it "does not insert the toolbar" do
       header 'cookie', ""
       response = get "/redirect"
-      response.should_not have_selector("div#insight")
+      response.should_not have_selector("div#rack-insight")
     end
 
     it "does not insert the toolbar if even toolbar requested" do
       response = get "/redirect"
-      response.should_not have_selector("div#insight")
+      response.should_not have_selector("div#rack-insight")
     end
   end
 
@@ -78,7 +77,7 @@ describe Insight do
 
     it "shows the interception page" do
       response = get "/redirect"
-      response.should have_selector("div#insight")
+      response.should have_selector("div#rack-insight")
     end
 
     it "should provide a link to the target URL" do
@@ -88,13 +87,13 @@ describe Insight do
 
     it "inserts the toolbar if requested" do
       response = get "/redirect"
-      response.should have_selector("div#insight")
+      response.should have_selector("div#rack-insight")
     end
 
     it "does not inserts the toolbar if not requested" do
       header 'cookie', ""
       response = get "/redirect"
-      response.should_not have_selector("div#insight")
+      response.should_not have_selector("div#rack-insight")
     end
   end
 
@@ -103,14 +102,14 @@ describe Insight do
       app.insight_app.ip_masks = [IPAddr.new("127.0.0.1/255.255.255.0")]
     end
 
-    it "inserts the Insight toolbar when the IP matches" do
+    it "inserts the Rack::Insight toolbar when the IP matches" do
       response = get_via_rack "/", {}, "REMOTE_ADDR" => "127.0.0.2"
-      response.should have_selector("div#insight")
+      response.should have_selector("div#rack-insight")
     end
 
     it "is disabled when the IP doesn't match" do
       response = get_via_rack "/", {}, "REMOTE_ADDR" => "128.0.0.1"
-      response.should_not have_selector("div#insight")
+      response.should_not have_selector("div#rack-insight")
     end
 
     it "doesn't use any panels" do
@@ -125,16 +124,16 @@ describe Insight do
       app.insight_app.password = "secret"
     end
 
-    it "should insert the Insight toolbar when the password matches" do
-      sha = Digest::SHA1.hexdigest ["insight", "secret"].join(":")
-      set_cookie ["insight_enabled=1", "insight_password=#{sha}"]
+    it "should insert the Rack::Insight toolbar when the password matches" do
+      sha = Digest::SHA1.hexdigest ["rack-insight", "secret"].join(":")
+      set_cookie ["rack-insight_enabled=1", "rack-insight_password=#{sha}"]
       response = get_via_rack "/"
-      response.should have_selector("div#insight")
+      response.should have_selector("div#rack-insight")
     end
 
     it "should be disabled when the password doesn't match" do
       response = get_via_rack "/"
-      response.should_not have_selector("div#insight")
+      response.should_not have_selector("div#rack-insight")
     end
     it "doesn't use any panels" do
       DummyPanel.should_not_receive(:new)

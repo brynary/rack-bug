@@ -1,5 +1,5 @@
-require 'insight/instrumentation'
-require 'insight/instrumentation/setup'
+require 'rack/insight/instrumentation'
+require 'rack/insight/instrumentation/setup'
 
 class One
   def initialize(arry)
@@ -42,7 +42,7 @@ describe "Setting up probes" do
 
   let :test_collector do
     collector = Object.new
-    collector.extend Insight::Instrumentation::Client
+    collector.extend Rack::Insight::Instrumentation::Client
     collector.instance_variable_set("@calls", method_calls)
     def collector.after_detect(method_call, timing, arguments, results)
       @calls << [method_call, timing, arguments, results]
@@ -51,7 +51,7 @@ describe "Setting up probes" do
   end
 
   let :instrument_setup do
-    Insight::Instrumentation::Setup.new(nil)
+    Rack::Insight::Instrumentation::Setup.new(nil)
   end
 
   let :fake_env do

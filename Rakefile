@@ -1,31 +1,27 @@
-require 'yaml'
-require 'corundum'
-require 'corundum/tasklibs'
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
 
-module Corundum
-  tk = Toolkit.new do |tk|
-  end
+require 'rake'
 
-  tk.in_namespace do
-    sanity = GemspecSanity.new(tk)
-    rspec = RSpec.new(tk)
-    cov = SimpleCov.new(tk, rspec) do |cov|
-      cov.threshold = 90
-    end
-    gem = GemBuilding.new(tk)
-    cutter = GemCutter.new(tk,gem)
-    email = Email.new(tk)
-    vc = Git.new(tk) do |vc|
-      vc.branch = "master"
-    end
-    task tk.finished_files.build => vc["is_checked_in"]
-    yd = YARDoc.new(tk) do |yd|
-      yd.options = %w[--exclude lib/insight/views --exclude lib/insight/public]
-    end
-    all_docs = DocumentationAssembly.new(tk, yd, rspec, cov) do |da|
-      da.external_docs["The Wiki"] = "https://github.com/LRDesign/logical-insight/wiki"
-      da.external_docs["Github page"] = "https://github.com/LRDesign/logical-insight/"
-    end
-    pages = GithubPages.new(all_docs)
-  end
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
 end
+
+require 'reek/rake/task'
+Reek::Rake::Task.new do |t|
+  t.fail_on_error = true
+  t.verbose = false
+  t.source_files = 'lib/**/*.rb'
+end
+
+require 'roodi'
+require 'roodi_task'
+RoodiTask.new do |t|
+  t.verbose = false
+end
+
+task :default => :spec
+
+Bundler::GemHelper.install_tasks

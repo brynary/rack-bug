@@ -1,0 +1,58 @@
+== 0.5.0 / 2012-08-29 - transition to rack_insight
+
+  * Compatibility
+
+    * Restructure gem so Insight is inside a namespace, because I have classes named Insight that are obscured by
+      logical_insight gem when loaded.  Logical also seemed like it may be a class name somewhere, hence going back to
+      the Rack namespace a la rack-bug.  Keeping the (now nested) Insight namespace as well, because - genetics.
+
+  *Other
+
+    * Fix spelling of retreive => retrieve (Peter Boling)
+    * Remove redundant time method from cache_panel/stats.rb
+
+== 0.4.X - last of logical_insight
+
+  * New features
+
+    * Can use LoggerPanel on ruby stdlib Logger in non-rails app (Tim Connor)
+
+  * Bug fixes
+  
+    * Fix profile, explain and select in the queries tab, fixes issue #22 (ebertech)
+    
+  * Minor fixes
+  
+    * Explicitly require 'digest/sha1' (Jérémy Lecour)
+    * Eliminate unreachable code in params signature validation (Tim Connor)
+
+  * Compatibilty
+
+    * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
+  
+  * Other
+  
+    * Refactoring and code cleanup (Tim Connor)
+    * Testing cleanup - better isolation of Rails vs. non-Rails in tests (Tim Connor)
+
+== 0.3.0 / 2010-05-28
+
+  * New features
+
+    * Log panel includes log level and timestamp (Tim Connor)
+    * Sphinx panel (George Chatzigeorgiou)
+    * Backtraces for Redis panel (Luke Melia & Joey Aghion)
+
+  * Minor fixes
+
+    * Don't "enable" rack bug if you hit cancel on the bookmarklet prompt (Mischa Fierer)
+
+  * Compatibilty
+
+    * backtrace filtering now supports more than just Rails (Alex Chaffee)
+    * compatibility with current rack-test (Luke Melia & Joey Aghion)
+    * update Sinatra sample app (Tim Conner)
+
+== 0.2.1
+
+  * The beginning of recorded history
