@@ -128,7 +128,9 @@ module Rack::Insight
 
       include Logging
       def log &block
-        logger.debug &block
+        if verbose(:debug)
+          logger.debug &block
+        end
       end
 
       def fulfill_probe_orders
@@ -183,9 +185,9 @@ module Rack::Insight
       def define_trace_method(target, method)
         (class << target; self; end).class_exec() do
           define_method(method.name) do |*args, &block|
-          ProbeRunner::probe_run(self, target.name, :class, args, caller(0)[0], method.name) do
-            method.bind(self).call(*args, &block)
-          end
+            ProbeRunner::probe_run(self, target.name, :class, args, caller(0)[0], method.name) do
+              method.bind(self).call(*args, &block)
+            end
           end
         end
       end
