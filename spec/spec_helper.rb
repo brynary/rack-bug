@@ -31,7 +31,11 @@ RSpec.configure do |config|
   config.include Rack::Insight::RspecMatchers
 
   config.before do
-    Thread.current["rack-insight.logger"] = Rack::Insight::Logger.new(Logger::FATAL, "")
+    # Will use the default Ruby Logger.
+    Rack::Insight::Config.configure do |config|
+      config[:verbosity] = Rack::Insight::Logging::VERBOSITY[:silent]
+    end
+    puts "Verbosity level for specs is #{Rack::Insight::Logging::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"
     @added_constants = []
   end
 

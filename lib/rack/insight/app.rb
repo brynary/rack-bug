@@ -1,7 +1,7 @@
 require 'rack'
 require "digest/sha1"
 require "rack/insight/config"
-require "rack/insight/logger"
+require "rack/insight/logging"
 require "rack/insight/filtered_backtrace"
 require "rack/insight/options"
 require "rack/insight/panel"
@@ -20,11 +20,11 @@ require 'rack/insight/panels-header'
 
 module Rack::Insight
   class App
-    include Options
+    include Rack::Insight::Options
+    include Rack::Insight::Logging
+
     INSIGHT_ROOT = "/__insight__"
     INSIGHT_REGEX = %r{^#{INSIGHT_ROOT}}
-
-    VERSION = "0.4.4"
 
     class SecurityError < StandardError
     end
@@ -34,16 +34,13 @@ module Rack::Insight
       @base_app = app
       @panels = []
       instance_eval(&block) if block_given?
-
-      @logger = Logger.new(read_option(:log_level), read_option(:log_path))
-      Thread.current['rack-insight.logger'] = @logger
       build_normal_stack
       build_debug_stack
+      # TODO: Understand when this would be used
       if options[:on_initialize]
         options[:on_initialize].call(self)
       end
     end
-    attr_reader :logger
     attr_accessor :panels
 
     def call(env)
@@ -51,10 +48,6 @@ module Rack::Insight
       if insight_active?
         @env = env
         self.options = @default_options
-
-        env['rack-insight.logger'] = @logger
-        Thread.current['rack-insight.logger'] = @logger
-
         Rack::Insight.enable
         env["rack-insight.panels"] = []
         @debug_stack.call(env)
@@ -62,7 +55,6 @@ module Rack::Insight
         @normal_stack.call(env)
       end
     end
-
 
     def reset(new_options=nil)
       @env = nil
@@ -141,6 +133,7 @@ module Rack::Insight
       app = RedirectInterceptor.new(app)
       #Reversed?  Does it matter?
       app = classes.inject(app) do |app, panel_class|
+        puts "panel_class: #{panel_class}"
         panel = panel_class.new(app)
         panels << panel
         panel

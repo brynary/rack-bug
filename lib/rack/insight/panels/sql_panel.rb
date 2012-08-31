@@ -15,7 +15,7 @@ module Rack::Insight
           instrument "ActiveRecord::ConnectionAdapters::#{adapter}" do
             instance_probe :execute
           end
-            end
+        end
       end
       table_setup("sql_queries")
     end

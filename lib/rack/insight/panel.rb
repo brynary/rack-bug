@@ -1,5 +1,5 @@
 require "erb"
-require "rack/insight/logger"
+require "rack/insight/logging"
 require 'rack/insight/database'
 require 'rack/insight/instrumentation'
 require 'rack/insight/render'

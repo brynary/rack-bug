@@ -1,5 +1,5 @@
 require 'rack/insight/instrumentation/backstage'
-require 'rack/insight/logger'
+require 'rack/insight/logging'
 
 module Rack::Insight
   module Instrumentation
@@ -34,9 +34,9 @@ module Rack::Insight
         @collectors = nil
       end
 
-      include Backstage
+      include Rack::Insight::Instrumentation::Backstage
 
-      include Logging
+      include Rack::Insight::Logging
 
       def run(object, context="::", kind=:instance, called_at = caller[0], method = "<unknown>", args=[], &blk)
         file, line, rest = called_at.split(':')

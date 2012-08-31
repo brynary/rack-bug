@@ -1,8 +1,8 @@
-require 'rack/insight/logger'
+require 'rack/insight/logging'
 
 module Rack::Insight
   class PathFilter
-    include Logging
+    include Rack::Insight::Logging
     def initialize(app)
       @app = app
     end
