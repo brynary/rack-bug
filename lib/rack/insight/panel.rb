@@ -17,6 +17,7 @@ module Rack::Insight
     attr_reader :request
 
     class << self
+      attr_accessor :template_root
       def file_index
         return @file_index ||= Hash.new do |h,k|
           h[k] = []
@@ -40,7 +41,7 @@ module Rack::Insight
         Thread::current['rack-panel_file'] = old_rel
       end
 
-      def current_panel_file
+      def current_panel_file(sub)
         return Thread::current['rack-panel_file'] ||
           begin
             file_name = nil
@@ -58,13 +59,14 @@ module Rack::Insight
               end
               break unless file_name.nil?
             end
+            sub.template_root = File.dirname(matched_line.split(':')[0]) if matched_line.respond_to?(:split)
             file_name
           end
       end
 
       def inherited(sub)
-        if filename = current_panel_file
-          Panel::file_index[current_panel_file] << sub
+        if filename = current_panel_file(sub)
+          Panel::file_index[filename] << sub
         else
           warn "Rack::Insight::Panel inherited by #{sub.name} outside rack-insight's :panel_load_paths.  Discarded.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}"
         end

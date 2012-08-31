@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/redis_panel'
 
 module Rack::Insight
   describe "RedisPanel" do

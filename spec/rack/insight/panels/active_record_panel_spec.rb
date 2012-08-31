@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/active_record_panel'
 
 module Rack::Insight
   describe "ActiveRecordPanel" do

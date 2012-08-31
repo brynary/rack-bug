@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/timer_panel'
 
 module Rack::Insight
   describe "TimerPanel" do

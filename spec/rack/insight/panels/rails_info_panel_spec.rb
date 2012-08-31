@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/rails_info_panel'
 
 module Rack::Insight
   describe "RailsInfoPanel" do

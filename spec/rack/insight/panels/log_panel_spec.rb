@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/log_panel'
 
 module Rack::Insight
   describe "LogPanel" do

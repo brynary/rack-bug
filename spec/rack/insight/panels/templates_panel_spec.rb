@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/templates_panel'
 
 module Rack::Insight
   describe "TemplatesPanel" do

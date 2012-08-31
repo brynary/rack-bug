@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/cache_panel'
 
 module Rack::Insight
   describe "CachePanel" do

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'rack/insight/panels/sql_panel'
 
 module Rack::Insight
   describe "SQLPanel" do
