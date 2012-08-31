@@ -12,6 +12,14 @@ require "fixtures/sample_app"
 require "fixtures/dummy_panel"
 require "rack/insight/rspec_matchers"
 
+# Will use the default Ruby Logger.
+Rack::Insight::Config.configure do |config|
+  config[:verbosity] = Rack::Insight::Logging::VERBOSITY[:silent]
+  config[:log_level] = ::Logger::ERROR
+end
+puts "Log Level for specs is #{::Logger::ERROR}"
+puts "Verbosity level for specs is #{Rack::Insight::Logging::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"
+
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
@@ -31,11 +39,6 @@ RSpec.configure do |config|
   config.include Rack::Insight::RspecMatchers
 
   config.before do
-    # Will use the default Ruby Logger.
-    Rack::Insight::Config.configure do |config|
-      config[:verbosity] = Rack::Insight::Logging::VERBOSITY[:silent]
-    end
-    puts "Verbosity level for specs is #{Rack::Insight::Logging::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"
     @added_constants = []
   end
 

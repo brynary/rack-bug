@@ -44,7 +44,7 @@ module Rack::Insight
       @logger ||= begin
         logga = self.config[:logger]
         if logga.nil?
-          puts("Rack::Insight::Config#configure: logger is not configured, defaults to Ruby's Logger")
+          warn ("Rack::Insight::Config#configure: logger is not configured, defaults to Ruby's Logger")
           logga = ::Logger.new(log_file)
           if logga.respond_to?(:level)
             logga.level = self.log_level

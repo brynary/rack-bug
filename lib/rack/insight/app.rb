@@ -133,7 +133,6 @@ module Rack::Insight
       app = RedirectInterceptor.new(app)
       #Reversed?  Does it matter?
       app = classes.inject(app) do |app, panel_class|
-        puts "panel_class: #{panel_class}"
         panel = panel_class.new(app)
         panels << panel
         panel
