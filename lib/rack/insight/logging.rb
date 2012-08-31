@@ -18,7 +18,7 @@ module Rack::Insight
     # max_level is confusing because the 'level' of output goes up (and this is what max refers to)
     # when the integer value goes DOWN
     def verbose(max_level = false)
-      #puts "Rack::Insight::Config.verbosity: #{Rack::Insight::Config.verbosity} <= max_level: #{max_level}" #for debugging the logger
+      #logger.unknown "Rack::Insight::Config.verbosity: #{Rack::Insight::Config.verbosity} <= max_level: #{VERBOSITY[max_level]}" #for debugging the logger
       return false if (!Rack::Insight::Config.verbosity) # false results in Exactly Zero output!
       return true if (Rack::Insight::Config.verbosity == true) # Not checking truthy because need to check against max_level...
       # Example: if configured log spam level is high (1) logger should get all messages that are not :debug (0)

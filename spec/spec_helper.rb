@@ -15,7 +15,7 @@ require "rack/insight/rspec_matchers"
 # Will use the default Ruby Logger.
 Rack::Insight::Config.configure do |config|
   config[:verbosity] = Rack::Insight::Logging::VERBOSITY[:silent]
-  config[:log_level] = ::Logger::ERROR
+  config[:log_level] = ::Logger::INFO
 end
 puts "Log Level for specs is #{::Logger::ERROR}"
 puts "Verbosity level for specs is #{Rack::Insight::Logging::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"

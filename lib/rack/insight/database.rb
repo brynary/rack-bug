@@ -90,7 +90,7 @@ module Rack::Insight
       end
 
       def execute(*args)
-        logger.info{ ins_args = args.inspect; "(#{[ins_args.length,120].min}/#{ins_args.length})" + ins_args[0..120] }
+        #logger.info{ ins_args = args.inspect; "(#{[ins_args.length,120].min}/#{ins_args.length})" + ins_args[0..120] } if verbose(:debug)
         db.execute(*args)
       end
 
@@ -98,7 +98,7 @@ module Rack::Insight
         @table_name = table_name
         @keys = keys
         if(execute("select * from sqlite_master where name = ?", table_name).empty?)
-          logger.warn{ "Initializing a table called #{table_name}" }
+          logger.info{ "Initializing a table called #{table_name}" } if verbose(:med)
           execute(create_sql)
         end
       end

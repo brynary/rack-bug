@@ -87,11 +87,11 @@ module Rack::Insight
 
     def call(env)
       @env = env
-      logger.debug{ "Before call: #{self.name}" }
+      logger.debug{ "Before call: #{self.name}" } if verbose(:debug)
       before(env)
       status, headers, body = @app.call(env)
       @request = Rack::Request.new(env)
-      logger.debug{ "After call: #{self.name}" }
+      logger.debug{ "After call: #{self.name}" } if verbose(:debug)
       after(env, status, headers, body)
       env["rack-insight.panels"] << self
       return [status, headers, body]

@@ -160,17 +160,17 @@ module Rack::Insight
     def ip_authorized?
       return true unless options["rack-insight.ip_masks"]
 
-      logger.debug{ "Checking #{@original_request.ip} against ip_masks" }
+      logger.info{ "Checking #{@original_request.ip} against ip_masks" } if verbose(:low)
       ip = IPAddr.new(@original_request.ip)
 
       mask = options["rack-insight.ip_masks"].find do |ip_mask|
         ip_mask.include?(ip)
       end
       if mask
-        logger.debug{ "Matched #{mask}" }
+        logger.info{ "Matched #{mask}" } unless verbose(:silent)
         return true
       else
-        logger.debug{ "Matched no masks" }
+        logger.info{ "Matched no masks" } unless verbose(:silent)
         return false
       end
     end
@@ -178,12 +178,12 @@ module Rack::Insight
     def password_authorized?
       return true unless options["rack-insight.password"]
 
-      logger.debug{"Checking password"}
+      logger.info{"Checking password"} if verbose(:low)
 
       expected_sha = Digest::SHA1.hexdigest ["rack-insight", options["rack-insight.password"]].join(":")
       actual_sha = @original_request.cookies["rack-insight_password"]
 
-      logger.debug{"Password result: #{actual_sha == expected_sha}"}
+      logger.info{"Password result: #{actual_sha == expected_sha}"} if verbose(:med)
       actual_sha == expected_sha
     end
   end

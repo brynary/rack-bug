@@ -3,6 +3,9 @@ require 'rack/insight/app'
 module Rack
   module Insight
     class << self
+
+      include Logging
+
       def enable
         Thread.current["rack-insight.enabled"] = true
       end

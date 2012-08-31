@@ -16,7 +16,7 @@ module Rack::Insight
         return [404, {}, []]
       end
 
-      logger.debug{ "Shortcutting collection stack: #{filter} =~ #{env['PATH_INFO']}"}
+      logger.debug{ "Shortcutting collection stack: #{filter} =~ #{env['PATH_INFO']}"} if verbose(:debug)
       return @app.call(env)
     end
   end

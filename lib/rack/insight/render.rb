@@ -68,7 +68,7 @@ module Rack::Insight
       if file
         ::ERB.new(file, nil, "-").src
       else
-        warn "Rack::Insight: Unable to find expected view template #{primary_file_path} or a #{filename}.html.erb template in rack-insight's :panel_load_paths.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}"
+        logger.fatal("Rack::Insight: Unable to find expected view template #{primary_file_path} or a #{filename}.html.erb template in rack-insight's :panel_load_paths.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}")
       end
     end
 

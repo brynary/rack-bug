@@ -39,7 +39,7 @@ module Rack::Insight
       if(defined? Dalli and Dalli::Client === method_call.object)
         method, key = args[0], args[1]
       end
-      logger.info{ "Cache panel got #{method} #{key.inspect}" }
+      logger.info{ "Cache panel got #{method} #{key.inspect}" } if verbose(:high)
       @stats.record_call(method, timing.duration, !result.nil?, key)
     end
 
@@ -58,7 +58,8 @@ module Rack::Insight
     end
 
     def content_for_request(number)
-      logger.debug{{ :req_num => number }}
+      # TODO: What is this syntax with the double {{}}?
+      logger.debug{{ :req_num => number }} if verbose(:debug)
       stats = retrieve(number).first
       render_template "panels/cache", :stats => stats
     end

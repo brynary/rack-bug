@@ -41,7 +41,7 @@ module Rack::Insight
 
     def content_for_request(number)
       queries = retrieve(number)
-      logger.debug{ "ARes: #{queries.inspect}" }
+      logger.debug{ "ARes: #{queries.inspect}" } if verbose(:debug)
       render_template "panels/active_resource", :queries => queries
     end
   end

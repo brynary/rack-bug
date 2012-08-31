@@ -66,7 +66,7 @@ module Rack::Insight
             begin
               h[k] = self.new(const_from_name(k))
             rescue NameError
-              logger.warn{ "Cannot find constant: #{k}" }
+              logger.warn{ "Cannot find constant: #{k}" } if verbose(:med)
               false
             end
           end

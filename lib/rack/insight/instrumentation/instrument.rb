@@ -62,14 +62,16 @@ module Rack::Insight
         collectors = probe_chain.inject([]) do |list, probe|
           probe.collectors(method_call.method)
         end
-        logger.debug do
-          "Probe chain for: #{method_call.context} #{method_call.kind} #{method_call.method}:\n  #{collectors.map{|col| col.class.name}.join(", ")}"
+        if verbose(:debug)
+          logger.debug do
+            "Probe chain for: #{method_call.context} #{method_call.kind} #{method_call.method}:\n  #{collectors.map{|col| col.class.name}.join(", ")}"
+          end
         end
         collectors
       end
 
       def start_event(method_call, arguments)
-        logger.debug{ "Starting event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
+        logger.debug{ "Starting event: #{method_call.context} #{method_call.kind} #{method_call.method}" } if verbose(:high)
 
         collectors_for(method_call).each do |collector|
           collector.before_detect(method_call, arguments)
@@ -78,7 +80,7 @@ module Rack::Insight
 
       def finish_event(method_call, arguments, start_time, result)
         timing = Timing.new(@start, start_time, Time.now)
-        logger.debug{ "Finishing event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
+        logger.debug{ "Finishing event: #{method_call.context} #{method_call.kind} #{method_call.method}" } if verbose(:high)
         collectors_for(method_call).each do |collector|
           collector.after_detect(method_call, timing, arguments, result)
         end
