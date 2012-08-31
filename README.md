@@ -76,6 +76,35 @@ spec/fixtures folder for an example Sinatra app.
 If you wish to use the logger panel define the LOGGER constant that is a ruby
 Logger or ActiveSupport::BufferedLogger
 
+Configure Rack::Insight
+----------------------
+
+Pattern:
+
+    Rack::Insight::Config.configure do |config|
+      config[:option] = value
+    end
+
+Options:
+
+    :logger - Can be set to any Ruby-esque Logger, examples include the Rails Logger, or the Ruby Logger (default).
+            If you do not set logger Rack::Insight defaults to the Ruby Logger.
+            You can configure it with additional options:
+            :log_file - The logdev parameter for the Ruby Logger (a file path, an IO, like STDOUT, or STDERR, etc)
+            :log_level - The maximum severity at which things should be logged.
+
+    :rails_log_copy - If you are setting :logger to the Rails Logger, you should set this to false (default is true).
+
+    :verbosity - true is default .
+               true is equivalent to relying soley on the logger's log level to determine if a message is logged.
+               Other potential values are:
+                  anything falsey => no logging at all
+                  Rack::Insight::Logging::VERBOSITY[*level*] where *level* is one of:
+                    :debug, :high, :med, :low, :silent
+
+    :panel_load_paths => [File::join('rack', 'insight', 'panels')] (default)
+                         See *Configuring custom panels* section for example usage
+
 Configuring custom panels
 -------------------------
 
