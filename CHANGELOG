@@ -1,4 +1,16 @@
-== 0.5.0 / 2012-08-29 - transition to rack_insight
+== 0.5.5 / 2012-08-31 (Peter Boling)
+
+  * New Features
+
+    * Extension gems now automatically look for their view templates
+      relative to the panel class file that tries to render them.
+    * Two levels of log verbosity filtering to allow re-use of the Rails log, but to not force same level output from
+      rack-insight as the rails log is set to for the env.  It will never be more logging than Rails log's env level,
+      but it can, and usually should, be less.
+
+  * Fixed a number of bugs, and refactored some things.  Please let me know if you use it/break it!
+
+== 0.5.0 / 2012-08-29 - transition to rack_insight (Peter Boling)
 
   * Compatibility
 
@@ -8,7 +20,7 @@
 
   *Other
 
-    * Fix spelling of retreive => retrieve (Peter Boling)
+    * Fix spelling of retreive => retrieve
     * Remove redundant time method from cache_panel/stats.rb
 
 == 0.4.X - last of logical_insight
