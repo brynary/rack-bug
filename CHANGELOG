@@ -1,3 +1,16 @@
+== 0.5.7 / 2012-09-03 (Peter Boling)
+
+  * Bug Fixes
+
+    * require 'logger' important when using Ruby Logger
+
+== 0.5.6 / 2012-08-31 (Peter Boling)
+
+  * Other
+
+    * Wrap debug logging in verbose check
+    * Documentation
+
 == 0.5.5 / 2012-08-31 (Peter Boling)
 
   * New Features
