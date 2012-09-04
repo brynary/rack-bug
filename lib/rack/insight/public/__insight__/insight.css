@@ -22,22 +22,22 @@
   right:0;
   cursor: pointer;
 }
-.insight_bottom #rack-insight_toolbar {
+.rack-insight_bottom #rack-insight_toolbar {
   bottom:0;
   border-top: 2px solid #234f32;
 }
-.insight_top #rack-insight_toolbar {
+.rack-insight_top #rack-insight_toolbar {
   top:0;
   border-bottom: 2px solid #234f32;
 }
 
-.insight_error #rack-insight_toolbar {
+.rack-insight_error #rack-insight_toolbar {
   background: #ff0000;
   color: #fff;
   border: none;
 }
 
-.insight_error #rack-insight_toolbar p {
+.rack-insight_error #rack-insight_toolbar p {
   margin-top: 6px;
   margin-left: 15px;
   font-weight: bold;
@@ -104,11 +104,11 @@
   overflow: auto;
 }
 
-#rack-insight.insight_top .panel_content {
+#rack-insight.rack-insight_top .panel_content {
   top: 32px;
 }
 
-#rack-insight.insight_bottom .panel_content {
+#rack-insight.rack-insight_bottom .panel_content {
   bottom: 32px;
 }
 
@@ -202,10 +202,10 @@
   margin-left: 10px;
 }
 
-#rack-insight .panel_content table tr.odd td.insight_spinner,
-#rack-insight .panel_content table tr.even td.insight_spinner,
-#rack-insight .panel_content table td.insight_spinner,
-#rack-insight .insight_spinner {
+#rack-insight .panel_content table tr.odd td.rack-insight_spinner,
+#rack-insight .panel_content table tr.even td.rack-insight_spinner,
+#rack-insight .panel_content table td.rack-insight_spinner,
+#rack-insight .rack-insight_spinner {
   background-image: url(/__insight__/spinner.gif);
   background-repeat: no-repeat;
   background-position: center center;

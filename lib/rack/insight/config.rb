@@ -30,7 +30,7 @@ module Rack::Insight
     @config ||= DEFAULTS
     def self.configure &block
       yield @config
-      logger.debug("Config#configure:\n  called from: #{caller[0]}\n  with: #{@config}")
+      logger.debug("Rack::Insight::Config#configure:\n  called from: #{caller[0]}\n  with: #{@config}") if config[:verbosity] == true || config[:verbosity].respond_to?(:<) && config[:verbosity] <= 1
       @logger = config[:logger]
       @log_level = config[:log_level]
       @log_file = config[:log_file]

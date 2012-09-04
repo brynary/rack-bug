@@ -49,33 +49,13 @@ module Rack::Insight
       end
     end
 
-    #def compiled_source(filename)
-    #  primary_file_path = ::File.join(::File.dirname(__FILE__), "views/#{filename}.html.erb")
-    #  file = nil
-    #  begin
-    #    file = ::File.read(primary_file_path)
-    #  rescue Errno::ENOENT
-    #  end
-    #  if file.nil?
-    #    Rack::Insight::Config.config[:panel_load_paths].each do |load_path|
-    #      begin
-    #        file = ::File.read(::File.join(load_path, "#{filename}.html.erb"))
-    #        break # If no error is raised then the file was read!
-    #      rescue Errno::ENOENT
-    #      end
-    #    end
-    #  end
-    #  if file
-    #    ::ERB.new(file, nil, "-").src
-    #  else
-    #    logger.fatal("Rack::Insight: Unable to find expected view template #{primary_file_path} or a #{filename}.html.erb template in rack-insight's :panel_load_paths.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}")
-    #  end
-    #end
-
     def compiled_source(filename)
       templates = []
       templates << ::File.join(::File.dirname(__FILE__), "views/#{filename}.html.erb")
-      templates << ::File.join(::File.join(self.class.template_root, "#{filename}.html.erb")) if self.class.respond_to?(:template_root)
+      if self.class.respond_to?(:template_root) && !self.class.template_root.nil?
+        # Push onto the front of the array to try because if there is a template root it is the most likely place to find the view.
+        templates.unshift(::File.join(::File.join(self.class.template_root, "#{filename}.html.erb")))
+      end
       file = nil
       templates.each do |template_path|
         begin

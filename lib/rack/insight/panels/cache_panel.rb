@@ -1,4 +1,3 @@
-
 module Rack::Insight
 
   class CachePanel < Panel

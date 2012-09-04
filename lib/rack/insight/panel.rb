@@ -17,6 +17,9 @@ module Rack::Insight
     attr_reader :request
 
     class << self
+
+      include Rack::Insight::Logging
+
       attr_accessor :template_root
       def file_index
         return @file_index ||= Hash.new do |h,k|
@@ -41,31 +44,34 @@ module Rack::Insight
         Thread::current['rack-panel_file'] = old_rel
       end
 
+      def set_sub_class_template_root(sub_class, path)
+        sub_class.template_root = path
+      end
+
       def current_panel_file(sub)
-        return Thread::current['rack-panel_file'] ||
-          begin
-            file_name = nil
-            matched_line = nil
-            caller.each do |line|
-              # First make sure we are not matching rack-insight's own panel class, which will be in the caller stack,
-              # and which may match some custom load path added (try adding 'rack' as a custom load path!)
-              next if line =~ /rack-insight.*\/lib\/rack\/insight\/panel.rb:/
-              Rack::Insight::Config.config[:panel_load_paths].each do |load_path|
-                regex = %r{^[^:]*#{load_path}/([^:]*)\.rb:}
-                md = regex.match line
-                file_name = md[1] unless md.nil?
-                matched_line = line unless file_name.nil?
-                break unless file_name.nil?
-              end
-              break unless file_name.nil?
-            end
-            sub.template_root = File.dirname(matched_line.split(':')[0]) if matched_line.respond_to?(:split)
-            file_name
+        file_name = nil
+        matched_line = nil
+        caller.each do |line|
+          # First make sure we are not matching rack-insight's own panel class, which will be in the caller stack,
+          # and which may match some custom load path added (try adding 'rack' as a custom load path!)
+          # .*panel because the panels that ship with rack-insight also do not need custom template roots.
+          next if line =~ /rack-insight.*\/lib\/rack\/insight\/.*panel.rb:/
+          Rack::Insight::Config.config[:panel_load_paths].each do |load_path|
+            regex = %r{^[^:]*#{load_path}/([^:]*)\.rb:}
+            md = regex.match line
+            file_name = md[1] unless md.nil?
+            matched_line = line unless file_name.nil?
+            break unless file_name.nil?
           end
+          break unless file_name.nil?
+        end
+        set_sub_class_template_root(sub, File.dirname(matched_line.split(':')[0])) if matched_line.respond_to?(:split)
+        return Thread::current['rack-panel_file'] || file_name
       end
 
       def inherited(sub)
         if filename = current_panel_file(sub)
+          logger.debug("panel inherited by #{sub.inspect} with template_root: #{sub.template_root}") if verbose(:high)
           Panel::file_index[filename] << sub
         else
           warn "Rack::Insight::Panel inherited by #{sub.name} outside rack-insight's :panel_load_paths.  Discarded.  Configured panel load paths are: #{Rack::Insight::Config.config[:panel_load_paths].inspect}"

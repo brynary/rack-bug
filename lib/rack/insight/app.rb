@@ -160,17 +160,17 @@ module Rack::Insight
     def ip_authorized?
       return true unless options["rack-insight.ip_masks"]
 
-      logger.info{ "Checking #{@original_request.ip} against ip_masks" } if verbose(:low)
+      logger.info{ "Checking #{@original_request.ip} against ip_masks" } if verbose(:high)
       ip = IPAddr.new(@original_request.ip)
 
       mask = options["rack-insight.ip_masks"].find do |ip_mask|
         ip_mask.include?(ip)
       end
       if mask
-        logger.info{ "Matched #{mask}" } unless verbose(:silent)
+        logger.info{ "Matched #{mask}" } if verbose(:high)
         return true
       else
-        logger.info{ "Matched no masks" } unless verbose(:silent)
+        logger.info{ "Matched no masks" } if verbose(:high)
         return false
       end
     end
