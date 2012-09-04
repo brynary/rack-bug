@@ -1,3 +1,4 @@
+require 'logger'
 require 'rack/insight/app'
 
 module Rack
