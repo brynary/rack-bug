@@ -1,3 +1,9 @@
+== 0.5.8 / 2012-09-03 (Peter Boling)
+
+  * Bug Fixes
+
+    * working template_root for rack-insight extension libraries
+
 == 0.5.7 / 2012-09-03 (Peter Boling)
 
   * Bug Fixes
