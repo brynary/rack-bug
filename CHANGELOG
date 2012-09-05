@@ -1,10 +1,10 @@
-== 0.5.9 / 2012-09-03 (Peter Boling)
+== 0.5.9 / 2012-09-04 (Peter Boling)
 
   * New Features
 
     * FilteredBacktrace was disabled in LogicalInsight.  It's now back.  It is now configurable via the configure block.
 
-== 0.5.8 / 2012-09-03 (Peter Boling)
+== 0.5.8 / 2012-09-04 (Peter Boling)
 
   * Bug Fixes
 
