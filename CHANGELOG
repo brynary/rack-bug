@@ -1,3 +1,9 @@
+== 0.5.10 / 2012-09-04 (Peter Boling)
+
+  * Bug Fixes
+
+    * Ajax requests for previously cached panel data now go to root (/), which allows it to work on non-root URLs.
+
 == 0.5.9 / 2012-09-04 (Peter Boling)
 
   * New Features
