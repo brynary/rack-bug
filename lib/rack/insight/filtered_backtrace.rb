@@ -16,7 +16,7 @@ module Rack::Insight
     def self.backtrace_regexp
       @backtrace_regexp ||=
         begin
-          if true or (app_root = root_for_backtrace_filtering).nil?
+          if !Rack::Insight::Config.filtered_backtrace || (app_root = root_for_backtrace_filtering).nil?
             /.*/
           else
             excludes = %w{vendor}
