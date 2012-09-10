@@ -117,6 +117,15 @@ Options:
           config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
         end
 
+      Example:  If you want all of your log statements in Rails to be traced twice by Rack::Insight,
+                this will do that because ActiveSupport::BufferedLogger utilizes Logger under the hood:
+
+        config[:panel_configs][:log_panel] = {:watch => {
+                "ActiveSupport::BufferedLogger" => :add,
+                "Logger" => :add
+        }}
+
+
 Configure Middleware
 --------------------
 
