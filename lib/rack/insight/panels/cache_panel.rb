@@ -57,8 +57,6 @@ module Rack::Insight
     end
 
     def content_for_request(number)
-      # TODO: What is this syntax with the double {{}}?
-      logger.debug{{ :req_num => number }} if verbose(:debug)
       stats = retrieve(number).first
       render_template "panels/cache", :stats => stats
     end
