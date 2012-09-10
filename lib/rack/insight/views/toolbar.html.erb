@@ -13,6 +13,10 @@
 <script>
   $(function($) {
     $.insight.request_id = <%= request_id %>
+    if(document.readCookie('rack-insight_position')) {
+      $('#rack-insight').removeClass('rack-insight_top rack-insight_bottom')
+        .addClass('rack-insight_' + document.readCookie('rack-insight_position'));
+    }
   })
 </script>
 
