@@ -56,10 +56,9 @@ module Rack::Insight
       "log"
     end
 
-    def heading
-      stats = retrieve(number).first
-
-      "#{stats.queries.size} Log Lines"
+    def heading_for_request(number)
+      num = count(number)
+      "Logs (#{num})"
     end
 
     def content_for_request(number)

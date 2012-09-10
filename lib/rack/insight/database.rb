@@ -30,7 +30,10 @@ module Rack::Insight
       def retrieve(request_id)
         @table.for_request(request_id)
       end
-      alias retreive retrieve #JDL cannot spell
+
+      def count(request_id)
+        @table.count_for_request(request_id)
+      end
 
       def table_length
         @table.length
@@ -107,6 +110,10 @@ module Rack::Insight
         execute("select #{which_sql} from #@table_name where #{condition_sql}")
       end
 
+      def count(condition_sql)
+        execute("select count(*) from #@table_name where #{condition_sql}")
+      end
+
       def fields_sql
         "#{@keys.join(",")}"
       end
@@ -179,8 +186,16 @@ module Rack::Insight
         select("value", key_sql).map{|value| decode_value(value.first)}
       end
 
+      def count_entries(key_sql)
+        count(key_sql).first.first
+      end
+
       def for_request(id)
         retrieve("request_id = #{id}")
+      end
+
+      def count_for_request(id)
+        count_entries("request_id = #{id}")
       end
 
       def to_a
