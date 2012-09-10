@@ -54,7 +54,11 @@ module Rack::Insight
         { :id => row[0], :method => row[1], :path => row[2] }
       end
 
-      logger.info{ "Injecting toolbar: active panels: #{@insight.panels.map{|pnl| pnl.class.name}.inspect}" } unless verbose(:silent)
+      unless verbose(:silent)
+        logger.info do
+          "Injecting toolbar: active panels: #{@insight.panels.map{|pnl| pnl.class.name}.inspect}"
+        end
+      end
 
       headers_fragment = render_template("headers_fragment",
                                          :panels => @insight.panels,
