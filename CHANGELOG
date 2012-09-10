@@ -1,8 +1,21 @@
+== HEAD
+
+
+== 0.5.12 / 2012-09-10
+
+  * Other
+
+    * Improving documentation by Peter Boling
+
+  * New Features
+
+    * persistent toolbar position by Alif Rachmawadi
+
 == 0.5.11 / 2012-09-05
 
   * Bug Fixes
 
-    * Fixed Encoding::CompatibilityError. (Michael Grosser)
+    * Fixed Encoding::CompatibilityError by Michael Grosser
 
 == 0.5.10 / 2012-09-04 (Peter Boling)
 
