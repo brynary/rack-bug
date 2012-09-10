@@ -9,6 +9,7 @@ module Rack::Insight
     @verbosity = true
     @rails_log_copy = true
     @filtered_backtrace = true
+    @panel_configs = {}
 
     DEFAULTS = {
       # You can augment or replace the default set of panel load paths.
@@ -26,7 +27,8 @@ module Rack::Insight
       :rails_log_copy => @rails_log_copy, # Only has effect when logger is the Rack::Insight::Logger, or a logger behaving like it
       # Can set a specific verbosity: Rack::Insight::Logging::VERBOSITY[:debug]
       :verbosity => @verbosity, # true is equivalent to relying soley on the log level of each logged message
-      :filtered_backtrace => @filtered_backtrace # Full backtraces, or filtered ones?
+      :filtered_backtrace => @filtered_backtrace, # Full backtraces, or filtered ones?
+      :panel_configs => @panel_configs # Allow specific panels to have their own configurations, and make it extensible
     }
 
     @config ||= DEFAULTS
@@ -38,8 +40,12 @@ module Rack::Insight
       @log_file = config[:log_file]
       @verbosity = config[:verbosity]
       @filtered_backtrace = config[:filtered_backtrace]
+      @panel_configs = config[:panel_configs]
       unless config[:panel_load_paths].kind_of?(Array)
         raise "Rack::Insight::Config.config[:panel_load_paths] is invalid: Expected kind of Array but got #{config[:panel_load_paths].class}"
+      end
+      unless config[:panel_configs].kind_of?(Hash)
+        raise "Rack::Insight::Config.config[:panel_configs] is invalid: Expected kind of Hash but got #{config[:panel_configs].class}"
       end
     end
 

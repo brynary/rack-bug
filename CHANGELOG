@@ -1,5 +1,13 @@
 == HEAD
 
+  * New Features
+
+    * Panel level configuration options for all panels, including extension gems.
+      Currently this is implemented in the log_panel, and configured as:
+        Rack::Insight::Config.configure do |config|
+          config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
+        end
+    * Count number of Log Entries
 
 == 0.5.12 / 2012-09-10
 

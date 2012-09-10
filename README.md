@@ -1,19 +1,22 @@
 Rack::Insight
-=========
+=============
 
-Rack::Insight began life as an fork of Logical::Insight by LRDesign.  I started a
-fork because LogicalInsight was namespaced as "Insight", which is causing namespace
-collisions everywhere I have an Insight model.  I had to re-namespace all the code.
-I also needed to build a few extension gems with additional panels, and added the
-Config class to allow for custom panel load paths, and other future extensions
-that don't work in the *use Middleware* declaration.  It should be *even* easier
-to extend than LogicalInsight was, because extension gems can access the Config class
+Rack::Insight began life as an fork of Logical::Insight by LRDesign.
+
+* I started a fork because:
+    * LogicalInsight was namespaced as "Insight"
+        * Causing namespace collisions everywhere I have an Insight model.  I had to re-namespace all the code.
+    * I also needed to build a few extension gems with additional panels, which didn't fully work in LI
+        * Added the Config class to allow for custom panel load paths
+          and many other extensions that don't work in the *use Middleware* declaration.
+
+It should be *even* easier to extend than LogicalInsight was, because extension gems can access the Config class
 and truly bolt-on cleanly.
 
 Having made really significant architectural changes, I'll be keeping Rack::Insight
-a separate project for the forseeable future.
+a separate project for the foreseeable future.
 
-* Forked From: [logical-insight](http://github.com/LRDesign/logical-insight), [documentation](http://lrdesign.github.com/rack-insight/)
+* Forked From: [logical-insight](http://github.com/LRDesign/logical-insight)
 * Which Was Forked From: [rack-bug](http://github.com/brynary/rack-bug)
 
 Description
@@ -33,12 +36,12 @@ Features
         * Rails Info
         * Timer
         * Request Variables
-        * SQL
-        * Active Record
         * Cache
         * Templates
-        * Log
+        * Log               (can configure which loggers to watch!)
         * Memory
+        * SQL               (Failing specs, and I don't use it, someone please pull me a fix!)
+        * Active Record     (Failing specs, and I don't use it, someone please pull me a fix!)
     * Other bundled panels:
         * Redis
         * Speedtracer
@@ -49,7 +52,7 @@ Features
         * Consistent interface to instrument application code
         * Consistent timing across panels
         * Easy to add sub-applications for more detailed reports (c.f. SQLPanel)
-        * The documentation is scarce, so there's a feeling of adventure :/
+        * Ask me (pboling) if you need help with this.
 
 Rails quick start
 ---------------------------
@@ -104,6 +107,15 @@ Options:
 
     :panel_load_paths => [File::join('rack', 'insight', 'panels')] (default)
                          See *Configuring custom panels* section for example usage
+
+    :panel_configs => This is a nested config, se below:
+
+      Panel level configuration options for all panels, including extension gems.
+      Currently this is implemented in the log_panel, and configured as:
+
+        Rack::Insight::Config.configure do |config|
+          config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
+        end
 
 Configure Middleware
 --------------------
@@ -207,7 +219,7 @@ and Rack::Cache
 License
 -------
 
-See LICENSE in this directory.
+MIT. See LICENSE in this directory.
 
 Notes
 -----
