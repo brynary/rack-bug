@@ -77,7 +77,7 @@ If you wish to use the logger panel define the LOGGER constant that is a ruby
 Logger or ActiveSupport::BufferedLogger
 
 Configure Rack::Insight
-----------------------
+---------------------
 
 Pattern:
 
@@ -105,8 +105,8 @@ Options:
     :panel_load_paths => [File::join('rack', 'insight', 'panels')] (default)
                          See *Configuring custom panels* section for example usage
 
-Configuring custom panels
--------------------------
+Configure Middleware
+--------------------
 
 Specify the set of panels you want, in the order you want them to appear:
 
@@ -151,7 +151,7 @@ When you create custom panels use the render_template method and pass it the pat
     render_template 'thunder_panel/views/thor'
 
 Running Rack::Insight in staging or production
-------------------------------------------
+----------------------------------------------
 
 We have have found that Rack::Insight is fast enough to run in production for specific troubleshooting efforts.
 
@@ -174,6 +174,7 @@ Restrict access using a password:
 
     ActionController::Dispatcher.middleware.use "Rack::Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
+      :ip_masks   => false # Default is 127.0.0.1
       :password   => "yourpassword"
 
 #### custom file path for the logging database ####
