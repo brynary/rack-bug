@@ -1,16 +1,5 @@
 module Rack::Insight
   class ActiveRecordPanel < Panel
-    def initialize(app)
-      super
-
-      table_setup("active_record")
-
-      probe(self) do
-        instrument "ActiveRecord::Base" do
-          class_probe :allocate
-        end
-      end
-    end
 
     def request_start(env, start)
       @records = Hash.new{ 0 }
@@ -22,10 +11,6 @@ module Rack::Insight
 
     def request_finish(env, status, headers, body, timing)
       store(env, @records)
-    end
-
-    def name
-      "active_record"
     end
 
     def heading_for_request(number)

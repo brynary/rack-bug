@@ -15,12 +15,13 @@ module Rack::Insight
     include Rack::Insight::Instrumentation::Client
 
     attr_reader :request
+    attr_accessor :probed
 
     class << self
 
       include Rack::Insight::Logging
 
-      attr_accessor :template_root
+      attr_accessor :template_root, :tableless
       def file_index
         return @file_index ||= Hash.new do |h,k|
           h[k] = []
@@ -91,6 +92,32 @@ module Rack::Insight
       else
         @app = app
       end
+
+      # User has explicitly declared what classes/methods to probe:
+      #   Rack::Insight::Config.configure do |config|
+      #     config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
+      #   end
+      if !Rack::Insight::Config.config[:panel_configs][self.as_sym].respond_to?(:[])
+        if Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].kind_of?(Hash)
+          probe(self) do
+            Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].each do |klass, *method_probes|
+              probe_type = method_probes.shift
+              puts "probe_type: #{probe_type.inspect}"
+              instrument klass do
+                self.send("#{probe_type}_probe", method_probes)
+              end
+            end
+          end
+        else
+          raise "Expected Rack::Insight::Config.config[:panel_configs][#{self.as_sym.inspect}][:probes] to be a kind of Hash, but is a #{Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].class}"
+        end
+      end
+
+      # Setup a table for the panel unless
+      # 1. no_table has been called
+      # 2. @table has been set to false
+      # 3. table_setup has already been called
+      table_setup("#{self.name}_entries") unless tableless?
     end
 
     def call(env)
@@ -113,12 +140,39 @@ module Rack::Insight
       {}
     end
 
+    def tableless?
+      !!self.class.tableless
+    end
+
     def has_content?
       true
     end
 
+    def already_probed?
+      !!@probed
+    end
+
+    # The name informs the table name, and the panel_configs hash among other things.
+    # Override in subclass panels if you want a custom name
     def name
-      "Unnamed panel: #{self.class.name}" #for shame
+      self.underscored_name
+    end
+
+    def as_sym
+      @as_sym ||= self.name.to_sym
+    end
+
+    # Mostly stolen from Rails' ActiveSupport' underscore method:
+    def underscored_name
+      @underscored_name ||= begin
+        self.class.to_s.
+          gsub(/Panel/,'').
+          gsub(/::/, '/').
+          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+          gsub(/([a-z\d])([A-Z])/,'\1_\2').
+          tr("-", "_").
+          downcase
+      end
     end
 
     def heading_for_request(number)

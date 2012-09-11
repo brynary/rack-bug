@@ -12,8 +12,6 @@ module Rack::Insight
         end
       end
 
-      table_setup("templates")
-
       @current = nil
     end
 
@@ -38,10 +36,6 @@ module Rack::Insight
     def after_detect(method_call, timing, args, result)
       @current.timing = timing
       @current = @current.parent
-    end
-
-    def name
-      "templates"
     end
 
     def heading_for_request(number)

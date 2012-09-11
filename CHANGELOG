@@ -2,6 +2,17 @@
 
   * New Features
 
+    * Panel level configurations for :watch are now supported by default on all panels that define name
+    * Auto-magical panel names
+
+== 0.5.13 / 2012-09-10
+
+  * Bug Fixes
+
+    * Fixed the double logging of anything logged with ActiveSupport::BufferedLogger (via the new :panel_configs)
+
+  * New Features
+
     * Panel level configuration options for all panels, including extension gems.
       Currently this is implemented in the log_panel, and configured as:
         Rack::Insight::Config.configure do |config|

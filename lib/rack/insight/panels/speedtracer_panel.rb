@@ -52,7 +52,6 @@ module Rack::Insight
       super
     end
 
-
     def call(env)
       env['rack-insight.speedtracer-id'] = @uuid
 
@@ -65,10 +64,6 @@ module Rack::Insight
 
     def self.panel_mappings
       { "speedtracer" => TraceApp.new }
-    end
-
-    def name
-      "speedtracer"
     end
 
     def heading

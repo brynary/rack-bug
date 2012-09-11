@@ -2,14 +2,6 @@ require 'benchmark'
 
 module Rack::Insight
   class TimerPanel < Panel
-    def initialize(app)
-      super
-      table_setup("timer")
-    end
-
-    def name
-      "timer"
-    end
 
     def call(env)
       status, headers, body = nil
@@ -36,5 +28,6 @@ module Rack::Insight
     def content_for_request(number)
       render_template "panels/timer", :measurements => retrieve(number).first
     end
+
   end
 end

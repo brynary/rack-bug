@@ -4,6 +4,8 @@ module Rack::Insight
     require "rack/insight/panels/sphinx_panel/sphinx_extension"
     require "rack/insight/panels/sphinx_panel/stats"
 
+    self.tableless = true
+
     def self.record(*sphinx_command_args, &block)
       return block.call unless Rack::Insight.enabled?
 
@@ -20,10 +22,6 @@ module Rack::Insight
 
     def self.stats
       Thread.current["rack-insight.sphinx"] ||= Stats.new
-    end
-
-    def name
-      "sphinx"
     end
 
     def heading

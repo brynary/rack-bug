@@ -9,7 +9,16 @@ module Rack::Insight
     @verbosity = true
     @rails_log_copy = true
     @filtered_backtrace = true
-    @panel_configs = {}
+    @panel_configs = {
+      :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
+      :active_resource => {:probes => {'ActiveResource::Connection' => [:instance, :request]}},
+      :cache => {:probes => { 'Memcached'     => [:instance, :decrement, :get, :increment, :set,
+                                                                 :add, :replace, :delete, :prepend, :append],
+                              'MemCache'      => [:instance, :decr, :get, :get_multi, :incr, :set, :add, :delete],
+                              'Dalli::Client' => [:instance, :perform] } },
+      :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
+#      :log_panel => The log panel configures its probes in its initializer
+    }
 
     DEFAULTS = {
       # You can augment or replace the default set of panel load paths.
@@ -40,13 +49,24 @@ module Rack::Insight
       @log_file = config[:log_file]
       @verbosity = config[:verbosity]
       @filtered_backtrace = config[:filtered_backtrace]
-      @panel_configs = config[:panel_configs]
+
+      config[:panel_configs].each do |panel_name_sym, config|
+        set_panel_config(panel_name_sym, config)
+      end
+
       unless config[:panel_load_paths].kind_of?(Array)
         raise "Rack::Insight::Config.config[:panel_load_paths] is invalid: Expected kind of Array but got #{config[:panel_load_paths].class}"
       end
       unless config[:panel_configs].kind_of?(Hash)
         raise "Rack::Insight::Config.config[:panel_configs] is invalid: Expected kind of Hash but got #{config[:panel_configs].class}"
       end
+    end
+
+    # To preserve :panel_configs settings from extension libraries,
+    # and allowing user config to override the defaults set in this, or other extension gems.
+    def self.set_panel_config(panel_name_sym, config)
+      @panel_configs[panel_name_sym].merge!(config)
+      self.config[:panel_configs][panel_name_sym] = @panel_configs[panel_name_sym]
     end
 
     def self.logger

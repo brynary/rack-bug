@@ -22,8 +22,12 @@ module Rack::Insight
     end
 
     def initialize(app)
-      probe(self) do
-        if !Rack::Insight::Config.config[:panel_configs][:log_panel].respond_to?(:[])
+
+      # Call super before setting up probes in case there are any custom probes configured
+      super # will setup custom probes
+
+      unless already_probed?
+        probe(self) do
           # Trying to be smart...
           if defined?(ActiveSupport)
             instrument "ActiveSupport::BufferedLogger" do
@@ -34,26 +38,8 @@ module Rack::Insight
               instance_probe :add
             end
           end
-        else
-          # User has explicitly declared what log classes to monitor:
-          #   Rack::Insight::Config.configure do |config|
-          #     config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
-          #   end
-          Rack::Insight::Config.config[:panel_configs][:log_panel][:watch].each do |klass, method_probe|
-            instrument klass do
-              instance_probe method_probe
-            end
-          end
         end
       end
-
-      table_setup("log_entries")
-
-      super
-    end
-
-    def name
-      "log"
     end
 
     def heading_for_request(number)

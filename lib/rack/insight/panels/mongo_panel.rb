@@ -4,6 +4,8 @@ module Rack::Insight
     require "rack/insight/panels/mongo_panel/mongo_extension"
     require "rack/insight/panels/mongo_panel/stats"
 
+    self.tableless = true
+
     def self.record(command, &block)
       return block.call unless Rack::Insight.enabled?
 
@@ -20,10 +22,6 @@ module Rack::Insight
 
     def self.stats
       Thread.current["rack-insight.mongo"] ||= Stats.new
-    end
-
-    def name
-      "mongo"
     end
 
     def heading

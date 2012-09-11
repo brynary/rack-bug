@@ -5,6 +5,8 @@ module Rack::Insight
 
     require "rack/insight/panels/redis_panel/stats"
 
+    self.tableless = true
+
     def self.record(redis_command_args, backtrace, &block)
       return block.call unless Rack::Insight.enabled?
 
@@ -21,10 +23,6 @@ module Rack::Insight
 
     def self.stats
       Thread.current["rack-insight.redis"] ||= Stats.new
-    end
-
-    def name
-      "redis"
     end
 
     def heading

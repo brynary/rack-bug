@@ -4,27 +4,6 @@ module Rack::Insight
     require "rack/insight/panels/cache_panel/panel_app"
     require "rack/insight/panels/cache_panel/stats"
 
-    def initialize(app)
-      super
-
-      probe(self) do
-        instrument("Memcached") do
-          instance_probe :decrement, :get, :increment, :set, :add,
-            :replace, :delete, :prepend, :append
-        end
-
-        instrument("MemCache") do
-          instance_probe :decr, :get, :get_multi, :incr, :set, :add, :delete
-        end
-
-        instrument("Dalli::Client") do
-          instance_probe :perform
-        end
-      end
-
-      table_setup("cache")
-    end
-
     def request_start(env, start)
       @stats = Stats.new
     end
@@ -44,10 +23,6 @@ module Rack::Insight
 
     def panel_app
       PanelApp.new
-    end
-
-    def name
-      "cache"
     end
 
     def heading_for_request(number)

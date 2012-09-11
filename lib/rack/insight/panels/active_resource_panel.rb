@@ -6,16 +6,6 @@ module Rack::Insight
     #require "rack/insight/panels/sql_panel/panel_app"
     #require "rack/insight/panels/sql_panel/query"
 
-    def initialize(app)
-      super
-      probe(self) do
-        instrument "ActiveResource::Connection" do
-          instance_probe :request
-        end
-      end
-      table_setup("active_resource_requests")
-    end
-
     def after_detect(method_call, timing, arguments, results)
       body = "<no body>"
       if results.respond_to? :body
@@ -28,10 +18,6 @@ module Rack::Insight
       (queries.inject(0) do |memo, query|
         memo + query.time
       end)
-    end
-
-    def name
-      "active_resource"
     end
 
     def heading_for_request(number)

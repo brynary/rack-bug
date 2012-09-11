@@ -17,7 +17,6 @@ module Rack::Insight
           end
         end
       end
-      table_setup("sql_queries")
     end
 
     def self.panel_mappings
@@ -32,10 +31,6 @@ module Rack::Insight
       (queries.inject(0) do |memo, query|
         memo + query.time
       end)
-    end
-
-    def name
-      "sql"
     end
 
     def heading_for_request(number)

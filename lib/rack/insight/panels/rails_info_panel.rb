@@ -1,9 +1,7 @@
 module Rack::Insight
   class RailsInfoPanel < Panel
 
-    def name
-      "rails_info"
-    end
+    self.tableless = true
 
     def heading
       return unless (defined?(Rails) && defined?(Rails::Info))

@@ -1,14 +1,5 @@
 module Rack::Insight
   class RequestVariablesPanel < Panel
-    def initialize(app)
-      super
-
-      table_setup("request_variables")
-    end
-
-    def name
-      "request_variables"
-    end
 
     def after(env,status,headers,body)
       sections = {}

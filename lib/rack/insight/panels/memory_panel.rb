@@ -1,10 +1,6 @@
 module Rack::Insight
 
   class MemoryPanel < Panel
-    def initialize(app)
-      super
-      table_setup("memory_records")
-    end
 
     def before(env)
       @original_memory = `ps -o rss= -p #{$$}`.to_i
@@ -25,10 +21,6 @@ module Rack::Insight
 
     def has_content?
       false
-    end
-
-    def name
-      "Memory"
     end
 
   end
