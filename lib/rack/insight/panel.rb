@@ -260,9 +260,7 @@ module Rack::Insight
 
     def content
       logger.info("Rack::Insight is using default content for #{self.class}") if verbose(:med)
-      html = "<h3>#{self.camelized_name}</h3>"
-      html += '<p>Add a content method to your panel</p>'
-      html
+      render_template 'no_content', :name => self.camelized_name
     end
 
     # Override in subclasses.
