@@ -4,7 +4,7 @@ module Rack::Insight
     require "rack/insight/panels/mongo_panel/mongo_extension"
     require "rack/insight/panels/mongo_panel/stats"
 
-    self.tableless = true
+    self.has_table = false
 
     def self.record(command, &block)
       return block.call unless Rack::Insight.enabled?

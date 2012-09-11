@@ -7,6 +7,11 @@ module Rack::Insight
 
       FourOhFour = [404, {"Content-Type" => "text/html"}, "App tracker doesn't know that path or id"].freeze
 
+      class << self
+        attr_accessor :has_table
+      end
+      self.has_table = true
+
       def initialize
         table_setup("speedtracer", "uuid")
         key_sql_template = "'%s'"

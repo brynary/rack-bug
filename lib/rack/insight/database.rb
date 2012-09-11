@@ -4,15 +4,26 @@ require 'base64'
 
 module Rack::Insight
   class Database
+
+    # Classes including this module must define the following structure:
+    #    class FooBar
+    #      include Rack::Insight::Database
+    #      class << self
+    #        attr_accessor :has_table
+    #      end
+    #      # Setting as below is only required when not using a table (Why are you including this module then?)
+    #      # self.has_table = false
+    #    end
     module RequestDataClient
       def key_sql_template(sql)
         @key_sql_template = sql
       end
 
       def table_setup(name, *keys)
+        self.class.has_table = true
         @table = DataTable.new(name, *keys)
         if keys.empty?
-          @key_sql_template = ""
+          @key_sql_template = ''
         end
       end
 

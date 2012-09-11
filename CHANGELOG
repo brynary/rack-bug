@@ -2,8 +2,11 @@
 
   * New Features
 
-    * Panel level configurations for :watch are now supported by default on all panels that define name
+    * Panel level configurations for :probes are now supported by default on all panels
     * Auto-magical panel names
+    * Auto-magical table creation (skipped with self.tableless = false in a Panel class definition)
+    * Under construction, or blank, panels have more scaffolding
+    *
 
 == 0.5.13 / 2012-09-10
 

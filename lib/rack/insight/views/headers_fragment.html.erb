@@ -4,7 +4,7 @@
   <li>
   <% begin %>
     <% if panel.has_content? %>
-      <a href="#" class="<%= panel.name %>">
+      <a href="#" class="<%= panel.camelized_name %>Panel">
         <%= panel.heading_for_request(request_id) %>
       </a>
     <% else %>

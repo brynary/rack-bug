@@ -7,18 +7,6 @@ module Rack::Insight
     require "rack/insight/panels/sql_panel/panel_app"
     require "rack/insight/panels/sql_panel/query"
 
-    def initialize(app)
-      super
-      probe(self) do
-        %w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
-            Mysql2Adapter OracleEnhancedAdapter }.each do |adapter|
-          instrument "ActiveRecord::ConnectionAdapters::#{adapter}" do
-            instance_probe :execute
-          end
-        end
-      end
-    end
-
     def self.panel_mappings
       { "sql" => PanelApp.new }
     end

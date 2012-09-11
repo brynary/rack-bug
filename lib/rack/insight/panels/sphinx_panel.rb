@@ -4,7 +4,7 @@ module Rack::Insight
     require "rack/insight/panels/sphinx_panel/sphinx_extension"
     require "rack/insight/panels/sphinx_panel/stats"
 
-    self.tableless = true
+    self.has_table = false
 
     def self.record(*sphinx_command_args, &block)
       return block.call unless Rack::Insight.enabled?

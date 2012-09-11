@@ -56,7 +56,6 @@ module Rack::Insight
       env['rack-insight.speedtracer-id'] = @uuid
 
       status, headers, body = @app.call(env)
-
       store(env, env['rack-insight.speedtracer-id'], env['rack-insight.speedtracer-record'])
       headers['X-TraceUrl'] = '__insight__/speedtracer?id=' + env['rack-insight.speedtracer-id']
       return [status, headers, body]

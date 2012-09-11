@@ -26,7 +26,7 @@ module Rack::Insight
       # Call super before setting up probes in case there are any custom probes configured
       super # will setup custom probes
 
-      unless already_probed?
+      unless is_probed?
         probe(self) do
           # Trying to be smart...
           if defined?(ActiveSupport)
@@ -40,11 +40,6 @@ module Rack::Insight
           end
         end
       end
-    end
-
-    def heading_for_request(number)
-      num = count(number)
-      "Logs (#{num})"
     end
 
     def content_for_request(number)

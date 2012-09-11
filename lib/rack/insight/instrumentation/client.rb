@@ -2,7 +2,7 @@ require 'rack/insight/instrumentation/package-definition'
 module Rack::Insight::Instrumentation
   module Client
     def probe(collector, &block)
-      @probed = true
+      self.class.is_probed = true
       ::Rack::Insight::Instrumentation::PackageDefinition::probe(collector, &block)
     end
 

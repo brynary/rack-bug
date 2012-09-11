@@ -5,7 +5,7 @@ module Rack::Insight
 
     require "rack/insight/panels/redis_panel/stats"
 
-    self.tableless = true
+    self.has_table = false
 
     def self.record(redis_command_args, backtrace, &block)
       return block.call unless Rack::Insight.enabled?

@@ -18,6 +18,11 @@ module Rack::Insight
                               'Dalli::Client' => [:instance, :perform] } },
       :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
 #      :log_panel => The log panel configures its probes in its initializer
+      :sql => {:probes => Hash[%w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
+                  Mysql2Adapter OracleEnhancedAdapter }.map do |adapter|
+                    ["ActiveRecord::ConnectionAdapters::#{adapter}", [:instance, :execute]]
+                  end ] },
+      :templates => {:probes => {'ActionView::Template' => [:instance, :render]}}
     }
 
     DEFAULTS = {

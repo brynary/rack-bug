@@ -6,12 +6,6 @@ module Rack::Insight
     def initialize(app)
       super
 
-      probe(self) do
-        instrument "ActionView::Template" do
-          instance_probe :render
-        end
-      end
-
       @current = nil
     end
 
@@ -43,8 +37,7 @@ module Rack::Insight
     end
 
     def content_for_request(number)
-      result = render_template "panels/templates", :root_rendering => retrieve(number).first
-      return result
+      render_template "panels/templates", :root_rendering => retrieve(number).first
     end
 
   end

@@ -1,7 +1,7 @@
 <div id="request_<%=request_id%>">
   <% panels.each do |panel| %>
     <% if panel.has_content? %>
-      <div class="panel_content" id="<%= panel.name %>">
+      <div class="panel_content" id="<%= panel.camelized_name %>Panel">
         <div class="panel_controls">
           <form action="#">
             <select id="request_id_menu" name="current_request">

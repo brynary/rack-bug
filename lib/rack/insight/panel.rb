@@ -15,13 +15,16 @@ module Rack::Insight
     include Rack::Insight::Instrumentation::Client
 
     attr_reader :request
-    attr_accessor :probed
 
     class << self
 
       include Rack::Insight::Logging
 
-      attr_accessor :template_root, :tableless
+      attr_accessor :template_root, :is_probed, :has_table, :is_magic
+      @is_probed = false  # Once a panel is probed this should be set to true
+      @has_table = true   # default to true.  Panels without tables override with self.has_table = false
+      @is_magic = false   # check this to wrap any functionality targeted at magic panels.
+
       def file_index
         return @file_index ||= Hash.new do |h,k|
           h[k] = []
@@ -34,10 +37,17 @@ module Rack::Insight
 
       def from_file(rel_path)
         old_rel, Thread::current['rack-panel_file'] = Thread::current['rack-panel_file'], rel_path
-        Rack::Insight::Config.config[:panel_load_paths].each do |load_path|
+        load_paths_to_check = Rack::Insight::Config.config[:panel_load_paths].length
+        Rack::Insight::Config.config[:panel_load_paths].each_with_index do |load_path, index|
           begin
             require File::join(load_path, rel_path)
+            break # once found
           rescue LoadError => e
+            # TODO: If probes are defined for this panel, instantiate a magic panel
+            # if self.has_custom_probes?
+            if (index + 1) == load_paths_to_check # You have failed me for the last time!
+              warn "Rack::Insight #{e.class}: Unable to find panel specified as '#{rel_path}'.  Looked in the following :panel_load_paths: #{Rack::Insight::Config.config[:panel_load_paths].inspect}."
+            end
           end
         end
         return (file_index[rel_path] - panel_exclusion)
@@ -95,29 +105,45 @@ module Rack::Insight
 
       # User has explicitly declared what classes/methods to probe:
       #   Rack::Insight::Config.configure do |config|
-      #     config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
+      #     config[:panel_configs][:log] = {:probes => {'Logger' => [:instance, :add] } }
+      #     # OR EQUIVALENTLY
+      #     config[:panel_configs][:log] = {:probes => ['Logger', :instance, :add] }
       #   end
-      if !Rack::Insight::Config.config[:panel_configs][self.as_sym].respond_to?(:[])
-        if Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].kind_of?(Hash)
+      panel_name = self.underscored_name.to_sym
+      if self.has_custom_probes?(panel_name)
+        custom_probes = Rack::Insight::Config.config[:panel_configs][panel_name][:probes]
+        if custom_probes.kind_of?(Hash)
           probe(self) do
-            Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].each do |klass, *method_probes|
+            custom_probes.each do |klass, method_probes|
               probe_type = method_probes.shift
-              puts "probe_type: #{probe_type.inspect}"
               instrument klass do
-                self.send("#{probe_type}_probe", method_probes)
+                self.send("#{probe_type}_probe", *method_probes)
+              end
+            end
+          end
+        elsif custom_probes.kind_of?(Array) && custom_probes.length >=3
+          probe(self) do
+            custom_probes.each do |probe|
+              klass = probe.shift
+              probe_type = probe.shift
+              instrument klass do
+                self.send("#{probe_type}_probe", *probe)
               end
             end
           end
         else
-          raise "Expected Rack::Insight::Config.config[:panel_configs][#{self.as_sym.inspect}][:probes] to be a kind of Hash, but is a #{Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].class}"
+          raise "Expected Rack::Insight::Config.config[:panel_configs][#{self.as_sym.inspect}][:probes] to be a kind of Hash or an Array with length >= 3, but is a #{Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].class}"
         end
       end
 
       # Setup a table for the panel unless
-      # 1. no_table has been called
-      # 2. @table has been set to false
-      # 3. table_setup has already been called
-      table_setup("#{self.name}_entries") unless tableless?
+      # 1. self.has_table = false has been set for the Panel class
+      # 2. class instance variable @has_table has been set to false
+      # 3. table_setup has already been called by the sub class' initializer
+      if !has_table?
+        table_setup(self.name)
+      end
+      #puts "Initalization Complete for #{panel_name}\n1. #{self.is_magic?} && 2. #{self.has_table?} && 3. #{self.is_probed?} 4. #{self.has_custom_probes?}"
     end
 
     def call(env)
@@ -140,16 +166,26 @@ module Rack::Insight
       {}
     end
 
-    def tableless?
-      !!self.class.tableless
+    def has_table?
+      !!self.class.has_table
+    end
+
+    def is_magic?
+      !!self.class.is_magic
     end
 
     def has_content?
       true
     end
 
-    def already_probed?
-      !!@probed
+    def is_probed?
+      !!self.class.is_probed
+    end
+
+    def has_custom_probes?(panel_name = self.underscored_name.to_sym)
+      #puts "Rack::Insight::Config.config[:panel_configs][#{panel_name.inspect}]: #{Rack::Insight::Config.config[:panel_configs][panel_name].inspect}"
+      Rack::Insight::Config.config[:panel_configs][panel_name].respond_to?(:[]) &&
+        !Rack::Insight::Config.config[:panel_configs][panel_name][:probes].nil?
     end
 
     # The name informs the table name, and the panel_configs hash among other things.
@@ -158,29 +194,98 @@ module Rack::Insight
       self.underscored_name
     end
 
-    def as_sym
-      @as_sym ||= self.name.to_sym
-    end
-
     # Mostly stolen from Rails' ActiveSupport' underscore method:
-    def underscored_name
+    # See activesupport/lib/active_support/inflector/methods.rb, line 77
+    # HTTPClientPanel => http_client
+    # LogPanel => log
+    # ActiveRecordPanel => active_record
+    def underscored_name(word = self.class.to_s)
       @underscored_name ||= begin
-        self.class.to_s.
-          gsub(/Panel/,'').
-          gsub(/::/, '/').
-          gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-          gsub(/([a-z\d])([A-Z])/,'\1_\2').
-          tr("-", "_").
-          downcase
+        words = word.dup.split('::')
+        word = words.last
+        if word == 'Panel'
+          word = words[-2] # Panel class is Panel... and this won't do.
+        end
+        #word.gsub!(/(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/) { "#{$1}#{$1 && '_'}#{$2.downcase}" }
+        word.gsub!(/Panel$/,'')
+        word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
+        word.gsub!(/([a-z\d])([A-Z])/,'\1_\2')
+        word.tr!("-", "_")
+        word.downcase!
+        word
       end
     end
 
+    def camelized_name(str = self.underscored_name)
+      str.split('_').map {|w| w.capitalize}.join
+    end
+
     def heading_for_request(number)
-      heading rescue "xxx" #XXX: no panel should need this
+      if !self.has_table?
+        heading
+      else
+        num = count(number)
+        if num == 0
+          heading
+        else
+          "#{self.camelized_name} (#{num})"
+        end
+      end
+      rescue 'XXX' # no panel should need this
     end
 
     def content_for_request(number)
-      content rescue "" #XXX: no panel should need this
+      logger.info("Rack::Insight is using default content_for_request for #{self.class}") if verbose(:med)
+      if !self.has_table?
+        logger.info("#{self.class} is being used without a table") if verbose(:med)
+        content
+      elsif self.is_probed?
+        html = "<h3>#{self.camelized_name}</h3>"
+        invocations = retrieve(number)
+        if invocations.length > 0 && invocations.first.is_a?(Rack::Insight::Panel::DefaultInvocation)
+          html += '<table><thead><tr>'
+          logger.info("Rack::Insight is using magic content for #{self.class}, which is probed") if verbose(:med)
+          members = invocations.first.members # is a struct, so we have members, not keys
+          members.each do |member|
+            html += '<td>' << member.to_s << '</td>'
+          end
+          html += '</tr></thead><tbody>'
+          invocations.each do |invocation|
+            html += '<tr>'
+            members.each do |member|
+              html += '<td>' << invocation.send(member).inspect << '</td>'
+            end
+            html += '</tr>'
+          end
+          html += '</tbody></table>'
+        else
+          html += '<p>No Data Available</p>'
+        end
+        html
+      else
+        content
+      end
+    rescue 'XXX' #XXX: no panel should need this
+    end
+
+    def heading
+      self.camelized_name
+    end
+
+    def content
+      logger.info("Rack::Insight is using default content for #{self.class}") if verbose(:med)
+      html = "<h3>#{self.camelized_name}</h3>"
+      html += '<p>Add a content method to your panel</p>'
+      html
+    end
+
+    # Override in subclasses.
+    # This is to make magic classes work.
+    def after_detect(method_call, timing, args, result)
+      #puts "Default After Detect for #{self.underscored_name}: 1. #{self.is_magic?} && 2. #{self.has_table?} && 3. #{self.is_probed?}"
+      if self.is_magic? && self.has_table? && self.is_probed?
+        store(@env, DefaultInvocation.new(method_call.to_s, timing.duration, args, result))
+      end
     end
 
     def before(env)
@@ -190,6 +295,16 @@ module Rack::Insight
     end
 
     def render(template)
+    end
+
+    # For Magic Panels (not fully implemented)
+    class DefaultInvocation < Struct.new :method, :time, :args, :result
+      def initialize(*args)
+        @time = human_time(args[1])
+      end
+      def human_time(t)
+        "%.2fms" % (t * 1_000)
+      end
     end
 
   end
