@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rack-insight (0.5.13)
+    rack-insight (0.5.14)
       rack
       sqlite3 (>= 1.3.3)
       uuidtools (>= 2.1.2)

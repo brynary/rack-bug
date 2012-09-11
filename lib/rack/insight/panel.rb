@@ -132,7 +132,7 @@ module Rack::Insight
             end
           end
         else
-          raise "Expected Rack::Insight::Config.config[:panel_configs][#{self.as_sym.inspect}][:probes] to be a kind of Hash or an Array with length >= 3, but is a #{Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].class}"
+          raise "Expected Rack::Insight::Config.config[:panel_configs][#{panel_name}][:probes] to be a kind of Hash or an Array with length >= 3, but is a #{Rack::Insight::Config.config[:panel_configs][self.as_sym][:probes].class}"
         end
       end
 
@@ -240,28 +240,14 @@ module Rack::Insight
         logger.info("#{self.class} is being used without a table") if verbose(:med)
         content
       elsif self.is_probed?
-        html = "<h3>#{self.camelized_name}</h3>"
         invocations = retrieve(number)
         if invocations.length > 0 && invocations.first.is_a?(Rack::Insight::Panel::DefaultInvocation)
-          html += '<table><thead><tr>'
-          logger.info("Rack::Insight is using magic content for #{self.class}, which is probed") if verbose(:med)
-          members = invocations.first.members # is a struct, so we have members, not keys
-          members.each do |member|
-            html += '<td>' << member.to_s << '</td>'
-          end
-          html += '</tr></thead><tbody>'
-          invocations.each do |invocation|
-            html += '<tr>'
-            members.each do |member|
-              html += '<td>' << invocation.send(member).inspect << '</td>'
-            end
-            html += '</tr>'
-          end
-          html += '</tbody></table>'
+          logger.info("Rack::Insight is using magic content for #{self.class}, which is probed")# if verbose(:med)
+          render_template 'default_invocation', :invocations => invocations, :name => self.camelized_name
         else
-          html += '<p>No Data Available</p>'
+          logger.info("Rack::Insight has no data for magic content for #{self.class}, which is probed")# if verbose(:med)
+          render_template 'no_data', :name => self.camelized_name
         end
-        html
       else
         content
       end
@@ -284,7 +270,7 @@ module Rack::Insight
     def after_detect(method_call, timing, args, result)
       #puts "Default After Detect for #{self.underscored_name}: 1. #{self.is_magic?} && 2. #{self.has_table?} && 3. #{self.is_probed?}"
       if self.is_magic? && self.has_table? && self.is_probed?
-        store(@env, DefaultInvocation.new(method_call.to_s, timing.duration, args, result))
+        store(@env, DefaultInvocation.new(method_call.method.to_s, timing, args, result, method_call.backtrace[2..-1]))
       end
     end
 
@@ -297,14 +283,24 @@ module Rack::Insight
     def render(template)
     end
 
-    # For Magic Panels (not fully implemented)
-    class DefaultInvocation < Struct.new :method, :time, :args, :result
+    # For Magic Panels
+    class DefaultInvocation < Struct.new :method, :time, :arguments, :result, :backtrace
+      attr_accessor :method, :time, :arguments, :result, :backtrace
+
+      include Rack::Insight::FilteredBacktrace
+
       def initialize(*args)
-        @time = human_time(args[1])
+        @method = args[0]
+        @time = [args[1].duration, args[1].delta_t]
+        @arguments = args[2]
+        @result = args[3]
+        @backtrace = args[4]
       end
-      def human_time(t)
-        "%.2fms" % (t * 1_000)
+
+      def human_time
+        "%.2fms" % (self.time * 1_000)
       end
+
     end
 
   end

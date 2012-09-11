@@ -10,7 +10,7 @@ module Rack::Insight
     end
 
     def filtered_backtrace
-      @filtered_backtrace ||= @backtrace.grep(FilteredBacktrace.backtrace_regexp)
+      @filtered_backtrace ||= @backtrace.respond_to?(:grep) ? @backtrace.grep(FilteredBacktrace.backtrace_regexp) : []
     end
 
     def self.backtrace_regexp
