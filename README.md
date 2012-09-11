@@ -114,15 +114,17 @@ Options:
       Currently this is implemented in the log_panel, and configured as:
 
         Rack::Insight::Config.configure do |config|
-          config[:panel_configs][:log_panel] = {:watch => {'Logger' => :add}}
+          # The following two lines have the same result
+          config[:panel_configs][:log] = {:probes => {'Logger' => [:instance, :add]}}
+          config[:panel_configs][:log] = {:probes => ['Logger', :instance, :add]}
         end
 
       Example:  If you want all of your log statements in Rails to be traced twice by Rack::Insight,
                 this will do that because ActiveSupport::BufferedLogger utilizes Logger under the hood:
 
-        config[:panel_configs][:log_panel] = {:watch => {
-                "ActiveSupport::BufferedLogger" => :add,
-                "Logger" => :add
+        config[:panel_configs][:log_panel] = {:probes => {
+                "ActiveSupport::BufferedLogger" => [:instance, :add],
+                "Logger" => [:instance, :add]
         }}
 
 
@@ -207,6 +209,35 @@ location (i.e. Heroku), you can pass a custom file path.
     ActionController::Dispatcher.middleware.use "Rack::Insight::App"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :database_path => "tmp/my_insight_db.sqlite"
+
+Magic Panels
+------------
+
+You can now create a fully functional new panel with a simple class definition:
+
+    module Rack::Insight
+      class FooBarPanel < Panel
+        self.is_magic = true
+      end
+    end
+
+Setup the probes for the magic panel in a `before_initialize` block in your application.rb as follows:
+
+    # Assuming there is a FooBra class with instance methods: foo, bar, cheese, and ducks
+    Rack::Insight::Config.configure do |config|
+      # Not :foo_bar_panel or 'FooBarPanel'... :foo_bar
+      config[:panel_configs][:foo_bar] = {:probes => {'FooBra' => [:instance, :foo, :bar, :cheese, :ducks]}}
+    end
+
+Custom Panels
+-------------
+
+See Magic Panels above, remove teh is_magic declaration, and add your own methods.
+Look at the panels bundled with this gem for pointers.  Here are some important methods to watch for:
+
+* initialize
+* after_detect
+* content_for_request(number)
 
 Authors
 -------
