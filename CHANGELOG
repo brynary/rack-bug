@@ -1,12 +1,13 @@
-== HEAD
+== 0.5.14 / 2012-09-11
 
   * New Features
 
     * Panel level configurations for :probes are now supported by default on all panels
     * Auto-magical panel names
-    * Auto-magical table creation (skipped with self.tableless = false in a Panel class definition)
+    * Auto-magical panel probe detection and storage
+    * Auto-magical panel content
+    * Auto-magical table creation (skipped with self.has_table = false in a Panel class definition)
     * Under construction, or blank, panels have more scaffolding
-    *
 
 == 0.5.13 / 2012-09-10
 
