@@ -23,12 +23,18 @@
   cursor: pointer;
 }
 .rack-insight_bottom #rack-insight_toolbar {
-  bottom:0;
   border-top: 2px solid #234f32;
+  height: auto;
+  clear: both;
+  position: relative;
+  z-index: 10;
+  margin-top: -3em;
 }
+
 .rack-insight_top #rack-insight_toolbar {
   top:0;
   border-bottom: 2px solid #234f32;
+  height: auto;
 }
 
 .rack-insight_error #rack-insight_toolbar {
@@ -105,11 +111,11 @@
 }
 
 #rack-insight.rack-insight_top .panel_content {
-  top: 32px;
+  top: auto;
 }
 
 #rack-insight.rack-insight_bottom .panel_content {
-  bottom: 32px;
+  bottom: auto;
 }
 
 #rack-insight .panel_content p a,
