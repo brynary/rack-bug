@@ -1,5 +1,7 @@
 == HEAD
 
+== 0.5.18 / 2012-09-13 - Peter Boling
+
   * Bug Fixes
 
     * panel content is no longer covered by panel toolbar when positioned on bottom
