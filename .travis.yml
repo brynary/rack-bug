@@ -6,3 +6,4 @@ rvm:
   - rbx-19mode
   - ruby-head
   - jruby-head
+bundler_args: "--binstubs --without documentation"
