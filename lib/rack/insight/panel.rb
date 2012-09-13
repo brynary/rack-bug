@@ -147,9 +147,9 @@ module Rack::Insight
       end
     end
 
-    #def inspect
-    #  "M:#{self.bool_prop(:is_magic?)} T:#{self.bool_prop(:has_table?)} P:#{self.bool_prop(:is_probing?)} C:#{self.bool_prop(:has_custom_probes?)} Name: #{name}"
-    #end
+    def inspect
+      "#{self.underscored_name} Magic:#{self.bool_prop(:is_magic?)} Table:#{self.bool_prop(:has_table?)} Probe:#{self.bool_prop(:is_probing?)} Custom:#{self.bool_prop(:has_custom_probes?)}" rescue "XXX inspect failed"
+    end
 
     def bool_prop(prop)
       self.send(prop) ? 'Y' : 'N'
@@ -234,13 +234,21 @@ module Rack::Insight
         heading
       else
         num = count(number)
-        if num == 0
-          heading
+        if num.kind_of?(Numeric)
+          if num == 0
+            heading
+          else
+            "#{self.camelized_name} (#{num})"
+          end
         else
-          "#{self.camelized_name} (#{num})"
+          heading
         end
       end
-      rescue 'XXX' # no panel should need this
+    rescue Object => ex
+      nom = self.name rescue "xxx"
+"Err3: #{nom}
+  Panel: #{self.inspect}
+  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
     end
 
     def content_for_request(number)
@@ -260,16 +268,30 @@ module Rack::Insight
       else
         content
       end
-    rescue 'XXX' #XXX: no panel should need this
+    rescue Object => ex
+      nom = self.name rescue "xxx"
+"Err4: #{nom}
+  Panel: #{self.inspect}
+  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
     end
 
     def heading
       self.camelized_name
+    rescue Object => ex
+      nom = self.name rescue "xxx"
+"Err1: #{nom}
+  Panel: #{self.inspect}
+  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
     end
 
     def content
       logger.info("Rack::Insight is using default content for #{self.class}") if verbose(:med)
       render_template 'no_content', :name => self.camelized_name
+    rescue Object => ex
+      nom = self.name rescue "xxx"
+"Err2: #{nom}
+  Panel: #{self.inspect}
+  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
     end
 
     # Override in subclasses.

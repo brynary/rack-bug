@@ -13,7 +13,8 @@
       </a>
     <% end %>
   <% rescue Object => ex %>
-    Err: <%= panel.name rescue "xxx" %>
+    Err5: <%= panel.name rescue "xxx" %>
+    <!-- Panel: <%= panel.inspect %> -->
     <!-- <%= ([ex.class.name, ex.message] + ex.backtrace).join("\n") %> -->
   <% end %>
   </li>

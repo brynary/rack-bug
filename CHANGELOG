@@ -1,5 +1,11 @@
 == HEAD
 
+== 0.5.20 / 2012-09-13 - Peter Boling
+
+  * Bug Fixes
+
+    * Fix panel error handling (pboling - Peter Boling)
+
 == 0.5.19 / 2012-09-13 - Peter Boling
 
   * Other
