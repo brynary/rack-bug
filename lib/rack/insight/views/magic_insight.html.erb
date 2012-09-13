@@ -1,0 +1,22 @@
+<tr class="<%=row_class%>">
+  <%- magic_insight._magic_insight_methods.each do |method| %>
+    <%- result = magic_insight.send(method) %>
+    <%- if result.respond_to?(:each) %>
+      <td>
+        <%- result.each do |line| %>
+          <%= line.inspect %><br/>
+        <%- end %>
+      </td>
+    <%- else %>
+      <td>
+        <%= result %>
+      </td>
+    <%- end %>
+    </td>
+  <%- end %>
+  <%- if details %>
+    <td>
+      <a class="reveal_backtrace" href="javascript:void(0);"><%= magic_insight._my_children %></a>
+    </td>
+  <%- end %>
+</tr>

@@ -1,0 +1,67 @@
+<%- if magic_insights.kind_of?(Array) %>
+  <%- magic_insight = magic_insights.last %>
+<%- else %>
+  <%- magic_insight = magic_insights %>
+<%- end %>
+<%- if magic_insight.class.ancestors.include?(Rack::Insight::MagicInsight) %>
+  <table class="sortable">
+    <thead>
+      <tr>
+        <%- magic_insight._magic_insight_methods.each do |method| %>
+          <%- if idiomatic_method = magic_insight._idiomatic_method(method) %>
+            <th><%= idiomatic_method %></th>
+          <%- else %>
+            <th><%= method %></th>
+          <%- end %>
+        <%- end %>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%- if magic_insights.respond_to?(:each) %>
+        <%- i = 1 %>
+        <%- magic_insights.each do |an_object| %>
+          <%- row_class = i % 2 == 0 ? 'even' : 'odd'
+              details = an_object.respond_to?(:children) && !an_object.children.empty?
+          %>
+          <%= render_template 'magic_insight', :magic_insight => an_object, :row_class => row_class, :details => details %>
+          <%- if details %>
+            <tr style="display:none">
+              <td colspan="<%= magic_insight._magic_insight_methods.length + 1%>">
+                <%= render_template 'magic_insights', :magic_insights => an_object.children %>
+              </td>
+            </tr>
+          <%- end %>
+          <%- i += 1 %>
+        <%- end %>
+      <%- else %>
+        <%- details = magic_insights.respond_to?(:children) && !magic_insights.children.empty? %>
+        <%= render_template 'magic_insight', :magic_insight => magic_insights, :row_class => 'odd', :details => details %>
+        <%- if details %>
+          <tr style="display:none">
+            <td colspan="<%= magic_insights._magic_insight_methods.length + 1%>">
+              <%= render_template 'magic_insights', :magic_insights => magic_insights.children %>
+            </td>
+          </tr>
+        <%- end %>
+      <%- end %>
+    </tbody>
+  </table>
+<%- elsif !magic_insight.nil? %>
+  <h3>Magic Panel Template for <%= magic_insight.class %></h3>
+  <p>If you want to have the magic panel template render your data first <strong>read the warning below</strong></p>
+  <h3>WARNING</h3>
+  <p>
+    <pre>
+      <%= Rack::Insight::MagicInsight::WARNING.join('<br/>').gsub(/\s/,'&nbsp;') %>
+    </pre>
+  </p>
+  <p>If you are sure, do the following in your class to be rendered by this template:</p>
+  <p>
+    <pre>
+      include Rack::Insight::MagicInsight
+    </pre>
+  </p>
+<%- else %>
+  <p>nil is non-magical</p>
+<%- end %>

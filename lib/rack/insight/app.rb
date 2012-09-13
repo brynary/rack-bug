@@ -4,6 +4,8 @@ require "rack/insight/config"
 require "rack/insight/logging"
 require "rack/insight/filtered_backtrace"
 require "rack/insight/options"
+require 'rack/insight/magic_insight'
+require 'rack/insight/default_invocation'
 require "rack/insight/panel"
 require "rack/insight/panel_app"
 require "rack/insight/params_signature"

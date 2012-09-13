@@ -1,10 +1,36 @@
-== 0.5.16 / 2012-09-11
+== HEAD
+
+== 0.5.17 / 2012-09-13 - Peter Boling
+
+  * New Features
+
+    * MagicInsight!  WARNING: Magic is dangerous.
+
+      * MagicInsight is a new mixin that can be used by any 'stat' type class built for Rack::Bug / LogicalInsight / Rack::Insight.
+        Just include Rack::Insight::MagicInsight in your stat class and then to render call:
+
+            render_template 'magic_panel', :magic_insights => your_stat_object, :name => 'panel name'
+
+        Read the source for Rack::Insight::MagicInsight and heed the warnings.
+        MagicInsight is used internally by Rack::Insight for magic panels and the templates panel.
+
+  * Bug Fixes
+
+    * Fixed the hardly working TemplatesPanel (Issue 1)
+    * Correct logging/debug statements
+    * Better tracking of which panels are probing
+
+  * Other
+
+    * TemplatesPanel is now more aligned with the Rack::Insight Panel API.
+
+== 0.5.16 / 2012-09-11 - Peter Boling
 
   * Other
 
     * Improved handling of no content for a panel.
 
-== 0.5.14-15 / 2012-09-11
+== 0.5.14-15 / 2012-09-11 - Peter Boling
 
   * New Features
 
@@ -15,7 +41,7 @@
     * Auto-magical table creation (skipped with self.has_table = false in a Panel class definition)
     * Under construction, or blank, panels have more scaffolding
 
-== 0.5.13 / 2012-09-10
+== 0.5.13 / 2012-09-10 - Peter Boling
 
   * Bug Fixes
 

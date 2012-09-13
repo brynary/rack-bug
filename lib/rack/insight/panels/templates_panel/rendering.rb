@@ -2,79 +2,69 @@ module Rack::Insight
   class TemplatesPanel
 
     class Rendering
-      attr_accessor :name
+
+      include Rack::Insight::MagicInsight
+
+      attr_accessor :template
+      attr_accessor :partial
       attr_accessor :parent
-      attr_accessor :timing
       attr_reader :children
 
-      def initialize(name, timing = nil)
-        @name = name
-        @timing = timing
+      # '_' prevents MagicInsight template from calling the method
+      # Time tracking
+      attr_accessor :_time, :_exclusive_time, :_child_time
+
+      def initialize(template)
+        @template = template.to_s
+        @partial = template.partial ? 'yes' : 'no' if template.respond_to?(:partial)
+        @_time = 0
+        @_exclusive_time = 0
+        @_child_time = 0
         @children = []
+        @parent = nil
       end
 
-      def start_time
-        @timing.start
-      end
-      alias_method :time, :start_time
-
-      def end_time
-        @timing.end
-      end
-
-      def add(rendering)
+      # called from Stats#begin_record
+      def add!(rendering)
         @children << rendering
         rendering.parent = self
       end
 
-      def delete(rendering)
-        @children.delete(rendering)
+      # LOL what?
+      #def delete(rendering)
+      #  @children.delete(rendering)
+      #end
+
+      def finish!(timing)
+        self._time = timing || 0
+        self._child_time = _calculate_child_time
+        self._exclusive_time = _calculate_exclusive_time
       end
 
-      def duration
-        if @timing
-          @timing.duration
-        else
-          child_duration
-        end
+      def _calculate_exclusive_time
+        _time - _child_time
       end
 
-      def exclusive_duration
-        duration - child_duration
+      def _calculate_child_time
+        children.inject(0.0) { |memo, c| memo + c._time } || 0
       end
 
-      def child_duration
-        children.inject(0.0) { |memo, c| memo + c.duration }
+      def _human_time(t = self._time)
+        "%.2fms" % t
       end
 
-      def duration_summary
+      def time_summary
         if children.any?
-          "%.2fms, %.2f exclusive" % [duration, exclusive_duration]
+          "#{_human_time}, (exclusive: #{_human_time(_exclusive_time)}, child: #{_human_time(_child_time)}"
         else
-          "%.2fms" % (duration)
+          _human_time
         end
       end
-      def html
-        <<-HTML
-            <li>
-              <p>#{name} (#{duration_summary})</p>
 
-        #{children_html}
-            </li>
-        HTML
+      def to_s
+        "#{template} (#{time_summary})#{!children.empty? ? " (#{children.length} children)\n#{children.map {|x| x.to_s}.join("\n")}" : ''}"
       end
 
-      def children_html
-        return "" unless children.any?
-
-        <<-HTML
-            <ul>#{joined_children_html}</ul>
-        HTML
-      end
-
-      def joined_children_html
-        children.map { |c| c.html }.join
-      end
     end
 
   end

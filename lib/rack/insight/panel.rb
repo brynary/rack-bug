@@ -20,8 +20,8 @@ module Rack::Insight
 
       include Rack::Insight::Logging
 
-      attr_accessor :template_root, :is_probed, :has_table, :is_magic
-      @is_probed = false  # Once a panel is probed this should be set to true
+      attr_accessor :template_root, :is_probing, :has_table, :is_magic
+      @is_probing = false  # Once a panel is probed this should be set to true
       @has_table = true   # default to true.  Panels without tables override with self.has_table = false
       @is_magic = false   # check this to wrap any functionality targeted at magic panels.
 
@@ -37,7 +37,7 @@ module Rack::Insight
 
       def from_file(rel_path)
         old_rel, Thread::current['rack-panel_file'] = Thread::current['rack-panel_file'], rel_path
-        load_paths_to_check = Rack::Insight::Config.config[:panel_load_paths].length
+        num_load_paths_to_check = Rack::Insight::Config.config[:panel_load_paths].length
         Rack::Insight::Config.config[:panel_load_paths].each_with_index do |load_path, index|
           begin
             require File::join(load_path, rel_path)
@@ -45,8 +45,10 @@ module Rack::Insight
           rescue LoadError => e
             # TODO: If probes are defined for this panel, instantiate a magic panel
             # if self.has_custom_probes?
-            if (index + 1) == load_paths_to_check # You have failed me for the last time!
-              warn "Rack::Insight #{e.class}: Unable to find panel specified as '#{rel_path}'.  Looked in the following :panel_load_paths: #{Rack::Insight::Config.config[:panel_load_paths].inspect}."
+            if !verbose(:high) && (index + 1) == num_load_paths_to_check # You have failed me for the last time!
+              warn "Rack::Insight #{e.class} while attempting to load '#{rel_path}' from :panel_load_paths #{Rack::Insight::Config.config[:panel_load_paths].inspect}."
+            elsif verbose(:high)
+              warn "Rack::Insight #{e.class} #{e.message} while attempting to load '#{rel_path}' from :panel_load_paths #{Rack::Insight::Config.config[:panel_load_paths].inspect} (just checked: #{load_path})."
             end
           end
         end
@@ -143,7 +145,14 @@ module Rack::Insight
       if !has_table?
         table_setup(self.name)
       end
-      #puts "Initalization Complete for #{panel_name}\n1. #{self.is_magic?} && 2. #{self.has_table?} && 3. #{self.is_probed?} 4. #{self.has_custom_probes?}"
+    end
+
+    #def inspect
+    #  "M:#{self.bool_prop(:is_magic?)} T:#{self.bool_prop(:has_table?)} P:#{self.bool_prop(:is_probing?)} C:#{self.bool_prop(:has_custom_probes?)} Name: #{name}"
+    #end
+
+    def bool_prop(prop)
+      self.send(prop) ? 'Y' : 'N'
     end
 
     def call(env)
@@ -178,12 +187,11 @@ module Rack::Insight
       true
     end
 
-    def is_probed?
-      !!self.class.is_probed
+    def is_probing?
+      !!self.class.is_probing
     end
 
     def has_custom_probes?(panel_name = self.underscored_name.to_sym)
-      #puts "Rack::Insight::Config.config[:panel_configs][#{panel_name.inspect}]: #{Rack::Insight::Config.config[:panel_configs][panel_name].inspect}"
       Rack::Insight::Config.config[:panel_configs][panel_name].respond_to?(:[]) &&
         !Rack::Insight::Config.config[:panel_configs][panel_name][:probes].nil?
     end
@@ -206,6 +214,7 @@ module Rack::Insight
         if word == 'Panel'
           word = words[-2] # Panel class is Panel... and this won't do.
         end
+        # This bit from rails probably isn't needed here, and wouldn't work anyways.
         #word.gsub!(/(?:([A-Za-z\d])|^)(#{inflections.acronym_regex})(?=\b|[^a-z])/) { "#{$1}#{$1 && '_'}#{$2.downcase}" }
         word.gsub!(/Panel$/,'')
         word.gsub!(/([A-Z\d]+)([A-Z][a-z])/,'\1_\2')
@@ -239,13 +248,13 @@ module Rack::Insight
       if !self.has_table?
         logger.info("#{self.class} is being used without a table") if verbose(:med)
         content
-      elsif self.is_probed?
+      elsif self.is_probing? # Checking probed because we only get here when the subclass panel hasn't overridden this method
         invocations = retrieve(number)
-        if invocations.length > 0 && invocations.first.is_a?(Rack::Insight::Panel::DefaultInvocation)
-          logger.info("Rack::Insight is using magic content for #{self.class}, which is probed")# if verbose(:med)
-          render_template 'default_invocation', :invocations => invocations, :name => self.camelized_name
+        if invocations.length > 0
+          logger.info("Rack::Insight is using #{self.is_magic? ? 'magic' : 'default'} content for #{self.class}, which is probed")# if verbose(:med)
+          render_template 'magic_panel', :magic_insights => invocations, :name => self.camelized_name
         else
-          logger.info("Rack::Insight has no data for magic content for #{self.class}, which is probed")# if verbose(:med)
+          logger.info("Rack::Insight has no data for #{self.is_magic? ? 'magic' : 'default'} content for #{self.class}, which is probed")
           render_template 'no_data', :name => self.camelized_name
         end
       else
@@ -266,9 +275,8 @@ module Rack::Insight
     # Override in subclasses.
     # This is to make magic classes work.
     def after_detect(method_call, timing, args, result)
-      #puts "Default After Detect for #{self.underscored_name}: 1. #{self.is_magic?} && 2. #{self.has_table?} && 3. #{self.is_probed?}"
-      if self.is_magic? && self.has_table? && self.is_probed?
-        store(@env, DefaultInvocation.new(method_call.method.to_s, timing, args, result, method_call.backtrace[2..-1]))
+      if self.is_magic? && self.has_table? && self.is_probing?
+        store(@env, Rack::Insight::DefaultInvocation.new(method_call.method.to_s, timing, args, result, method_call.backtrace[2..-1]))
       end
     end
 
@@ -279,26 +287,6 @@ module Rack::Insight
     end
 
     def render(template)
-    end
-
-    # For Magic Panels
-    class DefaultInvocation < Struct.new :method, :time, :arguments, :result, :backtrace
-      attr_accessor :method, :time, :arguments, :result, :backtrace
-
-      include Rack::Insight::FilteredBacktrace
-
-      def initialize(*args)
-        @method = args[0]
-        @time = [args[1].duration, args[1].delta_t]
-        @arguments = args[2]
-        @result = args[3]
-        @backtrace = args[4]
-      end
-
-      def human_time
-        "%.2fms" % (self.time * 1_000)
-      end
-
     end
 
   end

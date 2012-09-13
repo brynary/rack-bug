@@ -26,7 +26,7 @@ module Rack::Insight
       # Call super before setting up probes in case there are any custom probes configured
       super # will setup custom probes
 
-      unless is_probed?
+      unless is_probing?
         probe(self) do
           # Trying to be smart...
           if defined?(ActiveSupport)

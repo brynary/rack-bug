@@ -1,7 +1,8 @@
 module Rack::Insight
   class Config
     class << self
-      attr_reader :config, :verbosity, :log_file, :log_level, :rails_log_copy, :filtered_backtrace
+      attr_reader :config, :verbosity, :log_file, :log_level, :rails_log_copy,
+                  :filtered_backtrace, :panel_configs, :silence_magic_insight_warnings
     end
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
@@ -24,6 +25,7 @@ module Rack::Insight
                   end ] },
       :templates => {:probes => {'ActionView::Template' => [:instance, :render]}}
     }
+    @silence_magic_insight_warnings = false
 
     DEFAULTS = {
       # You can augment or replace the default set of panel load paths.
@@ -42,7 +44,8 @@ module Rack::Insight
       # Can set a specific verbosity: Rack::Insight::Logging::VERBOSITY[:debug]
       :verbosity => @verbosity, # true is equivalent to relying soley on the log level of each logged message
       :filtered_backtrace => @filtered_backtrace, # Full backtraces, or filtered ones?
-      :panel_configs => @panel_configs # Allow specific panels to have their own configurations, and make it extensible
+      :panel_configs => @panel_configs, # Allow specific panels to have their own configurations, and make it extensible
+      :silence_magic_insight_warnings => @silence_magic_insight_warnings # Should Rack::Insight warn when the MagicInsight is used?
     }
 
     @config ||= DEFAULTS
@@ -54,6 +57,7 @@ module Rack::Insight
       @log_file = config[:log_file]
       @verbosity = config[:verbosity]
       @filtered_backtrace = config[:filtered_backtrace]
+      @silence_magic_insight_warnings = config[:silence_magic_insight_warnings]
 
       config[:panel_configs].each do |panel_name_sym, config|
         set_panel_config(panel_name_sym, config)
