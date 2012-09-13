@@ -12,9 +12,9 @@ if defined?(Redis)
     elsif defined?(Redis::Client) # newer versions of redis-rb
 
       Redis::Client.class_eval do
-        def call_with_insight(*argv)
-          Rack::Insight::RedisPanel.record(argv, Kernel.caller) do
-            call_without_insight(*argv)
+        def call_with_insight(command, &block)
+          Rack::Insight::RedisPanel.record(command, Kernel.caller) do
+            call_without_insight(command, &block)
           end
         end
       end
