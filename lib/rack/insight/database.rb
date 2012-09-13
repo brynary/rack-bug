@@ -190,7 +190,7 @@ module Rack::Insight
       end
 
       def decode_value(value)
-        YAML.load(Base64.decode64(value))
+        YAML.load(Base64.decode64(value)) rescue "Unable to decode"
       end
 
       def retrieve(key_sql)
