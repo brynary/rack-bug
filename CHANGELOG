@@ -1,5 +1,9 @@
 == HEAD
 
+  * Other
+
+    * Fix Typo in templates panel
+
 == 0.5.17 / 2012-09-13 - Peter Boling
 
   * New Features
@@ -13,6 +17,8 @@
 
         Read the source for Rack::Insight::MagicInsight and heed the warnings.
         MagicInsight is used internally by Rack::Insight for magic panels and the templates panel.
+
+    * panel content now stays out of your page content, by displaying below it.
 
   * Bug Fixes
 

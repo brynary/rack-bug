@@ -55,7 +55,7 @@ module Rack::Insight
 
       def time_summary
         if children.any?
-          "#{_human_time}, (exclusive: #{_human_time(_exclusive_time)}, child: #{_human_time(_child_time)}"
+          "#{_human_time}, (exclusive: #{_human_time(_exclusive_time)}, child: #{_human_time(_child_time)})"
         else
           _human_time
         end
