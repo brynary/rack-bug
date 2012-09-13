@@ -16,8 +16,7 @@ if defined?(Redis)
         end
       end
 
-      alias_method_chain :call, :insight
-
+      Redis::Client.alias_method_chain :call, :insight
     end
   end
 end
