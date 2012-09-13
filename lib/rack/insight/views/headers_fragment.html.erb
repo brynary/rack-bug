@@ -14,7 +14,7 @@
     <% end %>
   <% rescue Object => ex %>
     Err: <%= panel.name rescue "xxx" %>
-    <!-- <%= ([ex.class.name, ex.message] + ex.backtrace[0..5]).join("\n") %> -->
+    <!-- <%= ([ex.class.name, ex.message] + ex.backtrace).join("\n") %> -->
   <% end %>
   </li>
 <% end %>

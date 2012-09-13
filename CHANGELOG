@@ -1,12 +1,15 @@
 == HEAD
 
+== 0.5.19 / 2012-09-13 - Peter Boling
+
   * Other
 
+    * Extend panel error backtrace logging to include full backtrace (pboling - Peter Boling)
     * Improved table template for magical panels (pboling - Peter Boling)
 
   * Bug Fixes
 
-    * Fix redis panel (oggy - George Ogata)
+    * Fix redis panel, maybe... (oggy - George Ogata)
 
 == 0.5.18 / 2012-09-13 - Peter Boling
 
