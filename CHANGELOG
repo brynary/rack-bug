@@ -3,6 +3,7 @@
 == 0.5.21 / 2012-09-13 - Peter Boling
 
   * Attempting to handle values that get stored in the sqlite db, but which can't be re-marshalled, without failing the entire panel
+  * Much nicer error handling output in panel heading and panel content areas
 
 == 0.5.20 / 2012-09-13 - Peter Boling
 

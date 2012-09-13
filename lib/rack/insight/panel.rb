@@ -246,9 +246,11 @@ module Rack::Insight
       end
     rescue Object => ex
       nom = self.name rescue "xxx"
-"Err3: #{nom}
-  Panel: #{self.inspect}
-  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
+      msg = ["Failed to create heading_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
+      logger.error(msg.join("\n"))
+      "Err3: #{nom}
+      <!-- Panel: #{self.inspect}\n
+      #{msg.join("\n")} -->"
     end
 
     def content_for_request(number)
@@ -270,18 +272,22 @@ module Rack::Insight
       end
     rescue Object => ex
       nom = self.name rescue "xxx"
-"Err4: #{nom}
-  Panel: #{self.inspect}
-  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
+      msg = ["Failed to create content_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
+      logger.error(msg.join("\n"))
+      "Err4: #{nom}
+      <!-- Panel: #{self.inspect}\n
+      #{msg.join("\n")} -->"
     end
 
     def heading
       self.camelized_name
     rescue Object => ex
       nom = self.name rescue "xxx"
-"Err1: #{nom}
-  Panel: #{self.inspect}
-  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
+      msg = ["Failed to create heading for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
+      logger.error(msg.join("\n"))
+      "Err1: #{nom}
+      <!-- Panel: #{self.inspect}\n
+      #{msg.join("\n")} -->"
     end
 
     def content
@@ -289,9 +295,11 @@ module Rack::Insight
       render_template 'no_content', :name => self.camelized_name
     rescue Object => ex
       nom = self.name rescue "xxx"
-"Err2: #{nom}
-  Panel: #{self.inspect}
-  #{([ex.class.name, ex.message] + ex.backtrace).join("<br/>")}"
+      msg = ["Failed to create content for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
+      logger.error(msg.join("\n"))
+      "Err2: #{nom}
+      <!-- Panel: #{self.inspect}\n
+      #{msg.join("\n")} -->"
     end
 
     # Override in subclasses.
