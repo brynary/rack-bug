@@ -13,6 +13,9 @@ if defined?(Redis)
 
       Redis::Client.class_eval do
         def call_with_insight(*argv)
+          Rack::Insight::RedisPanel.record(argv, Kernel.caller) do
+            call_without_insight(*argv)
+          end
         end
       end
 
