@@ -115,7 +115,7 @@
 }
 
 #rack-insight.rack-insight_bottom .panel_content {
-  bottom: auto;
+  top: auto;
 }
 
 #rack-insight .panel_content p a,

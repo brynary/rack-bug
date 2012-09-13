@@ -1,5 +1,9 @@
 == HEAD
 
+  * Bug Fixes
+
+    * panel content is no longer covered by panel toolbar when positioned on bottom
+
   * Other
 
     * Fix Typo in templates panel
