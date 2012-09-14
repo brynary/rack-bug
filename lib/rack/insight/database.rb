@@ -14,6 +14,7 @@ module Rack::Insight
     #      # Setting as below is only required when not using a table (Why are you including this module then?)
     #      # self.has_table = false
     #    end
+    # TODO: Move the has_table definition into this module's included hook.
     module RequestDataClient
       def key_sql_template(sql)
         @key_sql_template = sql
@@ -185,12 +186,39 @@ module Rack::Insight
         insert(sql)
       end
 
+      # We sometimes get errors in the encoding and decoding, and they could be from any number of root causes.
+      # This will allow those root causes to be exposed at the top layer by wrapping all errors in a Rack::Insight
+      # namespaced error class, which will be rescued higher up the stack.
+      module ErrorWrapper
+        def new(parent, message = '')
+          ex = super("#{message}#{parent.class}: #{parent.message}")
+          ex.set_backtrace parent.backtrace
+          ex
+        end
+      end
+
+      class EncodingError < StandardError
+        extend ErrorWrapper
+      end
+
+      class DecodingError < StandardError
+        extend ErrorWrapper
+      end
+
       def encode_value(value)
         Base64.encode64(YAML.dump(value))
+      rescue Exception => ex
+        wrapped = EncodingError.new(ex, "Rack::Insight::Database#encode_value failed with error: ")
+        logger.error(wrapped)
+        raise wrapped if Rack::Insight::Config.database[:raise_encoding_errors]
       end
 
       def decode_value(value)
-        YAML.load(Base64.decode64(value)) rescue "Unable to decode"
+        YAML.load(Base64.decode64(value))
+      rescue Exception => ex
+        wrapped = DecodingError.new(ex, "Rack::Insight::Database#decode_value failed with error: ")
+        logger.error(wrapped)
+        raise wrapped if Rack::Insight::Config.database[:raise_decoding_errors]
       end
 
       def retrieve(key_sql)

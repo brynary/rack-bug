@@ -1,0 +1,14 @@
+<h3><%= name %></h3>
+<p>Unable to Decoding or Marshalling Objects from rack-insight data storage.</p>
+<h4>Error</h4>
+<p><%= @error.message %></p>
+<h4>Backtrace</h4>
+<p>
+  <pre>
+    <code>
+      <%- @error.backtrace.each do |line| %>
+        <%= line %>
+      <%- end %>
+    </code>
+  </pre>
+</p>

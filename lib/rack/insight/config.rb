@@ -2,7 +2,8 @@ module Rack::Insight
   class Config
     class << self
       attr_reader :config, :verbosity, :log_file, :log_level, :rails_log_copy,
-                  :filtered_backtrace, :panel_configs, :silence_magic_insight_warnings
+                  :filtered_backtrace, :panel_configs, :silence_magic_insight_warnings,
+                  :database
     end
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
@@ -26,6 +27,10 @@ module Rack::Insight
       :templates => {:probes => {'ActionView::Template' => [:instance, :render]}}
     }
     @silence_magic_insight_warnings = false
+    @database = {
+      :raise_encoding_errors => false,  # Either way will be logged
+      :raise_decoding_errors => true,   # Either way will be logged
+    }
 
     DEFAULTS = {
       # You can augment or replace the default set of panel load paths.
@@ -45,7 +50,16 @@ module Rack::Insight
       :verbosity => @verbosity, # true is equivalent to relying soley on the log level of each logged message
       :filtered_backtrace => @filtered_backtrace, # Full backtraces, or filtered ones?
       :panel_configs => @panel_configs, # Allow specific panels to have their own configurations, and make it extensible
-      :silence_magic_insight_warnings => @silence_magic_insight_warnings # Should Rack::Insight warn when the MagicInsight is used?
+      :silence_magic_insight_warnings => @silence_magic_insight_warnings, # Should Rack::Insight warn when the MagicInsight is used?
+      :database => @database # a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
+                             # :raise_encoding_errors
+                             #    When set to true, if there is an encoding error (unlikely)
+                             #    it will cause a 500 error on your site.  !!!WARNING!!!
+                             # :raise_decoding_errors
+                             #    The bundled panels should work fine with :raise_decoding_errors set to true or false
+                             #    but custom panel implementations may prefer one over the other
+                             #    The bundled panels will capture these errors and perform admirably.
+                             #    Site won't go down unless a custom panel is not handling the errors well.
     }
 
     @config ||= DEFAULTS
@@ -53,21 +67,34 @@ module Rack::Insight
       yield @config
       logger.debug("Rack::Insight::Config#configure:\n  called from: #{caller[0]}\n  with: #{@config}") if config[:verbosity] == true || config[:verbosity].respond_to?(:<) && config[:verbosity] <= 1
       @logger = config[:logger]
-      @log_level = config[:log_level]
-      @log_file = config[:log_file]
+      if @logger.nil?
+        @log_level = config[:log_level]
+        @log_file = config[:log_file]
+      elsif config[:log_level] || config[:log_file]
+        logger.warn("Rack::Insight::Config#configure: when logger is set, log_level and log_file have no effect, and will only confuse you.")
+      end
       @verbosity = config[:verbosity]
       @filtered_backtrace = config[:filtered_backtrace]
       @silence_magic_insight_warnings = config[:silence_magic_insight_warnings]
+      @database = config[:database]
 
       config[:panel_configs].each do |panel_name_sym, config|
         set_panel_config(panel_name_sym, config)
       end
 
-      unless config[:panel_load_paths].kind_of?(Array)
-        raise "Rack::Insight::Config.config[:panel_load_paths] is invalid: Expected kind of Array but got #{config[:panel_load_paths].class}"
-      end
-      unless config[:panel_configs].kind_of?(Hash)
-        raise "Rack::Insight::Config.config[:panel_configs] is invalid: Expected kind of Hash but got #{config[:panel_configs].class}"
+      validate_config(:panel_configs, Hash)
+      validate_config(:panel_load_paths, Array)
+      validate_config(:database, Hash)
+    end
+
+    def self.validate_config(key, klass)
+      raise ConfigurationError.new(key, klass.to_s) unless config[key].kind_of?(klass)
+    end
+
+    class ConfigurationError < StandardError;
+      def self.new(key, expected)
+        actual = Rack::Insight::Config.config[key].class
+        super("Rack::Insight::Config.config[:#{key}] is invalid: Expected kind of #{expected} but got #{actual}")
       end
     end
 

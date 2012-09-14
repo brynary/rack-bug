@@ -1,5 +1,7 @@
 == HEAD
 
+  * Improve handling of decoding and marshalling problems.
+
 == 0.5.21 / 2012-09-13 - Peter Boling
 
   * Attempting to handle values that get stored in the sqlite db, but which can't be re-marshalled, without failing the entire panel

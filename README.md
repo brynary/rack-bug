@@ -127,6 +127,15 @@ Options:
                 "Logger" => [:instance, :add]
         }}
 
+    :database => a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
+                 :raise_encoding_errors
+                     When set to true, if there is an encoding error (unlikely)
+                     it will cause a 500 error on your site.  !!!WARNING!!!
+                 :raise_decoding_errors
+                     The bundled panels should work fine with :raise_decoding_errors set to true or false
+                     but custom panel implementations may prefer one over the other
+                     The bundled panels will capture these errors and perform admirably.
+                     Site won't go down unless a custom panel is not handling the errors well.
 
 Configure Middleware
 --------------------
@@ -200,7 +209,7 @@ Restrict access using a password:
       :ip_masks   => false # Default is 127.0.0.1
       :password   => "yourpassword"
 
-#### custom file path for the logging database ####
+#### custom file path for the request recording database ####
 
 Logical Rack::Insight uses SQLite to store data from requests, and outputs a database
 file in the root directory. If you need the file to be created at another
