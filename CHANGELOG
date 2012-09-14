@@ -1,6 +1,25 @@
 == HEAD
 
-  * Improve handling of decoding and marshalling problems.
+== 0.5.22 / 2012-09-14 - Peter Boling
+
+  * New Features
+
+    * Improve handling of decoding and marshalling problems with new config options and implementation:
+
+      :database => a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
+                   :raise_encoding_errors
+                       When set to true, if there is an encoding error (unlikely)
+                       it will cause a 500 error on your site.  !!!WARNING!!!
+                   :raise_decoding_errors
+                       The bundled panels should work fine with :raise_decoding_errors set to true or false
+                       but custom panel implementations may prefer one over the other
+                       The bundled panels will capture these errors and perform admirably.
+                       Site won't go down unless a custom panel is not handling the errors well.
+
+  * Other
+
+    * Error system improvements and refactoring
+    * Internal config validation system
 
 == 0.5.21 / 2012-09-13 - Peter Boling
 
