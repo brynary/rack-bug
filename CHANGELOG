@@ -1,10 +1,10 @@
 == HEAD
 
-== 0.5.22 / 2012-09-14 - Peter Boling
+== 0.5.22 / 2012-09-14
 
   * New Features
 
-    * Improve handling of decoding and marshalling problems with new config options and implementation:
+    * Improve handling of decoding and marshalling problems with new config options and implementation: (pboling - Peter Boling)
 
       :database => a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
                    :raise_encoding_errors
@@ -16,10 +16,15 @@
                        The bundled panels will capture these errors and perform admirably.
                        Site won't go down unless a custom panel is not handling the errors well.
 
+  * Bug Fixes
+
+    * Fixes for redis panel. (oggy - George Ogata)
+
   * Other
 
-    * Error system improvements and refactoring
-    * Internal config validation system
+    * Error system improvements and refactoring (pboling - Peter Boling)
+
+    * Internal config validation system (pboling - Peter Boling)
 
 == 0.5.21 / 2012-09-13 - Peter Boling
 
