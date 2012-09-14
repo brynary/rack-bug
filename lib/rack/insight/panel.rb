@@ -244,7 +244,7 @@ module Rack::Insight
           heading
         end
       end
-    rescue Object => ex
+    rescue StandardError => ex
       nom = self.name rescue "xxx"
       msg = ["Failed to create heading_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
       logger.error(msg.join("\n"))
@@ -270,7 +270,7 @@ module Rack::Insight
       else
         content
       end
-    rescue Object => ex
+    rescue StandardError => ex
       nom = self.name rescue "xxx"
       msg = ["Failed to create content_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
       logger.error(msg.join("\n"))
@@ -281,7 +281,7 @@ module Rack::Insight
 
     def heading
       self.camelized_name
-    rescue Object => ex
+    rescue StandardError => ex
       nom = self.name rescue "xxx"
       msg = ["Failed to create heading for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
       logger.error(msg.join("\n"))
@@ -293,7 +293,7 @@ module Rack::Insight
     def content
       logger.info("Rack::Insight is using default content for #{self.class}") if verbose(:med)
       render_template 'no_content', :name => self.camelized_name
-    rescue Object => ex
+    rescue StandardError => ex
       nom = self.name rescue "xxx"
       msg = ["Failed to create content for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
       logger.error(msg.join("\n"))

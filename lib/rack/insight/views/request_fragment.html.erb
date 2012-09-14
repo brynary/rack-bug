@@ -16,8 +16,8 @@
         </div>
         <% begin %>
           <%=  panel.content_for_request(request_id) %>
-        <% rescue Object => ex %>
-          <%= "Error #{ex.class.name}: #{ex.message} <!-- #{ex.backtrace[0..5]} -->" %>
+        <% rescue StandardError => ex %>
+          <%= "Error #{ex.class.name}: #{ex.message} <!-- #{ex.backtrace.join("\n")} -->" %>
         <% end %>
       </div>
     <% end %>

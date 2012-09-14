@@ -75,7 +75,7 @@ module Rack::Insight
         @db = SQLite3::Database.new(database_path)
         @db.execute("pragma foreign_keys = on")
         @db
-      rescue Object => ex
+      rescue StandardError => ex
         msg = "Issue while loading SQLite DB:" + [ex.class, ex.message, ex.backtrace[0..4]].inspect
         logger.error{ msg }
 

@@ -40,7 +40,7 @@ module Rack::Insight
 
       begin
         CompiledTemplates.module_eval(source, filename, 0)
-      rescue Object => ex
+      rescue StandardError => ex
         logger.error do
           "#{ex.class.name}: #{ex.message} in\n" +
           source +
