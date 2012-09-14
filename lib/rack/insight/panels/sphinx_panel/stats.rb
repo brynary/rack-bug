@@ -3,16 +3,20 @@ module Rack::Insight
 
     class Stats
       class Query
+        include Rack::Insight::FilteredBacktrace
+
         attr_reader :time
         attr_reader :command
 
-        def initialize(time, *command_args)
+        def initialize(time, command_args, method_call)
+          riddle_command, messages = *command_args
           @time = time
-          if command_args.flatten.first == :search
-            @command = "search: " + decode_message(command_args.first.flatten.last).collect{|k,v| "#{k} => #{v}"}.join(", ")
+          if riddle_command == :search
+            @command = "search: " + decode_message(messages.first).collect{|k,v| "#{k} => #{v}"}.join(", ")
           else
-            @command = command_args.flatten.first.to_s + ": No more info is available for this Sphinx request type"
+            @command = command_args.inspect + ": No more info is available for this Sphinx request type"
           end
+          @backtrace = method_call.backtrace
         end
 
         def display_time
@@ -72,9 +76,8 @@ module Rack::Insight
         @time = 0.0
       end
 
-      def record_call(time, *command_args)
-
-        @queries << Query.new(time, command_args)
+      def record_call(time, command_args, method_call)
+        @queries << Query.new(time, command_args, method_call)
         @calls += 1
         @time += time
       end
