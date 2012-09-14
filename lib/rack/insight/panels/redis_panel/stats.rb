@@ -8,10 +8,10 @@ module Rack::Insight
         attr_reader :time
         attr_reader :command
 
-        def initialize(time, command_args, backtrace)
+        def initialize(time, command_args, method_call)
           @time = time
           @command = command_args.inspect
-          @backtrace = backtrace
+          @backtrace = method_call.backtrace
         end
 
         def display_time
@@ -28,8 +28,8 @@ module Rack::Insight
         @time = 0.0
       end
 
-      def record_call(time, command_args, backtrace)
-        @queries << Query.new(time, command_args, backtrace)
+      def record_call(time, command_args, method_call)
+        @queries << Query.new(time, command_args, method_call)
         @calls += 1
         @time += time
       end
