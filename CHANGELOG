@@ -1,5 +1,27 @@
 == HEAD
 
+== 0.5.23 / 2012-09-14
+
+  * New Features
+
+    * No longer rescue Object, and instead rescue Standard Error.
+      If this is a problem strange non-StandardErrors should be wrapped. (pboling - Peter Boling)
+
+    * Refactor Panel error handling. (pboling - Peter Boling)
+
+      Create error handling method: `handle_error_for(method_name, exception)`
+        Logs the error.
+        Returns HTML for the view.
+        Simplifies error handling in any panel that overrides one of:
+          content, heading, content_for_request and heading_for_request
+        like this:
+
+          def content
+            # Do stuff
+          rescue StandardError => ex
+            handle_error_for(method_name, ex)
+          end
+
 == 0.5.22 / 2012-09-14
 
   * New Features

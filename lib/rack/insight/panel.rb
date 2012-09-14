@@ -244,13 +244,8 @@ module Rack::Insight
           heading
         end
       end
-    rescue StandardError => ex
-      nom = self.name rescue "xxx"
-      msg = ["Failed to create heading_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
-      logger.error(msg.join("\n"))
-      "Err3: #{nom}
-      <!-- Panel: #{self.inspect}\n
-      #{msg.join("\n")} -->"
+    rescue StandardError => exception
+      handle_error_for('heading_for_request', exception)
     end
 
     def content_for_request(number)
@@ -270,34 +265,29 @@ module Rack::Insight
       else
         content
       end
-    rescue StandardError => ex
-      nom = self.name rescue "xxx"
-      msg = ["Failed to create content_for_request for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
-      logger.error(msg.join("\n"))
-      "Err4: #{nom}
-      <!-- Panel: #{self.inspect}\n
-      #{msg.join("\n")} -->"
+    rescue StandardError => exception
+      handle_error_for('content_for_request', exception)
     end
 
     def heading
       self.camelized_name
-    rescue StandardError => ex
-      nom = self.name rescue "xxx"
-      msg = ["Failed to create heading for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
-      logger.error(msg.join("\n"))
-      "Err1: #{nom}
-      <!-- Panel: #{self.inspect}\n
-      #{msg.join("\n")} -->"
+    rescue StandardError => exception
+      handle_error_for('heading', exception)
     end
 
     def content
       logger.info("Rack::Insight is using default content for #{self.class}") if verbose(:med)
       render_template 'no_content', :name => self.camelized_name
-    rescue StandardError => ex
+    rescue StandardError => exception
+      handle_error_for('content', exception)
+    end
+
+    def handle_error_for(method_name, exception)
       nom = self.name rescue "xxx"
-      msg = ["Failed to create content for #{nom}","#{ex.class}: #{ex.message}"] + ex.backtrace
+      msg = ["#{self.class}##{method_name} failed","#{exception.class}: #{exception.message}"] + exception.backtrace
       logger.error(msg.join("\n"))
-      "Err2: #{nom}
+      # return HTML
+      "Error in #{nom}
       <!-- Panel: #{self.inspect}\n
       #{msg.join("\n")} -->"
     end
