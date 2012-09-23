@@ -20,6 +20,7 @@ module Rack::Insight
                               'Dalli::Client' => [:instance, :perform] } },
       :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
 #      :log_panel => The log panel configures its probes in its initializer
+      :sphinx => {:probes => {'Riddle::Client' => [:instance, :request]}},
       :sql => {:probes => Hash[%w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
                   Mysql2Adapter OracleEnhancedAdapter }.map do |adapter|
                     ["ActiveRecord::ConnectionAdapters::#{adapter}", [:instance, :execute]]

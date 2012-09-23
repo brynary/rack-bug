@@ -1,39 +1,27 @@
 module Rack::Insight
-
   class SphinxPanel < Panel
-    require "rack/insight/panels/sphinx_panel/sphinx_extension"
     require "rack/insight/panels/sphinx_panel/stats"
 
-    self.has_table = false
-
-    def self.record(*sphinx_command_args, &block)
-      return block.call unless Rack::Insight.enabled?
-
-      start_time = Time.now
-      result = block.call
-      total_time = Time.now - start_time
-      stats.record_call(total_time * 1_000, sphinx_command_args)
-      return result
+    def request_start(env, start)
+      @stats = Stats.new
     end
 
-    def self.reset
-      Thread.current["rack-insight.sphinx"] = Stats.new
+    def request_finish(env, status, headers, body, timing)
+      store(env, @stats)
+      @stats = nil
     end
 
-    def self.stats
-      Thread.current["rack-insight.sphinx"] ||= Stats.new
+    def after_detect(method_call, timing, args, message)
+      @stats.record_call(timing.duration, args, method_call)
     end
 
-    def heading
-      "Sphinx: %.2fms (#{self.class.stats.queries.size} calls)" % self.class.stats.time
+    def heading_for_request(number)
+      stats = retrieve(number).first
+      "Sphinx: %.2fms (#{stats.queries.size} calls)" % stats.time
     end
 
-    def content
-      result = render_template "panels/sphinx", :stats => self.class.stats
-      self.class.reset
-      return result
+    def content_for_request(number)
+      render_template "panels/sphinx", :stats => retrieve(number).first
     end
-
   end
-
 end
