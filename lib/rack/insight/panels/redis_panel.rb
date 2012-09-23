@@ -1,40 +1,47 @@
 module Rack::Insight
-
   class RedisPanel < Panel
-    require "rack/insight/panels/redis_panel/redis_extension"
-
     require "rack/insight/panels/redis_panel/stats"
 
-    self.has_table = false
+    def initialize(app)
+      super
 
-    def self.record(redis_command_args, backtrace, &block)
-      return block.call unless Rack::Insight.enabled?
-
-      start_time = Time.now
-      result = block.call
-      total_time = Time.now - start_time
-      stats.record_call(total_time * 1_000, redis_command_args, backtrace)
-      return result
+      unless is_probing?
+        probe(self) do
+          if defined?(Redis::Client)
+            # Redis >= 3.0.0
+            instrument "Redis::Client" do
+              instance_probe :call
+            end
+          elsif defined?(Redis)
+            # Redis < 3.0.0
+            instrument "Redis" do
+              instance_probe :call_command
+            end
+          end
+        end
+      end
     end
 
-    def self.reset
-      Thread.current["rack-insight.redis"] = Stats.new
+    def request_start(env, start)
+      @stats = Stats.new
     end
 
-    def self.stats
-      Thread.current["rack-insight.redis"] ||= Stats.new
+    def request_finish(env, status, headers, body, timing)
+      store(env, @stats)
+      @stats = nil
     end
 
-    def heading
-      "Redis: %.2fms (#{self.class.stats.queries.size} calls)" % self.class.stats.time
+    def after_detect(method_call, timing, args, message)
+      @stats.record_call(timing.duration, args, method_call)
     end
 
-    def content
-      result = render_template "panels/redis", :stats => self.class.stats
-      self.class.reset
-      return result
+    def heading_for_request(number)
+      stats = retrieve(number).first
+      "Redis: %.2fms (#{stats.queries.size} calls)" % stats.time
     end
 
+    def content_for_request(number)
+      render_template "panels/redis", :stats => retrieve(number).first
+    end
   end
-
 end
