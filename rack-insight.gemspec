@@ -34,7 +34,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", ">= 2.11.0"
   s.add_development_dependency "sinatra"
   s.add_development_dependency "webrat"
-  s.add_development_dependency "ruby-debug19"
-
-
+  s.add_development_dependency "debugger"
 end
