@@ -154,7 +154,7 @@ Specify the set of panels you want, in the order you want them to appear:
         cache_panel
         log_panel
         memory_panel,
-        shpinx_panel
+        sphinx_panel
       ]
 
 By default panel files are looked up by prepending "rack/insight/panels/" and requiring them.
