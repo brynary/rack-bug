@@ -43,10 +43,10 @@ Features
         * SQL               (Failing specs, and I don't use it, someone please pull me a fix!)
         * Active Record     (Failing specs, and I don't use it, someone please pull me a fix!)
     * Other bundled panels:
+        * Sphinx (thanks to Oggy for updating this to the rack-insight panel API)
         * Redis
         * Speedtracer
-    * Retired panels - if needed they could come back quickly:
-        * Sphinx
+    * Panels under construction:
         * Mongo
     * The API for adding your own panels is simple and very powerful
         * Consistent interface to instrument application code
@@ -153,7 +153,8 @@ Specify the set of panels you want, in the order you want them to appear:
         templates_panel
         cache_panel
         log_panel
-        memory_panel
+        memory_panel,
+        shpinx_panel
       ]
 
 By default panel files are looked up by prepending "rack/insight/panels/" and requiring them.
@@ -211,7 +212,7 @@ Restrict access using a password:
 
 #### custom file path for the request recording database ####
 
-Logical Rack::Insight uses SQLite to store data from requests, and outputs a database
+Rack::Insight uses SQLite to store data from requests, and outputs a database
 file in the root directory. If you need the file to be created at another
 location (i.e. Heroku), you can pass a custom file path.
 
@@ -241,7 +242,7 @@ Setup the probes for the magic panel in a `before_initialize` block in your appl
 Custom Panels
 -------------
 
-See Magic Panels above, remove teh is_magic declaration, and add your own methods.
+See Magic Panels above, remove the is_magic declaration, and add your own methods.
 Look at the panels bundled with this gem for pointers.  Here are some important methods to watch for:
 
 * initialize
@@ -259,7 +260,7 @@ Authors
 Thanks
 ------
 Rack::Insight owes a lot to both LogicalInsight and Rack::Bug, as the basis projects.  There's a lot of smart
-in there.  Many thanks to Evan, Judson, and Bryan for building them.
+in there.  Many thanks to Judson, and Bryan for building them.
 
 Inspiration for Rack::Bug is primarily from the Django debug toolbar.
 Additional ideas from Rails footnotes, Rack's ShowException middleware, Oink,
@@ -273,16 +274,14 @@ MIT. See LICENSE in this directory.
 Notes
 -----
 
+The ActiveRecord panel doesn't seem to work currently.  Probably something minor, but haven't had time to look into it.
+
 Legacy files: would like to re-include them, but they need work
 
     lib/rack/insight/views/panels/mongo.html.erb
     lib/rack/insight/panels/mongo_panel/mongo_extension.rb
     lib/rack/insight/panels/mongo_panel/stats.rb
     lib/rack/insight/panels/mongo_panel.rb
-
-    lib/rack/insight/views/panels/sphinx.html.erb
-    lib/rack/insight/panels/sphinx_panel/stats.rb
-    lib/rack/insight/panels/sphinx_panel.rb
 
 This one is mostly just a curiosity
     lib/rack/insight/panels/speedtracer_panel/profiling.rb
