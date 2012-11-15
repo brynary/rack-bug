@@ -3,8 +3,6 @@ Rack::Insight [![Build Status](https://secure.travis-ci.org/pboling/rack-insight
 
 Rack::Insight began life as an fork of Logical::Insight by LRDesign.
 
-[![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) - Please help if you have time!
-
 * I started a fork because:
     * LogicalInsight was namespaced as "Insight"
         * Causing namespace collisions everywhere I have an Insight model.  I had to re-namespace all the code.
@@ -55,6 +53,13 @@ Features
         * Consistent timing across panels
         * Easy to add sub-applications for more detailed reports (c.f. SQLPanel)
         * Ask me (pboling) if you need help with this.
+
+Build Status
+---------------------------
+
+Travis-ci: [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) - Please help if you have time!
+
+CodeClimate: https://codeclimate.com/github/pboling/rack-insight
 
 Rails quick start
 ---------------------------
