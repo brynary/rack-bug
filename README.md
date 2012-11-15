@@ -1,4 +1,4 @@
-Rack::Insight [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight)
+Rack::Insight [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight) [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight)
 =============
 
 Rack::Insight began life as an fork of Logical::Insight by LRDesign.
@@ -59,7 +59,7 @@ Build Status
 
 Travis-ci: [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) - Please help if you have time!
 
-CodeClimate: https://codeclimate.com/github/pboling/rack-insight
+CodeClimate: [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight)
 
 Rails quick start
 ---------------------------
