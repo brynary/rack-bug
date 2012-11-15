@@ -1,7 +1,9 @@
-Rack::Insight
+Rack::Insight [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight)
 =============
 
 Rack::Insight began life as an fork of Logical::Insight by LRDesign.
+
+[![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) - Please help if you have time!
 
 * I started a fork because:
     * LogicalInsight was namespaced as "Insight"
