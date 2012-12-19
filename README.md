@@ -1,4 +1,4 @@
-Rack::Insight [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight) [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight)
+Rack::Insight [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight) [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) [![Endorse Me](http://api.coderwall.com/pboling/endorsecount.png)](http://coderwall.com/pboling)
 =============
 
 Rack::Insight began life as an fork of Logical::Insight by LRDesign.
