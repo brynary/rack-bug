@@ -1,5 +1,13 @@
 == HEAD
 
+== 0.5.24 / 2013-01-01
+
+  * Bug Fixes
+
+    * (Issue #17) Fix 20x performance hit with default log level by changing default log level from `:debug` to `:silent` (Rack::Insight::Logging::VERBOSITY[:silent])
+
+    * Changed event logging in the instrumentation from `:high` to `:debug` level.
+
 == 0.5.23 / 2012-09-14
 
   * New Features
@@ -217,20 +225,20 @@
     * Can use LoggerPanel on ruby stdlib Logger in non-rails app (Tim Connor)
 
   * Bug fixes
-  
+
     * Fix profile, explain and select in the queries tab, fixes issue #22 (ebertech)
-    
+
   * Minor fixes
-  
+
     * Explicitly require 'digest/sha1' (Jérémy Lecour)
     * Eliminate unreachable code in params signature validation (Tim Connor)
 
   * Compatibilty
 
     * Make Redis panel compatible with latest redis-rb gem, without breaking older redis-rb versions (Luke Melia)
-  
+
   * Other
-  
+
     * Refactoring and code cleanup (Tim Connor)
     * Testing cleanup - better isolation of Rails vs. non-Rails in tests (Tim Connor)
 
