@@ -153,16 +153,16 @@ Specify the set of panels you want, in the order you want them to appear:
 
     ActionController::Dispatcher.middleware.use "Rack::Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
-      :panel_files => %w[
+      :panel_files => %w(
         timer_panel
         request_variables_panel
         redis_panel
         templates_panel
         cache_panel
         log_panel
-        memory_panel,
+        memory_panel
         sphinx_panel
-      ]
+      )
 
 By default panel files are looked up by prepending "rack/insight/panels/" and requiring them.
 Subclasses of Rack::Insight::Panel are loaded and added to the toolbar.  This makes
