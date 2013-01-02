@@ -8,7 +8,7 @@ module Rack::Insight
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
     @logger = nil
-    @verbosity = true
+    @verbosity = Rack::Insight::Logging::VERBOSITY[:silent]
     @rails_log_copy = true
     @filtered_backtrace = true
     @panel_configs = {
@@ -48,8 +48,8 @@ module Rack::Insight
       :log_level => @log_level,
       :rails_log_copy => @rails_log_copy, # Only has effect when logger is the Rack::Insight::Logger, or a logger behaving like it
       # Can set a specific verbosity: Rack::Insight::Logging::VERBOSITY[:debug]
-      :verbosity => @verbosity, # true is equivalent to relying soley on the log level of each logged message
-      :filtered_backtrace => @filtered_backtrace, # Full backtraces, or filtered ones?
+      :verbosity => @verbosity, # true is equivalent to relying solely on the log level of each logged message
+      :filtered_backtrace => @filtered_backtrace, # Full back-traces, or filtered ones?
       :panel_configs => @panel_configs, # Allow specific panels to have their own configurations, and make it extensible
       :silence_magic_insight_warnings => @silence_magic_insight_warnings, # Should Rack::Insight warn when the MagicInsight is used?
       :database => @database # a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory

@@ -71,7 +71,7 @@ module Rack::Insight
       end
 
       def start_event(method_call, arguments)
-        if verbose(:high)
+        if verbose(:debug)
           logger.debug{ "Starting event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
         end
 
@@ -82,7 +82,7 @@ module Rack::Insight
 
       def finish_event(method_call, arguments, start_time, result)
         timing = Timing.new(@start, start_time, Time.now)
-        if verbose(:high)
+        if verbose(:debug)
           logger.debug{ "Finishing event: #{method_call.context} #{method_call.kind} #{method_call.method}" }
         end
         collectors_for(method_call).each do |collector|

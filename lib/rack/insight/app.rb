@@ -1,7 +1,7 @@
 require 'rack'
 require "digest/sha1"
-require "rack/insight/config"
 require "rack/insight/logging"
+require "rack/insight/config"
 require "rack/insight/filtered_backtrace"
 require "rack/insight/options"
 require 'rack/insight/magic_insight'
