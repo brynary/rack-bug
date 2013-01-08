@@ -264,6 +264,34 @@ Authors
   - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
   - Which in turn was based on Rack::Bug by Bryan Helmkamp
 
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
+6. Create new Pull Request
+
+## Versioning
+
+This library aims to adhere to [Semantic Versioning 2.0.0][semver].
+Violations of this scheme should be reported as bugs. Specifically, 
+if a minor or patch version is released that breaks backward 
+compatibility, a new version should be immediately released that
+restores compatibility. Breaking changes to the public API will 
+only be introduced with new major versions.
+
+As a result of this policy, you can (and should) specify a 
+dependency on this gem using the [Pessimistic Version Constraint][pvc] with two digits of precision. 
+
+For example:
+
+    spec.add_dependency 'twitter', '~> 4.0'
+
+[semver]: http://semver.org/
+[pvc]: http://docs.rubygems.org/read/chapter/16#page74
+
 Thanks
 ------
 Rack::Insight owes a lot to both LogicalInsight and Rack::Bug, as the basis projects.  There's a lot of smart
