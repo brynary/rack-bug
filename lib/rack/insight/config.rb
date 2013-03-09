@@ -12,13 +12,12 @@ module Rack::Insight
     @rails_log_copy = true
     @filtered_backtrace = true
     @panel_configs = {
-      :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
+      :active_record => {:probes => {'ActiveRecord::Base' => [:class, :allocate]}},
       :active_resource => {:probes => {'ActiveResource::Connection' => [:instance, :request]}},
       :cache => {:probes => { 'Memcached'     => [:instance, :decrement, :get, :increment, :set,
                                                                  :add, :replace, :delete, :prepend, :append],
                               'MemCache'      => [:instance, :decr, :get, :get_multi, :incr, :set, :add, :delete],
                               'Dalli::Client' => [:instance, :perform] } },
-      :active_record => {:probes => {'ActiveRecord' => [:class, :allocate]}},
 #      :log_panel => The log panel configures its probes in its initializer
       :sphinx => {:probes => {'Riddle::Client' => [:instance, :request]}},
       :sql => {:probes => Hash[%w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
