@@ -35,4 +35,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sinatra"
   s.add_development_dependency "webrat"
   s.add_development_dependency "debugger", ">= 1.5.0"
+  s.add_development_dependency "gem-release", ">= 0.5.2"
 end
