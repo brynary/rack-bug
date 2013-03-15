@@ -44,7 +44,7 @@ Build Status
 
 Travis-ci: [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) - Please help if you have time!
 
-CodeClimate: [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight)
+CodeClimate: [![Code Climate](https://codeclimate.com/github/pboling/rack-insight.png)](https://codeclimate.com/github/pboling/rack-insight)
 
 Rails quick start
 ---------------------------
