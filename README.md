@@ -318,8 +318,6 @@ MIT. See LICENSE in this directory.
 Notes
 -----
 
-The ActiveRecord panel doesn't seem to work currently.  Probably something minor, but haven't had time to look into it.
-
 Legacy files: would like to re-include them, but they need work
 
     lib/rack/insight/views/panels/mongo.html.erb
