@@ -1,5 +1,11 @@
 == HEAD
 
+== 0.5.25 / 2013-03-15
+
+  * Bug Fixes
+
+    * active_record_panel is fixed! [(kjg - Kevin Glowacz)](https://github.com/kjg)
+
 == 0.5.24 / 2013-01-01
 
   * Bug Fixes
