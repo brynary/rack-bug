@@ -1,23 +1,8 @@
 Rack::Insight [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/pboling/rack-insight) [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) [![Endorse Me](http://api.coderwall.com/pboling/endorsecount.png)](http://coderwall.com/pboling)
 =============
 
-Rack::Insight began life as an fork of Logical::Insight by LRDesign.
 
-* I started a fork because:
-    * LogicalInsight was namespaced as "Insight"
-        * Causing namespace collisions everywhere I have an Insight model.  I had to re-namespace all the code.
-    * I also needed to build a few extension gems with additional panels, which didn't fully work in LI
-        * Added the Config class to allow for custom panel load paths
-          and many other extensions that don't work in the *use Middleware* declaration.
 
-It should be *even* easier to extend than LogicalInsight was, because extension gems can access the Config class
-and truly bolt-on cleanly.
-
-Having made really significant architectural changes, I'll be keeping Rack::Insight
-a separate project for the foreseeable future.
-
-* Forked From: [logical-insight](http://github.com/LRDesign/logical-insight)
-* Which Was Forked From: [rack-bug](http://github.com/brynary/rack-bug)
 
 Description
 -----------
@@ -41,7 +26,7 @@ Features
         * Log               (can configure which loggers to watch!)
         * Memory
         * SQL               (Failing specs, and I don't use it, someone please pull me a fix!)
-        * Active Record     (Failing specs, and I don't use it, someone please pull me a fix!)
+        * Active Record     (Thanks to [Kevin Glowacz](https://github.com/kjg) for the fix!)
     * Other bundled panels:
         * Sphinx (thanks to Oggy for updating this to the rack-insight panel API)
         * Redis
@@ -155,6 +140,7 @@ Specify the set of panels you want, in the order you want them to appear:
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
       :panel_files => %w(
         timer_panel
+        active_record_panel
         request_variables_panel
         redis_panel
         templates_panel
@@ -260,9 +246,31 @@ Authors
 -------
 
 - Maintained by [Peter Boling](mailto:peter.boling@gmail.com)
+  - Contributions from [Kevin Glowacz](https://github.com/kjg) (Fixed Active Record Panel), [Piotr Usewicz](https://github.com/pusewicz) (Use on instead of live), [Nate Greene](https://github.com/natejgreene) (javascript fix), [George Ogata](https://github.com/oggy) (Fixed Redis & Sphinx panels and added AJAX support to them), and [Alif Rachmawadi](https://github.com/subosito) (persistent toolbar position)
 - Based on LogicalInsight by Judson Lester
   - Contributions from Luke Melia, Joey Aghion, Tim Connor, and more
   - Which in turn was based on Rack::Bug by Bryan Helmkamp
+
+A History of Forking
+--------------------
+
+Rack::Insight began life as an fork of Logical::Insight by LRDesign.
+
+* I started a fork because:
+    * LogicalInsight was namespaced as "Insight"
+        * Causing namespace collisions everywhere I have an Insight model.  I had to re-namespace all the code.
+    * I also needed to build a few extension gems with additional panels, which didn't fully work in LI
+        * Added the Config class to allow for custom panel load paths
+          and many other extensions that don't work in the *use Middleware* declaration.
+
+It should be *even* easier to extend than LogicalInsight was, because extension gems can access the Config class
+and truly bolt-on cleanly.
+
+Having made really significant architectural changes, I'll be keeping Rack::Insight
+a separate project for the foreseeable future.
+
+* Forked From: [logical-insight](http://github.com/LRDesign/logical-insight)
+* Which Was Forked From: [rack-bug](http://github.com/brynary/rack-bug)
 
 ## Contributing
 
@@ -276,24 +284,25 @@ Authors
 ## Versioning
 
 This library aims to adhere to [Semantic Versioning 2.0.0][semver].
-Violations of this scheme should be reported as bugs. Specifically, 
-if a minor or patch version is released that breaks backward 
+Violations of this scheme should be reported as bugs. Specifically,
+if a minor or patch version is released that breaks backward
 compatibility, a new version should be immediately released that
-restores compatibility. Breaking changes to the public API will 
+restores compatibility. Breaking changes to the public API will
 only be introduced with new major versions.
 
-As a result of this policy, you can (and should) specify a 
-dependency on this gem using the [Pessimistic Version Constraint][pvc] with two digits of precision. 
+As a result of this policy, you can (and should) specify a
+dependency on this gem using the [Pessimistic Version Constraint][pvc] with two digits of precision.
 
 For example:
 
-    spec.add_dependency 'twitter', '~> 4.0'
+    spec.add_dependency 'rack-insight', '~> 0.5'
 
 [semver]: http://semver.org/
 [pvc]: http://docs.rubygems.org/read/chapter/16#page74
 
 Thanks
 ------
+
 Rack::Insight owes a lot to both LogicalInsight and Rack::Bug, as the basis projects.  There's a lot of smart
 in there.  Many thanks to Judson, and Bryan for building them.
 
