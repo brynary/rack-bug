@@ -26,9 +26,9 @@
   border-top: 2px solid #234f32;
   height: auto;
   clear: both;
-  position: relative;
   z-index: 10;
   margin-top: -3em;
+  bottom: 0;
 }
 
 .rack-insight_top #rack-insight_toolbar {
@@ -115,7 +115,7 @@
 }
 
 #rack-insight.rack-insight_bottom .panel_content {
-  top: auto;
+  bottom: 32px;
 }
 
 #rack-insight .panel_content p a,
