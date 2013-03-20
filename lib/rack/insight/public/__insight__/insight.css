@@ -117,6 +117,8 @@
 
 #rack-insight.rack-insight_bottom .panel_content {
   bottom: 32px;
+  top: 0;
+  overflow-y: auto;
 }
 
 #rack-insight .panel_content p a,
