@@ -49,7 +49,8 @@ CodeClimate: [![Code Climate](https://codeclimate.com/github/pboling/rack-insigh
 Rails quick start
 ---------------------------
 
-Add this to your Gemfile
+Add this to your Gemfile:
+
     gem "rack-insight"
 
 In config/environments/development.rb, add:
