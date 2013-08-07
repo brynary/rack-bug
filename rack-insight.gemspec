@@ -18,6 +18,9 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ["lib"]
 
+  s.licenses = ["MIT"]
+  s.platform = Gem::Platform::RUBY
+
   s.homepage      = "https://github.com/pboling/rack-insight"
   s.summary = %q{Debugging toolbar for Rack applications implemented as
     middleware.}
