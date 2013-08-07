@@ -1,4 +1,14 @@
-== HEAD
+== 0.5.26 / 2013-08-06
+
+  * Bug Fixes
+
+    * Dont reload page, just close panel by Harry Walter (5 months ago)
+    * Allow panels to scroll when fixed to bottom by Harry Walter (5 months ago)
+    * Set position to fixed to keep toolbar at bottom by Harry Walter (5 months ago)
+
+  * Other
+
+    * Update README.md by Agis Anastasopoulos (5 months ago)
 
 == 0.5.25 / 2013-03-15
 
