@@ -1,3 +1,5 @@
+require 'logger' # Require the standard Ruby Logger
+
 module Rack::Insight
   module Logging
     VERBOSITY = {
