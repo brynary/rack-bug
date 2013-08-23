@@ -116,13 +116,15 @@ module Rack::Insight
       #   end
       panel_name = self.underscored_name.to_sym
       if self.has_custom_probes?(panel_name)
+        # Both formats are valid and must be supported
+        #config[:panel_configs][:log] = {:probes => {'Logger' => [:instance, :add]}}
+        #config[:panel_configs][:log] = {:probes => ['Logger', :instance, :add]}
         custom_probes = Rack::Insight::Config.config[:panel_configs][panel_name][:probes]
         if custom_probes.kind_of?(Hash)
           probe(self) do
             custom_probes.each do |klass, method_probes|
-              probe_type = method_probes.shift
               instrument klass do
-                self.send("#{probe_type}_probe", *method_probes)
+                self.send("#{method_probes[0]}_probe", *(method_probes[1..-1]))
               end
             end
           end

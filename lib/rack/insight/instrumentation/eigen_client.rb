@@ -8,6 +8,7 @@ module Rack::Insight::Instrumentation
       base.send(:attr_accessor, :is_probing)
       base.send(:attr_accessor, :has_table)
       base.send(:attr_accessor, :is_magic)
+      base.send(:attr_accessor, :template_root)
     end
 
   end
