@@ -8,7 +8,7 @@ module Rack::Insight
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
     @logger = nil
-    @verbosity = Rack::Insight::Logging::VERBOSITY[:silent]
+    @verbosity = nil # deprecated - now set in Rack::Insight::Logging.verbosity
     @rails_log_copy = true
     @filtered_backtrace = true
     @panel_configs = {

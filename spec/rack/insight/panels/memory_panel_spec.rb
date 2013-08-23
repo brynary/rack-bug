@@ -2,7 +2,9 @@ require 'spec_helper'
 
 module Rack::Insight
   describe "MemoryPanel" do
-    before do
+    before(:each) do
+      puts "I am resetting"
+
       reset_insight :panel => [Rack::Insight::MemoryPanel]
     end
 

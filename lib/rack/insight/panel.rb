@@ -19,11 +19,14 @@ module Rack::Insight
     class << self
 
       include Rack::Insight::Logging
-
-      attr_accessor :template_root, :is_probing, :has_table, :is_magic
-      @is_probing = false  # Once a panel is probed this should be set to true
-      @has_table = true   # default to true.  Panels without tables override with self.has_table = false
-      @is_magic = false   # check this to wrap any functionality targeted at magic panels.
+      # This will allow the following:
+      # p = Panel.new
+      # p.class.is_probing = true
+      include Rack::Insight::Instrumentation::EigenClient
+      # has table defaults to true for panels.
+      def has_table
+        @has_table.nil? ? true : @has_table
+      end
 
       def file_index
         return @file_index ||= Hash.new do |h,k|

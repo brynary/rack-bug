@@ -35,14 +35,57 @@ class Two < One
   end
 end
 
+class Probeable
+  include Rack::Insight::Instrumentation::Client
+  class << self
+    include Rack::Insight::Instrumentation::EigenClient
+  end
+end
+
+module MyEigenClient;
+  def self.included(base)
+    base.send(:attr_accessor, :is_probed)
+  end
+end
+module MyClient; def probe; "anal probe is #{self.class.is_probed}"; end; end
+class MyPanel; include MyClient; class << self; include MyEigenClient; end; end
+class MyPanel2; include MyClient; class << self; include MyEigenClient; end; end
+
+describe "Validate Client Design" do
+  it "MyPanel instance should respond to probe" do
+    MyPanel.new.respond_to?(:probe).should be_true
+  end
+  it "MyPanel#probe should return 'anal_probe is '" do
+    MyPanel.new.probe.should == 'anal probe is '
+  end
+  it "MyPanel class should respond to is_probed" do
+    MyPanel.respond_to?(:is_probed).should be_true
+  end
+  it "MyPanel.is_probed should default to nil" do
+    MyPanel.is_probed.should == nil
+  end
+  it "MyPanel.is_probed should be settable" do
+    MyPanel.is_probed = 'fat mojo'
+    MyPanel.is_probed.should == 'fat mojo'
+    MyPanel.new.probe.should == 'anal probe is fat mojo'
+  end
+  it "MyPanel2.is_probed should not interfere with MyPanel.is_probed" do
+    MyPanel.is_probed = 'fat mojo'
+    MyPanel2.is_probed = 'nice banana'
+    MyPanel.is_probed.should == 'fat mojo'
+    MyPanel2.is_probed.should == 'nice banana'
+    MyPanel.new.probe.should == 'anal probe is fat mojo'
+    MyPanel2.new.probe.should == 'anal probe is nice banana'
+  end
+end
+
 describe "Setting up probes" do
   let :method_calls do [] end
   let :method_subject do [] end
   let :recording_list do [] end
 
   let :test_collector do
-    collector = Object.new
-    collector.extend Rack::Insight::Instrumentation::Client
+    collector = Probeable.new
     collector.instance_variable_set("@calls", method_calls)
     def collector.after_detect(method_call, timing, arguments, results)
       @calls << [method_call, timing, arguments, results]
