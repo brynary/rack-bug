@@ -17,22 +17,22 @@ module Rack::Insight
     describe "content" do
       it "displays the user CPU time" do
         response = get_via_rack "/"
-        response.should have_row("#timer", "User CPU time", TIME_MS_REGEXP)
+        response.should have_row("table.sortable", "User CPU time", TIME_MS_REGEXP)
       end
 
       it "displays the system CPU time" do
         response = get_via_rack "/"
-        response.should have_row("#timer", "System CPU time", TIME_MS_REGEXP)
+        response.should have_row("table.sortable", "System CPU time", TIME_MS_REGEXP)
       end
 
       it "displays the total CPU time" do
         response = get_via_rack "/"
-        response.should have_row("#timer", "Total CPU time", TIME_MS_REGEXP)
+        response.should have_row("table.sortable", "Total CPU time", TIME_MS_REGEXP)
       end
 
       it "displays the elapsed time" do
         response = get_via_rack "/"
-        response.should have_row("#timer", "Elapsed time", TIME_MS_REGEXP)
+        response.should have_row("table.sortable", "Elapsed time", TIME_MS_REGEXP)
       end
     end
   end
