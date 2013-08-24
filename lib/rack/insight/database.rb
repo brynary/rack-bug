@@ -5,6 +5,13 @@ require 'base64'
 module Rack::Insight
   class Database
 
+    module EigenClient
+      def self.included(base)
+        base.send(:attr_accessor, :table)
+        base.send(:attr_accessor, :key_sql_template)
+      end
+    end
+
     # Classes including this module must define the following structure:
     #    class FooBar
     #      include Rack::Insight::Database
@@ -17,15 +24,16 @@ module Rack::Insight
     # TODO: Move the has_table definition into this module's included hook.
     module RequestDataClient
       def key_sql_template(sql)
-        @key_sql_template = sql
+        self.class.key_sql_template = sql
       end
 
       def table_setup(name, *keys)
         self.class.has_table = true
-        @table = DataTable.new(name, *keys)
+        self.class.table = DataTable.new(name, *keys)
         if keys.empty?
-          @key_sql_template = ''
+          self.class.key_sql_template = ''
         end
+        self.class.table
       end
 
       def store(env, *keys_and_value)
@@ -36,19 +44,24 @@ module Rack::Insight
         value = keys_and_value[-1]
         keys = keys_and_value[0...-1]
 
-        @table.store(request_id, value, @key_sql_template % keys)
+        #puts "value: #{value}"
+        #puts "keys: #{keys}"
+        #puts "table: #{self.class.table.inspect}"
+        #puts "@key_sql_template: #{self.class.key_sql_template}"
+        #puts "class: #{self.class.inspect}"
+        self.class.table.store(request_id, value, self.class.key_sql_template % keys)
       end
 
       def retrieve(request_id)
-        @table.for_request(request_id)
+        self.class.table.for_request(request_id)
       end
 
       def count(request_id)
-        @table.count_for_request(request_id)
+        self.class.table.count_for_request(request_id)
       end
 
       def table_length
-        @table.length
+        self.class.table.length
       end
     end
 

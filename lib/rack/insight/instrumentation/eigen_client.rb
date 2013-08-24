@@ -7,6 +7,7 @@ module Rack::Insight::Instrumentation
       # check is_magic to wrap any functionality targeted at magic panels.
       base.send(:attr_accessor, :is_probing)
       base.send(:attr_accessor, :has_table)
+      base.send(:attr_accessor, :table)
       base.send(:attr_accessor, :is_magic)
       base.send(:attr_accessor, :template_root)
     end

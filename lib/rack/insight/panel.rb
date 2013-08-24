@@ -16,6 +16,11 @@ module Rack::Insight
 
     attr_reader :request
 
+    # has table defaults to true for panels.
+    def self.has_table
+      self.has_table.nil? ? true : self.class.table.nil?
+    end
+
     class << self
 
       include Rack::Insight::Logging
@@ -23,10 +28,7 @@ module Rack::Insight
       # p = Panel.new
       # p.class.is_probing = true
       include Rack::Insight::Instrumentation::EigenClient
-      # has table defaults to true for panels.
-      def has_table
-        @has_table.nil? ? true : @has_table
-      end
+      include Rack::Insight::Database::EigenClient
 
       def file_index
         return @file_index ||= Hash.new do |h,k|

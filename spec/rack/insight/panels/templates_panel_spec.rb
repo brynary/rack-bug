@@ -16,8 +16,8 @@ module Rack::Insight
     end
 
     def mock_template(path)
-      template = stub("ActionView::Template")
-      template.stub!(:virtual_path => path)
+      template = double("ActionView::Template")
+      template.stub(:virtual_path => path)
       template
     end
 
@@ -37,7 +37,7 @@ module Rack::Insight
           end
         end
         response = get_via_rack "/"
-        response.should have_selector("li", :content => "users/show") do |li|
+        response.should have_selector("div.panel_content#TemplatesPanel", :content => "users/show") do |li|
           li.should contain("users/toolbar")
         end
       end
@@ -51,12 +51,12 @@ module Rack::Insight
           end
 
           response = get_via_rack "/"
-          response.should have_selector("li", :content => "users/show") do |li|
+          response.should have_selector("div.panel_content#TemplatesPanel", :content => "users/show") do |li|
             li.should contain(TIME_MS_REGEXP)
           end
         end
 
-        it "displays the exclusive time" do
+        it "displays the exclusive and child times" do
           app.before_return do
             mock_method_call("ActionView::Template", :render, [], :instance, mock_template("users/show")) do
               mock_method_call("ActionView::Template", :render, [], :instance, mock_template("users/toolbar"))
@@ -64,8 +64,9 @@ module Rack::Insight
           end
 
           response = get_via_rack "/"
-          response.should have_selector("li", :content => "users/show") do |li|
-            li.should contain(/\d\.\d{2} exclusive/)
+          response.should have_selector("div.panel_content#TemplatesPanel", :content => "users/show") do |li|
+            li.should contain(/exclusive: \d\.\d{2}ms/)
+            li.should contain(/child: \d\.\d{2}ms/)
           end
         end
       end

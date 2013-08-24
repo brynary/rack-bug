@@ -9,6 +9,8 @@ require 'rack/insight/panels/speedtracer_panel/tracer'
 
 module Rack::Insight
   module SpeedTracer
+    # TODO Refactor this class name...
+    # TODO: Fix indentation of this class.
     class Panel < ::Rack::Insight::Panel
 
     def initialize(app)
