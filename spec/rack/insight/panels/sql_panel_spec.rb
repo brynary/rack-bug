@@ -3,9 +3,13 @@ require 'rack/insight/panels/sql_panel'
 
 module Rack::Insight
   describe "SQLPanel" do
+    #before do
+    #  reset_insight :panel_files => %w{sql_panel}
+    #end
     before do
       mock_constant("ActiveRecord::ConnectionAdapters::MysqlAdapter")
-      reset_insight :panel_files => %w{sql_panel}
+      reset_insight :panel_classes => [Rack::Insight::SQLPanel]
+      app.insight_app.secret_key = "abc"
     end
 
     describe "heading" do
@@ -32,7 +36,7 @@ module Rack::Insight
           mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
         end
         response = get_via_rack "/"
-        response.should have_row("#sql", "SELECT NOW();")
+        response.should have_row("div.panel_content#SqlPanel", "SELECT NOW();")
       end
 
       it "displays the time of each executed SQL query" do
@@ -40,24 +44,24 @@ module Rack::Insight
           mock_method_call("ActiveRecord::ConnectionAdapters::MysqlAdapter", "execute", ["SELECT NOW();"])
         end
         response = get_via_rack "/"
-        response.should have_row("#sql", "SELECT NOW();", TIME_MS_REGEXP)
+        response.should have_row("div.panel_content#SqlPanel", "SELECT NOW();", TIME_MS_REGEXP)
       end
     end
 
     def stub_result(results = [[]])
       columns = results.first
-      fields = columns.map { |c| stub("field", :name => c) }
+      fields = columns.map { |c| double("field", :name => c) }
       rows = results[1..-1]
 
-      result = stub("result", :fetch_fields => fields)
-      result.stub!(:map).and_yield(rows)
+      result = double("result", :fetch_fields => fields)
+      result.stub(:map).and_yield(rows)
       return result
     end
 
     def expect_query(sql, results)
-      conn = stub("connection")
+      conn = double("connection")
       mock_constant("ActiveRecord::Base")
-      ActiveRecord::Base.stub!(:connection => conn)
+      ActiveRecord::Base.stub(:connection => conn)
       conn.should_receive(:execute).with(sql).and_return(stub_result(results))
     end
 

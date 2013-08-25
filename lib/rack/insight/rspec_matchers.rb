@@ -17,6 +17,22 @@ module Rack::Insight
       end
     end
 
+    RSpec::Matchers.define :have_li do |container, key, value|
+      match do |response|
+        if value
+          response.should have_selector("#{container} li", :content => key) do |row|
+            row.should contain(value)
+          end
+        else
+          response.should have_selector("#{container} li", :content => key)
+        end
+      end
+
+      failure_message_for_should do |response|
+        "Expected: \n#{response.body}\nto have a li matching #{key}"
+      end
+    end
+
     RSpec::Matchers.define :have_heading do |text|
       match do |response|
         response.should have_selector("#rack-insight_toolbar li") do |heading|

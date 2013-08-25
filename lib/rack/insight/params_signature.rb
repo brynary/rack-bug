@@ -6,14 +6,15 @@ module Rack::Insight
     extend ERB::Util
 
     def self.sign(request, hash)
+      #puts "ParamsSignature#sign called!: #{caller.first}"
       parts = []
 
       hash.keys.sort.each do |key|
         parts << "#{key}=#{u(hash[key])}"
       end
 
-      signature = new(request).signature(hash)
-      parts << "hash=#{u(signature)}"
+      hancock = new(request).signature(hash)
+      parts << "hash=#{u(hancock)}"
 
       parts.join("&amp;")
     end
@@ -36,6 +37,7 @@ module Rack::Insight
       if secret_key_blank?
         raise SecurityError.new("Missing secret key")
       elsif request.params["hash"] != signature(request.params)
+        #puts "request params hash: #{request.params}\nsignature: #{signature(request.params)}"
         raise SecurityError.new("Invalid query hash.")
       end
     end
@@ -45,15 +47,15 @@ module Rack::Insight
     end
 
     def signature_base(params)
-      signature = []
-      signature << secret_key
+      hancock = []
+      hancock << secret_key
 
       params.keys.sort.each do |key|
         next if key == "hash"
-        signature << params[key].to_s
+        hancock << params[key].to_s
       end
 
-      signature.join(":")
+      hancock.join(":")
     end
 
   end

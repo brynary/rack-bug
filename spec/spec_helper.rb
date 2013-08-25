@@ -49,11 +49,13 @@ RSpec.configure do |config|
     @added_constants.clear
   end
 
-  def reset_insight(options=nil)
-    #puts "I am resetting 1"
-    #system(*%w{rm -f rack-insight.sqlite})
+  config.after :suite do
+    # Clear the database between runs
+    system(*%w{rm -f rack-insight.sqlite})
+    Rack::Insight::Database.reset
+  end
 
-    #Rack::Insight::Database.reset
+  def reset_insight(options=nil)
     app.prototype
     app.insight_app.reset(options)
 

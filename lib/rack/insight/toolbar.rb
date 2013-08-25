@@ -26,6 +26,7 @@ module Rack::Insight
 
     def okay_to_modify?(env, response)
       req = Rack::Request.new(env)
+      return false unless response.content_type.respond_to?(:split)
       content_type, charset = response.content_type.split(";")
 
       response.ok? && MIME_TYPES.include?(content_type) && !req.xhr?
