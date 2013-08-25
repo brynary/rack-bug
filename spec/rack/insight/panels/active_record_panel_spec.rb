@@ -9,10 +9,10 @@ module Rack::Insight
     end
 
     def mock_model(name)
-      model = stub("model")
-      model.stub!(:name => name)
-      obj = stub(name)
-      obj.stub!(:base_class => model)
+      model = double("model")
+      model.stub(:name => name)
+      obj = double(name)
+      obj.stub(:base_class => model)
       obj
     end
 

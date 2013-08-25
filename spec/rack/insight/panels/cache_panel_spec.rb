@@ -122,7 +122,7 @@ module Rack::Insight
 
       describe "expire_all" do
         it "expires the cache keys" do
-          Rails.stub!(:cache => mock("cache"))
+          Rails.stub(:cache => mock("cache"))
           Rails.cache.should_receive(:delete).with("user:1")
           Rails.cache.should_receive(:delete).with("user:2")
           Rails.cache.should_receive(:delete).with("user:3")
@@ -134,7 +134,7 @@ module Rack::Insight
         end
 
         it "returns OK" do
-          Rails.stub!(:cache => mock("cache", :delete => nil))
+          Rails.stub(:cache => mock("cache", :delete => nil))
           response = get_via_rack "/__insight__/delete_cache_list",
             :keys_1 => "user:1", :keys_2 => "user:2", :keys_3 => "user:3", :keys_4 => "user:4",
             :hash => Digest::SHA1.hexdigest("abc:user:1:user:2:user:3:user:4")
@@ -144,14 +144,14 @@ module Rack::Insight
 
       describe "expire" do
         it "expires the cache key" do
-          Rails.stub!(:cache => mock("cache"))
+          Rails.stub(:cache => mock("cache"))
           Rails.cache.should_receive(:delete).with("user:1")
           get_via_rack "/__insight__/delete_cache", :key => "user:1",
             :hash => Digest::SHA1.hexdigest("abc:user:1")
         end
 
         it "returns OK" do
-          Rails.stub!(:cache => mock("cache", :delete => nil))
+          Rails.stub(:cache => mock("cache", :delete => nil))
           response = get_via_rack "/__insight__/delete_cache", :key => "user:1",
             :hash => Digest::SHA1.hexdigest("abc:user:1")
           response.should contain("OK")
@@ -160,14 +160,14 @@ module Rack::Insight
 
       describe "view_cache" do
         it "renders the cache key" do
-          Rails.stub!(:cache => mock("cache", :read => "cache body"))
+          Rails.stub(:cache => mock("cache", :read => "cache body"))
           response = get_via_rack "/__insight__/view_cache", :key => "user:1",
             :hash => Digest::SHA1.hexdigest("abc:user:1")
           response.should contain("cache body")
         end
 
         it "renders non-String cache values properly" do
-          Rails.stub!(:cache => mock("cache", :read => [1, 2]))
+          Rails.stub(:cache => mock("cache", :read => [1, 2]))
           response = get_via_rack "/__insight__/view_cache", :key => "user:1",
             :hash => Digest::SHA1.hexdigest("abc:user:1")
           response.should contain("[1, 2]")

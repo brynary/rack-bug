@@ -16,7 +16,7 @@
 #    end
 #
 #    def mock_template(path)
-#      template = stub("ActionView::Template")
+#      template = double("ActionView::Template")
 #      template.stub!(:virtual_path => path)
 #      template
 #    end
