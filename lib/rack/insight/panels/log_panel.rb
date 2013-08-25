@@ -1,6 +1,7 @@
 module Rack::Insight
   class LogPanel < Panel
     class LogEntry
+      # TODO: Update this to the Rack::Insight panel format
       attr_reader :level, :time, :message
       LEVELS = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL']
 
