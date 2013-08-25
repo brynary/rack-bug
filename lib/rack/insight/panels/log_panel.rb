@@ -3,7 +3,7 @@ module Rack::Insight
     class LogEntry
       # TODO: Update this to the Rack::Insight panel format
       attr_reader :level, :time, :message
-      LEVELS = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL']
+      LEVELS = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'] unless defined?(LEVELS)
 
       def initialize(level, time, message)
         @level = LEVELS[level]

@@ -3,11 +3,10 @@ require 'rack/insight/panels/sql_panel'
 
 module Rack::Insight
   describe "SQLPanel" do
-    #before do
-    #  reset_insight :panel_files => %w{sql_panel}
-    #end
     before do
       mock_constant("ActiveRecord::ConnectionAdapters::MysqlAdapter")
+      # TODO: Figure out why panel_classes work here but panel_files does not.
+      #  reset_insight :panel_files => %w{sql_panel}
       reset_insight :panel_classes => [Rack::Insight::SQLPanel]
       app.insight_app.secret_key = "abc"
     end
