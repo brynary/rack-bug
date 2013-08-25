@@ -142,22 +142,25 @@ describe Rack::Insight do
     end
   end
 
-  context "configured with a SQLite database file path" do
-    before do
-      # We need to pass the SQLite database file path to the gem
-      require 'fileutils'
-      FileUtils.rm_rf("my_custom_db_path.sqlite") #because it doesn't count if it's already there
-      reset_insight :database_path => 'my_custom_db_path.sqlite'
-    end
+  # These specs are no longer applicable, since reset_insight no longer clears the sqlite database.
+  # Clearing of the database is now accomplished in a *config.after :suite do* block
 
-    it "should create a database at the path specified in the options" do
-      File.exist?('my_custom_db_path.sqlite').should be_true
-    end
-
-    after do
-      FileUtils.rm_rf("my_custom_db_path.sqlite")
-      reset_insight :database_path => nil
-    end
-
-  end
+  #context "configured with a SQLite database file path" do
+  #  before do
+  #    # We need to pass the SQLite database file path to the gem
+  #    require 'fileutils'
+  #    FileUtils.rm_rf("my_custom_db_path.sqlite") #because it doesn't count if it's already there
+  #    reset_insight :database_path => 'my_custom_db_path.sqlite'
+  #  end
+  #
+  #  it "should create a database at the path specified in the options" do
+  #    File.exist?('my_custom_db_path.sqlite').should be_true
+  #  end
+  #
+  #  after do
+  #    FileUtils.rm_rf("my_custom_db_path.sqlite")
+  #    reset_insight :database_path => nil
+  #  end
+  #
+  #end
 end

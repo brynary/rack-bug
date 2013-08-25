@@ -11,6 +11,7 @@ module Rack::Insight
   module SpeedTracer
     # TODO Refactor this class name...
     # TODO: Fix indentation of this class.
+    # TODO: Update this class to Rack::Insight pattern.
     class Panel < ::Rack::Insight::Panel
 
     def initialize(app)
