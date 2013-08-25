@@ -1,10 +1,23 @@
 require 'spec_helper'
 require 'rack/insight/panels/redis_panel'
 
+REDIS_INTERFACE = begin
+  # When Redis::Client is defined then Redis >= 3.0.0
+  if defined?(Redis::Client)
+    {  client:  'Redis::Client',
+       call_method: :call }
+  elsif defined?(Redis)
+    { client: 'Redis',
+      call_method: :call_command }
+  else
+    nil
+  end
+end
+
 module Rack::Insight
   describe "RedisPanel" do
     before do
-      reset_insight :panel_files => %w[redis_panel]
+      reset_insight :panel_classes => [Rack::Insight::RedisPanel]
     end
 
     describe "heading" do
@@ -17,7 +30,8 @@ module Rack::Insight
     describe "content" do
       describe "usage table" do
         it "displays the total number of redis calls" do
-          RedisPanel.record(["get, user:1"], Kernel.caller) { }
+          Kernel.const_get(REDIS_INTERFACE[:client]).send(REDIS_INTERFACE[:call_method], ["get, user:1"])
+
           response = get_via_rack "/"
 
           # This causes a bus error:
@@ -65,4 +79,4 @@ module Rack::Insight
       end
     end
   end
-end
+end unless REDIS_INTERFACE.nil?

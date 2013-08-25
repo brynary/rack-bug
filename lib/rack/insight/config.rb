@@ -24,7 +24,11 @@ module Rack::Insight
                   Mysql2Adapter OracleEnhancedAdapter }.map do |adapter|
                     ["ActiveRecord::ConnectionAdapters::#{adapter}", [:instance, :execute]]
                   end ] },
-      :templates => {:probes => {'ActionView::Template' => [:instance, :render]}}
+      :templates => {:probes => {'ActionView::Template' => [:instance, :render]}},
+      :redis => {:probes => defined?(Redis::Client) ?
+        { 'Redis::Client' => [:instance, :call] } : # Redis >= 3.0.0
+        { 'Redis' => [:instance, :call_command] } # Redis < 3.0.0
+      }
     }
     @silence_magic_insight_warnings = false
     @database = {

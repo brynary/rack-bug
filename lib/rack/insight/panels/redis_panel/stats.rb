@@ -30,6 +30,7 @@ module Rack::Insight
 
       def record_call(time, command_args, method_call)
         @queries << Query.new(time, command_args, method_call)
+        puts "Recorded Redis Call: #{@queries.inspect}"
         @calls += 1
         @time += time
       end

@@ -2,26 +2,6 @@ module Rack::Insight
   class RedisPanel < Panel
     require "rack/insight/panels/redis_panel/stats"
 
-    def initialize(app)
-      super
-
-      unless is_probing?
-        probe(self) do
-          if defined?(Redis::Client)
-            # Redis >= 3.0.0
-            instrument "Redis::Client" do
-              instance_probe :call
-            end
-          elsif defined?(Redis)
-            # Redis < 3.0.0
-            instrument "Redis" do
-              instance_probe :call_command
-            end
-          end
-        end
-      end
-    end
-
     def request_start(env, start)
       @stats = Stats.new
     end
