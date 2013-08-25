@@ -21,9 +21,9 @@ module Rack::Insight
     describe "content" do
       it "displays the Rails::Info properties" do
         Rails.stub(:version => "v2.3.0")
-        Rails::Info.stub(:properties => [["Name", "Value"]])
+        Rails::Info.stub(:properties => [["CaptainKirkIs", "ClimbingTheMountain"]])
         response = get_via_rack "/"
-        response.should have_row("#rails_info", "Name", "Value")
+        response.should have_row("#RailsInfoPanel", "CaptainKirkIs", "ClimbingTheMountain")
       end
     end
   end
