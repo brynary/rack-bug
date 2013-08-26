@@ -31,8 +31,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("uuidtools", ">= 2.1.2") # incurs far fewer dependencies that the uuid gem, and no shell forking
   s.add_runtime_dependency("sqlite3", ">= 1.3.3")
   #s.add_development_dependency "redcarpet", ">= 3.0.0"
-  #s.add_development_dependency(%q<reek>, [">= 1.2.13"])
-  #s.add_development_dependency(%q<roodi>, [">= 2.2.0"])
+  s.add_development_dependency(%q<reek>, [">= 1.2.13"])
+  s.add_development_dependency(%q<roodi>, [">= 2.2.0"])
   s.add_development_dependency(%q<rake>, [">= 10.1.0"])
   s.add_development_dependency "rspec", ">= 2.14.1"
   s.add_development_dependency "sinatra", ">= 1.4.3"
