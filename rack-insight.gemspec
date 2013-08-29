@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.version = Rack::Insight::VERSION
 
   s.authors = ["Peter Boling", "Evan Dorn", "Judson Lester", "Bryan Helmkamp"]
-  s.email = %w{peter.boling@gmail.com evan@lrdesign.com judson@lrdesign.com bryan@brynary.com}
+  s.email = %w{peter.boling@gmail.com}
   s.extra_rdoc_files = [
     "README.md",
     "LICENSE",
