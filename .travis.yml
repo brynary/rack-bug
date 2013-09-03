@@ -1,9 +1,10 @@
 language: ruby
 rvm:
+  - 2.0.0
   - 1.9.3
   - 1.9.2
 #  - jruby-19mode  # Fails to install sqlite3
-  - rbx-19mode
+#  - rbx-19mode
 #  - ruby-head    # Fails to download rubygems.org/latest_specs.4.8.gz
 #  - jruby-head   # Fails to install sqlite3
 bundler_args: "--binstubs --without documentation"
