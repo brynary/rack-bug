@@ -8,7 +8,7 @@ Description
 -----------
 
 Rack::Insight adds a diagnostics toolbar to Rack apps. When enabled, it injects a floating div
-allowing exploration of logging, database queries, template rendering times, etc.   Rack::Insight
+allowing exploration of logging, database queries, template rendering times, etc.  Rack::Insight
 stores debugging info over many requests, incuding AJAX requests.
 
 Features
@@ -25,7 +25,7 @@ Features
         * Templates
         * Log               (can configure which loggers to watch!)
         * Memory
-        * SQL               (Failing specs, and I don't use it, someone please pull me a fix!)
+        * SQL
         * Active Record     (Thanks to [Kevin Glowacz](https://github.com/kjg) for the fix!)
     * Other bundled panels:
         * Sphinx (thanks to Oggy for updating this to the rack-insight panel API)
@@ -59,7 +59,7 @@ In config/environments/development.rb, add:
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
 
 Any environment with Rack::Insight loaded will have a link to "Rack::Insight" added to as
-the last child of BODY to normal responses.  Clicking that link will load the
+the last child of `<body>` to normal responses.  Clicking that link will load the
 toolbar.  It's set with an id of "rack-insight-enabler", so it can be styled
 to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
 
@@ -68,9 +68,6 @@ Using with non-Rails Rack apps
 
 Just 'use Rack::Insight' as any other middleware.  See the SampleApp in the
 spec/fixtures folder for an example Sinatra app.
-
-If you wish to use the logger panel define the LOGGER constant that is a ruby
-Logger or ActiveSupport::BufferedLogger
 
 Configure Rack::Insight
 ---------------------
@@ -91,11 +88,11 @@ Options:
 
     :rails_log_copy - If you are setting :logger to the Rails Logger, you should set this to false (default is true).
 
-    :verbosity - true is default .
+    :verbosity - true is default.
                true is equivalent to relying soley on the logger's log level to determine if a message is logged.
                Other potential values are:
                   anything falsey => no logging at all
-                  Rack::Insight::Logging::VERBOSITY[*level*] where *level* is one of:
+                  Rack::Insight::Config::VERBOSITY[*level*] where *level* is one of:
                     :debug, :high, :med, :low, :silent
 
     :panel_load_paths => [File::join('rack', 'insight', 'panels')] (default)
@@ -206,9 +203,11 @@ Restrict access using a password:
 
 #### custom file path for the request recording database ####
 
-Rack::Insight uses SQLite to store data from requests, and outputs a database
+Rack::Insight uses SQLite to store data across requests, and outputs a database
 file in the root directory. If you need the file to be created at another
 location (i.e. Heroku), you can pass a custom file path.
+
+Please report back if you have success with this on Heroku!
 
     ActionController::Dispatcher.middleware.use "Rack::Insight::App"
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
