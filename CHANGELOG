@@ -1,3 +1,25 @@
+== 0.5.27 / 2013-09-02
+
+  * Other
+
+    * Improved configuration of logging and verbosity
+
+      * Moved VERBOSITY from Logging module into Config class
+
+    * gemspec email should reflect who the current contacts are for the gem by Peter Boling
+
+    * Removed unused development dependencies by Peter Boling
+
+    * All specs passing! by Peter Boling
+
+    * Fixing deprecations by Peter Boling
+
+    * Require the standard Ruby Logger by Peter Boling
+
+    * Convert to .ruby-version by Peter Boling
+
+    * Add license and platform to gemspec by Peter Boling
+
 == 0.5.26 / 2013-08-06
 
   * Bug Fixes

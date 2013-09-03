@@ -14,11 +14,11 @@ require "rack/insight/rspec_matchers"
 
 # Will use the default Ruby Logger.
 Rack::Insight::Config.configure do |config|
-  config[:verbosity] = Rack::Insight::Logging::VERBOSITY[:silent]
+  config[:verbosity] = Rack::Insight::Config::VERBOSITY[:silent]
   config[:log_level] = ::Logger::INFO
 end
 puts "Log Level for specs is #{::Logger::ERROR}"
-puts "Verbosity level for specs is #{Rack::Insight::Logging::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"
+puts "Verbosity level for specs is #{Rack::Insight::Config::VERBOSITY.select {|k,v| v == Rack::Insight::Config.verbosity }.keys.first.inspect} or #{Rack::Insight::Config.verbosity}"
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

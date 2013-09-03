@@ -1,5 +1,18 @@
+require 'logger' # Require the standard Ruby Logger
+
 module Rack::Insight
   class Config
+
+    VERBOSITY = {
+      :debug => Logger::DEBUG,
+      :high => Logger::INFO,
+      :med => Logger::WARN,
+      :low => Logger::ERROR,
+      # Silent can be used with unless instead of if.  Example:
+      #   logger.info("some message") unless app.verbose(:silent)
+      :silent => Logger::FATAL
+    }
+
     class << self
       attr_reader :config, :verbosity, :log_file, :log_level, :rails_log_copy,
                   :filtered_backtrace, :panel_configs, :silence_magic_insight_warnings,
@@ -8,7 +21,7 @@ module Rack::Insight
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
     @logger = nil
-    @verbosity = nil # deprecated - now set in Rack::Insight::Logging.verbosity
+    @verbosity = nil
     @rails_log_copy = true
     @filtered_backtrace = true
     @panel_configs = {
@@ -47,6 +60,7 @@ module Rack::Insight
       #   end
       :panel_load_paths => [File::join('rack', 'insight', 'panels')],
       :logger => @logger,
+      :verbosity => @verbosity,
       :log_file => @log_file,
       :log_level => @log_level,
       :rails_log_copy => @rails_log_copy, # Only has effect when logger is the Rack::Insight::Logger, or a logger behaving like it
@@ -78,6 +92,9 @@ module Rack::Insight
         logger.warn("Rack::Insight::Config#configure: when logger is set, log_level and log_file have no effect, and will only confuse you.")
       end
       @verbosity = config[:verbosity]
+      if @verbosity.nil?
+        @verbosity = Rack::Insight::Config::VERBOSITY[:silent]
+      end
       @filtered_backtrace = config[:filtered_backtrace]
       @silence_magic_insight_warnings = config[:silence_magic_insight_warnings]
       @database = config[:database]
@@ -107,6 +124,10 @@ module Rack::Insight
     def self.set_panel_config(panel_name_sym, config)
       @panel_configs[panel_name_sym].merge!(config)
       self.config[:panel_configs][panel_name_sym] = @panel_configs[panel_name_sym]
+    end
+
+    def self.verbosity
+      @verbosity ||= self.config[:verbosity]
     end
 
     def self.logger
