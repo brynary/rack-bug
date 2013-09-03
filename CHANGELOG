@@ -2,7 +2,7 @@
 
   * Other
 
-    * Improved configuration of logging and verbosity
+    * Improved configuration of logging and verbosity by Peter Boling
 
       * Moved VERBOSITY from Logging module into Config class
 
