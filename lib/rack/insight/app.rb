@@ -45,6 +45,11 @@ module Rack::Insight
     end
     attr_accessor :panels
 
+    # allow access to configuration settings directly through the app object!
+    def config
+      Rack::Insight::Config.config
+    end
+
     def call(env)
       @original_request = Rack::Request.new(env)
       if insight_active?
