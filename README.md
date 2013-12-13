@@ -198,7 +198,7 @@ Restrict access using a password:
 
     ActionController::Dispatcher.middleware.use "Rack::Insight::App",
       :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring",
-      :ip_masks   => false # Default is 127.0.0.1
+      :ip_masks   => false, # Default is 127.0.0.1
       :password   => "yourpassword"
 
 #### custom file path for the request recording database ####
