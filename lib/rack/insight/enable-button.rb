@@ -2,7 +2,7 @@ module Rack::Insight
   class EnableButton
     include Render
 
-    MIME_TYPES = ["text/html", "application/xhtml+xml"]
+    MIME_TYPES = ["text/plain", "text/html", "application/xhtml+xml"]
 
     def initialize(app, insight)
       @app = app
@@ -21,10 +21,9 @@ module Rack::Insight
     end
 
     def okay_to_modify?(env, response)
+      return false unless response.ok?
       req = Rack::Request.new(env)
-      content_type, charset = response.content_type.split(";")
-
-      response.ok? && MIME_TYPES.include?(content_type) && !req.xhr?
+      return MIME_TYPES.include?(req.media_type) && !req.xhr?
     end
 
     def inject_button(response)
