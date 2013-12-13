@@ -16,7 +16,7 @@ module Rack::Insight
     class << self
       attr_reader :config, :verbosity, :log_file, :log_level, :rails_log_copy,
                   :filtered_backtrace, :panel_configs, :silence_magic_insight_warnings,
-                  :database
+                  :database, :handle_javascript
     end
     @log_file = STDOUT
     @log_level = ::Logger::DEBUG
@@ -48,6 +48,7 @@ module Rack::Insight
       :raise_encoding_errors => false,  # Either way will be logged
       :raise_decoding_errors => true,   # Either way will be logged
     }
+    @handle_javascript = true # Set false if you want to handle the javascript yourself.
 
     DEFAULTS = {
       # You can augment or replace the default set of panel load paths.
@@ -69,7 +70,7 @@ module Rack::Insight
       :filtered_backtrace => @filtered_backtrace, # Full back-traces, or filtered ones?
       :panel_configs => @panel_configs, # Allow specific panels to have their own configurations, and make it extensible
       :silence_magic_insight_warnings => @silence_magic_insight_warnings, # Should Rack::Insight warn when the MagicInsight is used?
-      :database => @database # a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
+      :database => @database, # a hash.  Keys :raise_encoding_errors, and :raise_decoding_errors are self explanatory
                              # :raise_encoding_errors
                              #    When set to true, if there is an encoding error (unlikely)
                              #    it will cause a 500 error on your site.  !!!WARNING!!!
@@ -78,6 +79,8 @@ module Rack::Insight
                              #    but custom panel implementations may prefer one over the other
                              #    The bundled panels will capture these errors and perform admirably.
                              #    Site won't go down unless a custom panel is not handling the errors well.
+      :handle_javascript => @handle_javascript # If Your setup is AMD, and you are handling your javascript module loading,
+                             # including that of jQuery, then you will need to set this to false.
     }
 
     @config ||= DEFAULTS
@@ -98,6 +101,7 @@ module Rack::Insight
       @filtered_backtrace = config[:filtered_backtrace]
       @silence_magic_insight_warnings = config[:silence_magic_insight_warnings]
       @database = config[:database]
+      @handle_javascript = !!config[:handle_javascript] # Cast to boolean
 
       config[:panel_configs].each do |panel_name_sym, config|
         set_panel_config(panel_name_sym, config)
