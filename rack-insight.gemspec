@@ -13,19 +13,18 @@ Gem::Specification.new do |s|
     "CHANGELOG"
   ]
 
-  s.files         = `git ls-files`.split($\)
+  s.files         = Dir["{lib,vendor}/**/*"] + ['LICENSE', 'README.md', 'CHANGELOG']
   s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
+  s.test_files    = Dir["{test|spec|features}/**/*"].files
   s.require_paths = ["lib"]
 
   s.licenses = ["MIT"]
   s.platform = Gem::Platform::RUBY
 
   s.homepage      = "https://github.com/pboling/rack-insight"
-  s.summary = %q{Debugging toolbar for Rack applications implemented as
-    middleware.}
-  s.description = %q{Debugging toolbar for Rack applications implemented as
-    middleware.  Based on logical-insight and rack-bug. }
+  s.summary = %q{Debugging toolbar for Rack applications implemented as middleware.}
+  s.description = %q{Debugging toolbar for Rack applications implemented as middleware.
+    Based on logical-insight and rack-bug. }
 
   s.add_runtime_dependency("rack")
   s.add_runtime_dependency("uuidtools", ">= 2.1.2") # incurs far fewer dependencies that the uuid gem, and no shell forking
