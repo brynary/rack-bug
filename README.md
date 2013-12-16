@@ -327,3 +327,7 @@ Legacy files: would like to re-include them, but they need work
 
 This one is mostly just a curiosity
     lib/rack/insight/panels/speedtracer_panel/profiling.rb
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pboling/rack-insight/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
