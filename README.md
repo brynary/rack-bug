@@ -1,15 +1,34 @@
-Rack::Insight [![Maintainer Status](http://stillmaintained.com/pboling/rack-insight.png)](http://stillmaintained.com/pboling/rack-insight) [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) [![Code Climate](https://codeclimate.com/github/pboling/rack-insight.png)](https://codeclimate.com/github/pboling/rack-insight) [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) [![Endorse Me](http://api.coderwall.com/pboling/endorsecount.png)](http://coderwall.com/pboling)
+rack-insight will be merging back home into Rack Bug.
+
+@brynary and I have discussed it, and I will do the work to re-namespace Rack Insight.  Rack Insight, née Rack Bug, will be the basis of the next major release of Rack Bug.
+
+I will be the new maintainer of the project.
+
+Rack::Insight
 =============
 
-
-
-
-Description
+Summary
 -----------
 
 Rack::Insight adds a diagnostics toolbar to Rack apps. When enabled, it injects a floating div
 allowing exploration of logging, database queries, template rendering times, etc.  Rack::Insight
 stores debugging info over many requests, incuding AJAX requests.
+
+
+| Project                 |  Rack Insight   |
+|------------------------ | ----------------- |
+| gem name                |  rack-insight   |
+| license                 |  MIT              |
+| moldiness               |  [![Maintainer Status](http://stillmaintained.com/pboling/rack-insight.png)](http://stillmaintained.com/pboling/rack-insight) |
+| version                 |  [![Gem Version](https://badge.fury.io/rb/rack-insight.png)](http://badge.fury.io/rb/rack-insight) |
+| dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) |
+| code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/rack-insight.png)](https://codeclimate.com/github/pboling/rack-insight) |
+| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) |
+| test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/rack-insight/badge.png)](https://coveralls.io/r/pboling/rack-insight) |
+| homepage                |  [https://github.com/pboling/rack-insight][homepage] |
+| documentation           |  [http://rdoc.info/github/pboling/rack-insight/frames][documentation] |
+| author                  |  [Peter Boling](https://coderbits.com/pboling) |
+| Spread ~♡ⓛⓞⓥⓔ♡~      |  [![Endorse Me](https://api.coderwall.com/pboling/endorsecount.png)](http://coderwall.com/pboling) |
 
 Features
 --------
@@ -297,9 +316,6 @@ For example:
 
     spec.add_dependency 'rack-insight', '~> 0.5'
 
-[semver]: http://semver.org/
-[pvc]: http://docs.rubygems.org/read/chapter/16#page74
-
 Thanks
 ------
 
@@ -328,6 +344,11 @@ Legacy files: would like to re-include them, but they need work
 This one is mostly just a curiosity
     lib/rack/insight/panels/speedtracer_panel/profiling.rb
 
+[semver]: http://semver.org/
+[pvc]: http://docs.rubygems.org/read/chapter/16#page74
+[railsbling]: http://www.railsbling.com
+[peterboling]: http://www.peterboling.com
+[documentation]: http://rdoc.info/github/pboling/rack-insight/frames
+[homepage]: https://github.com/pboling/rack-insight
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/pboling/rack-insight/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
