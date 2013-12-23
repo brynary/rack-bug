@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   ]
 
   s.files         = Dir.glob("{bin,lib,vendor}/**/*") + %w(LICENSE README.md CHANGELOG Rakefile)
-  s.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
-  s.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = s.files.grep(%r{^(test|spec|features)/})
 
   s.require_paths = ["lib"]
 
