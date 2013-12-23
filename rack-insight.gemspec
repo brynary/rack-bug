@@ -13,9 +13,10 @@ Gem::Specification.new do |s|
     "CHANGELOG"
   ]
 
-  s.files         = Dir["{lib,vendor}/**/*"] + ['LICENSE', 'README.md', 'CHANGELOG']
-  s.executables   = s.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  s.test_files    = Dir["{test|spec|features}/**/*"].files
+  s.files         = Dir.glob("{bin,lib,vendor}/**/*") + %w(LICENSE README.md CHANGELOG Rakefile)
+  s.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  s.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+
   s.require_paths = ["lib"]
 
   s.licenses = ["MIT"]
