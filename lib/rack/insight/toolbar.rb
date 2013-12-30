@@ -26,8 +26,11 @@ module Rack::Insight
 
     def okay_to_modify?(env, response)
       return false unless response.ok?
+      return false unless response.content_type.respond_to?(:split)
+      content_type, charset = response.content_type.split(";")
+      return false unless MIME_TYPES.include?(content_type)
       req = Rack::Request.new(env)
-      return MIME_TYPES.include?(req.media_type) && !req.xhr?
+      !req.xhr?
     end
 
     def inject_toolbar(response)
