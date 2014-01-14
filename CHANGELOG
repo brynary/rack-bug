@@ -1,3 +1,33 @@
+== 0.5.28 / 2014-01-14
+
+  * Bug Fixes
+
+    * All specs passing by Peter Boling
+
+  * Other
+
+    * No reliance on rack's request.media_type by Peter Boling
+
+    * Update README.md by Peter Boling
+
+    * Add a Bitdeli badge to README by Bitdeli Chef
+
+    * Quicker access to config by Peter Boling
+
+    * Respond to requests with text/plain mime type by Peter Boling
+
+    * Implement :handle_javascript option (default true) by Peter Boling
+
+    * Remove dependency on git for gemspec by Peter Boling
+
+    * Fix typo in example code by Peter Boling
+
+    * Attributions by Peter Boling
+
+    * Improved Readme by Peter Boling
+
+
+
 == 0.5.27 / 2013-09-03
 
   * Other
@@ -25,7 +55,9 @@
   * Bug Fixes
 
     * Dont reload page, just close panel by Harry Walter
+
     * Allow panels to scroll when fixed to bottom by Harry Walter
+
     * Set position to fixed to keep toolbar at bottom by Harry Walter
 
   * Other
