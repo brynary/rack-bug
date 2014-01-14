@@ -74,7 +74,8 @@ module Rack::Insight
       render_template("toolbar",
                       :request_fragment => current_request_fragment,
                       :headers_fragment => headers_fragment,
-                      :request_id => req_id)
+                      :request_id => req_id,
+                      :handle_javascript => Rack::Insight::Config.config[:handle_javascript])
     end
   end
 end

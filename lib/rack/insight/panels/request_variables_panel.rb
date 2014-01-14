@@ -5,7 +5,10 @@ module Rack::Insight
       sections = {}
       sections["GET"] = sort(@request.GET) if @request.GET.any?
       sections["POST"] = sort(@request.POST) if @request.POST.any?
-      sections["Session"] = sort(@request.env["rack.session"]) if @request.env["rack.session"] && @request.env["rack.session"].any?
+      # TODO: Fix for Rails 4 (as part of splitting panels into separate gems)
+      unless defined?(ActionDispatch::Request::Session)
+        sections["Session"] = sort(@request.env["rack.session"]) if @request.env["rack.session"] && @request.env["rack.session"].any?
+      end
       sections["Cookies"] = sort(@request.env["rack.request.cookie_hash"]) if @request.env["rack.request.cookie_hash"] && @request.env["rack.request.cookie_hash"].any?
       server, rack = split_and_filter_env(@env)
       sections["SERVER VARIABLES"] = sort(server)
