@@ -23,7 +23,9 @@ module Rack::Insight
     def okay_to_modify?(env, response)
       return false unless response.ok?
       req = Rack::Request.new(env)
-      return MIME_TYPES.include?(req.media_type) && !req.xhr?
+      filters = (env['rack-insight.path_filters'] || []).map { |str| %r(^#{str}) }
+      filter = filters.find { |filter| env['REQUEST_PATH'] =~ filter }
+      return MIME_TYPES.include?(req.media_type) && !req.xhr? && !filter
     end
 
     def inject_button(response)
