@@ -52,9 +52,9 @@ module Rack::Insight
 
     def call(env)
       @original_request = Rack::Request.new(env)
+      @env = env
+      self.options = @default_options
       if insight_active?
-        @env = env
-        self.options = @default_options
         Rack::Insight.enable
         env["rack-insight.panels"] = []
         @debug_stack.call(env)
