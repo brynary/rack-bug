@@ -21,6 +21,8 @@ module Rack::Insight
     end
 
     def okay_to_modify?(env, response)
+      return false # нам кнопка не нужна
+
       return false unless response.ok?
       req = Rack::Request.new(env)
       filters = (env['rack-insight.path_filters'] || []).map { |str| %r(^#{str}) }
