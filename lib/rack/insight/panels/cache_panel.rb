@@ -18,7 +18,7 @@ module Rack::Insight
         method, key = args[0], args[1]
       end
       logger.info{ "Cache panel got #{method} #{key.inspect}" } if verbose(:high)
-      @stats.record_call(method, timing.duration, !result.nil?, key)
+      @stats.record_call(method, timing.duration, !result.nil?, key) if method.present?
     end
 
     def panel_app
