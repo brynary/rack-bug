@@ -13,11 +13,14 @@ module Rack::Insight
       @env = env
       status, headers, body = @app.call(@env)
 
-      response = Rack::Response.new(body, status, headers)
+      if body.present?
+        response = Rack::Response.new(body, status, headers)
+        inject_button(response) if okay_to_modify?(env, response)
 
-      inject_button(response) if okay_to_modify?(env, response)
-
-      return response.to_a
+        response.to_a
+      else
+        [status, headers, body]
+      end
     end
 
     def okay_to_modify?(env, response)
