@@ -86,6 +86,7 @@ module Rack::Insight
 
       def open_database
         @db = SQLite3::Database.new(database_path)
+        @db.busy_timeout = 10000
         @db.execute("pragma foreign_keys = on")
         @db
       rescue StandardError => ex

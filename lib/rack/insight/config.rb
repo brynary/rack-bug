@@ -1,4 +1,5 @@
 require 'logger' # Require the standard Ruby Logger
+require 'redis' rescue nil
 
 module Rack::Insight
   class Config
@@ -35,7 +36,7 @@ module Rack::Insight
       :sphinx => {:probes => {'Riddle::Client' => [:instance, :request]}},
       :sql => {:probes => Hash[%w{ PostgreSQLAdapter MysqlAdapter SQLiteAdapter
                   Mysql2Adapter OracleEnhancedAdapter }.map do |adapter|
-                    ["ActiveRecord::ConnectionAdapters::#{adapter}", [:instance, :execute]]
+                    ["ActiveRecord::ConnectionAdapters::#{adapter}", [:instance, :execute, :exec_query]]
                   end ] },
       :templates => {:probes => {'ActionView::Template' => [:instance, :render]}},
       :redis => {:probes => defined?(Redis::Client) ?
@@ -43,6 +44,7 @@ module Rack::Insight
         { 'Redis' => [:instance, :call_command] } # Redis < 3.0.0
       }
     }
+
     @silence_magic_insight_warnings = false
     @database = {
       :raise_encoding_errors => false,  # Either way will be logged
