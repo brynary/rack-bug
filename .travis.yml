@@ -7,4 +7,3 @@ rvm:
 #  - rbx-19mode
 #  - ruby-head    # Fails to download rubygems.org/latest_specs.4.8.gz
 #  - jruby-head   # Fails to install sqlite3
-bundler_args: "--binstubs --without documentation"
