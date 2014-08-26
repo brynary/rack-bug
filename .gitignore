@@ -11,3 +11,4 @@ pkg/
 .sass-cache/
 .yardoc/
 gh-pages/
+Gemfile.lock
