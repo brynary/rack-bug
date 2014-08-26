@@ -24,7 +24,7 @@ stores debugging info over many requests, incuding AJAX requests.
 | dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) |
 | code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/rack-insight.png)](https://codeclimate.com/github/pboling/rack-insight) |
 | inline documenation     |  [![Inline docs](http://inch-ci.org/github/pboling/rack-insight.png)](http://inch-ci.org/github/pboling/rack-insight) |
-| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight) (Failing due to [a bug(?) in rvm](https://github.com/wayneeseguin/rvm/issues/2619))|
+| continuous integration  |  [![Build Status](https://secure.travis-ci.org/pboling/rack-insight.png?branch=master)](https://travis-ci.org/pboling/rack-insight)|
 | test coverage           |  [![Coverage Status](https://coveralls.io/repos/pboling/rack-insight/badge.png)](https://coveralls.io/r/pboling/rack-insight) |
 | homepage                |  [https://github.com/pboling/rack-insight][homepage] |
 | documentation           |  [http://rdoc.info/github/pboling/rack-insight/frames][documentation] |
