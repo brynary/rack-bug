@@ -15,7 +15,6 @@ module Rack::Insight
 
       if body.present?
         response = Rack::Response.new(body, status, headers)
-        warn "DID THIS JUST HAPPEN? YES, but #{okay_to_modify?(env, response)}"
         inject_button(response) if okay_to_modify?(env, response)
 
         response.to_a
