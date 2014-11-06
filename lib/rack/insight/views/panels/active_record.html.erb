@@ -7,11 +7,13 @@
   </tr>
 </thead>
 <tbody>
+  <% i = 1 %>
   <% records.each do |class_name, count| %>
-    <tr>
+    <tr class="<%= i % 2 == 0 ? "even" : "odd" %>">
       <td><%= count %></td>
       <td><%= class_name %></td>
     </tr>
+    <% i += 1 %>
   <% end %>
 </tbody>
 </table>

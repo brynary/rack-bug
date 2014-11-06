@@ -13,3 +13,4 @@ pkg/
 gh-pages/
 Gemfile.lock
 *.log
+.idea
