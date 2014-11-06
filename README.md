@@ -30,6 +30,7 @@ stores debugging info over many requests, incuding AJAX requests.
 | documentation           |  [http://rdoc.info/github/pboling/rack-insight/frames][documentation] |
 | author                  |  [Peter Boling](https://coderbits.com/pboling) |
 | Spread ~♡ⓛⓞⓥⓔ♡~      |  [![Endorse Me](https://api.coderwall.com/pboling/endorsecount.png)](http://coderwall.com/pboling) |
+| Working Example         | [On Rails 3.2.20](https://github.com/pboling/x-cascade_header_rails/tree/rails3) |
 
 Features
 --------
