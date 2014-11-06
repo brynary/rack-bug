@@ -7,7 +7,7 @@ RAILS_ENV = "test"
 #$LOAD_PATH.unshift File.dirname(File.dirname(__FILE__)) + '/lib'
 #$LOAD_PATH.unshift File.dirname(File.dirname(__FILE__))
 
-require "rack-insight"
+require "rack/insight"
 require "fixtures/sample_app"
 require "fixtures/dummy_panel"
 require "rack/insight/rspec_matchers"
