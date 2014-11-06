@@ -33,7 +33,7 @@ module Rack::Insight
       filters = (env['rack-insight.path_filters'] || []).map { |str| %r(^#{str}) }
       filter = filters.find { |filter| env['REQUEST_PATH'] =~ filter }
 
-      MIME_TYPES.include?(content_type) && !req.xhr? && !filter
+      !filter && MIME_TYPES.include?(content_type) && !req.xhr?
     end
 
     def inject_button(response)
