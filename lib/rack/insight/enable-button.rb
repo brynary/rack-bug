@@ -15,22 +15,26 @@ module Rack::Insight
 
       if body.present?
         response = Rack::Response.new(body, status, headers)
+        warn "DID THIS JUST HAPPEN? YES, but #{okay_to_modify?(env, response)}"
         inject_button(response) if okay_to_modify?(env, response)
 
         response.to_a
       else
+        # Do not inject into assets served by rails or other detritus without a body.
         [status, headers, body]
       end
     end
 
     def okay_to_modify?(env, response)
-      return false # нам кнопка не нужна
-
+      Rails.logger.error "\nresponse is ok? #{response.ok?}\n"
       return false unless response.ok?
+
       req = Rack::Request.new(env)
+      content_type, charset = response.content_type.split(";")
       filters = (env['rack-insight.path_filters'] || []).map { |str| %r(^#{str}) }
       filter = filters.find { |filter| env['REQUEST_PATH'] =~ filter }
-      return MIME_TYPES.include?(req.media_type) && !req.xhr? && !filter
+
+      MIME_TYPES.include?(content_type) && !req.xhr? && !filter
     end
 
     def inject_button(response)

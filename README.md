@@ -68,8 +68,8 @@ Add this to your Gemfile:
 
 In config/environments/development.rb, add:
 
-    config.middleware.use "Rack::Insight::App",
-      :secret_key => "someverylongandveryhardtoguesspreferablyrandomstring"
+    config.middleware.use 'Rack::Insight::App',
+      :secret_key => 'someverylongandveryhardtoguesspreferablyrandomstring'
 
 Any environment with Rack::Insight loaded will have a link to "Rack::Insight" added to as
 the last child of `<body>` to normal responses.  Clicking that link will load the
