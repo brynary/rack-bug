@@ -26,7 +26,6 @@ module Rack::Insight
     end
 
     def okay_to_modify?(env, response)
-      Rails.logger.error "\nresponse is ok? #{response.ok?}\n"
       return false unless response.ok?
 
       req = Rack::Request.new(env)
