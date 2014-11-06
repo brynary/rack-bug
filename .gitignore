@@ -12,3 +12,4 @@ pkg/
 .yardoc/
 gh-pages/
 Gemfile.lock
+*.log
