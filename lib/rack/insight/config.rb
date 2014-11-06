@@ -1,5 +1,9 @@
 require 'logger' # Require the standard Ruby Logger
-require 'redis' rescue nil
+begin
+  require 'redis'
+rescue LoadError
+  warn "Could not load redis ruby gem. Some features are disabled."
+end
 
 module Rack::Insight
   class Config
