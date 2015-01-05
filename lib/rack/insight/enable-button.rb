@@ -13,7 +13,7 @@ module Rack::Insight
       @env = env
       status, headers, body = @app.call(@env)
 
-      if body.present?
+      if !body.nil? && !body.empty?
         response = Rack::Response.new(body, status, headers)
         inject_button(response) if okay_to_modify?(env, response)
 
