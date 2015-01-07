@@ -1,3 +1,32 @@
+== 0.5.30 / 2015-01-07
+
+  * Bug Fixes
+
+    * Removed dependence on rails by @javierhonduco
+
+  * Other
+
+    * Added working example: https://github.com/pboling/x-cascade_header_rails/tree/rails3
+
+
+== 0.5.29 / 2014-11-06
+
+  * Bug Fixes
+
+    * Fixed bug with asset pipeline by @hck https://github.com/pboling/rack-insight/pull/28
+
+    * Various bug fixes from @bibendi, @Napolskih, @abak-press, @semenyukdmitriy,
+
+    * Fixed travis build by @michaelmior
+
+    * Fixed serving of the toolbar by Peter Boling
+
+    * All specs passing by Peter Boling
+
+  * Other
+
+    * Improved Readme by Peter Boling
+
 == 0.5.28 / 2014-01-14
 
   * Bug Fixes
