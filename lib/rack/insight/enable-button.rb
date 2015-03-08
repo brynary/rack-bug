@@ -1,47 +1,35 @@
 module Rack::Insight
-  class EnableButton
+  class EnableButton < Struct.new :app, :insight
     include Render
 
-    MIME_TYPES = ["text/plain", "text/html", "application/xhtml+xml"]
-
-    def initialize(app, insight)
-      @app = app
-      @insight = insight
-    end
+    CONTENT_TYPE_REGEX = /text\/(html|plain)|application\/xhtml\+xml/
 
     def call(env)
-      @env = env
-      status, headers, body = @app.call(@env)
+      status, headers, response = app.call(env)
 
-      if !body.nil? && body.respond_to?('body') && !body.body.empty?
-        response = Rack::Response.new(body, status, headers)
-        inject_button(response) if okay_to_modify?(env, response)
-
-        response.to_a
-      else
-        # Do not inject into assets served by rails or other detritus without a body.
-        [status, headers, body]
+      if okay_to_modify?(env, headers)
+        body = response.inject("") do |memo, part|
+          memo << part
+          memo
+        end
+        index = body.rindex("</body>")
+        if index
+          body.insert(index, render)
+          headers["Content-Length"] = body.bytesize.to_s
+          response = [body]
+        end
       end
+
+      [status, headers, response]
     end
 
-    def okay_to_modify?(env, response)
-      return false unless response.ok?
-
-      req = Rack::Request.new(env)
-      content_type, charset = response.content_type.split(";")
-      filters = (env['rack-insight.path_filters'] || []).map { |str| %r(^#{str}) }
-      filter = filters.find { |filter| env['REQUEST_PATH'] =~ filter }
-
-      !filter && MIME_TYPES.include?(content_type) && !req.xhr?
+    def okay_to_modify?(env, headers)
+      return false unless headers["Content-Type"] =~ CONTENT_TYPE_REGEX
+      return !(filters.find { |filter| env["REQUEST_PATH"] =~ filter })
     end
 
-    def inject_button(response)
-      full_body = response.body.join
-      full_body.sub! /<\/body>/, render + "</body>"
-
-      response["Content-Length"] = full_body.bytesize.to_s
-
-      response.body = [full_body]
+    def filters
+      (env["rack-insight.path_filters"] || []).map { |str| %r(^#{str}) }
     end
 
     def render
