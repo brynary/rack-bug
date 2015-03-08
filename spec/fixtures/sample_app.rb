@@ -2,9 +2,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../../lib'
 require "sinatra/base"
 require 'logger'
 
-RAILS_ENV = "development" unless defined?(RAILS_ENV)
-log_to = RAILS_ENV == "test" ? StringIO.new : STDOUT
-LOGGER = Logger.new(log_to)
+LOGGER = Logger.new(StringIO.new)
 
 class SampleApp < Sinatra::Base
   class OneLastThing
@@ -30,8 +28,9 @@ class SampleApp < Sinatra::Base
     end
   end
 
-
-
+  Rack::Insight::Config.configure do |config|
+    config[:log_file] = STDOUT
+  end
   use Rack::Insight::App, :log_path => "rack-insight-test.log", :on_initialize => proc {|app|
     self.insight_app = app
   }
