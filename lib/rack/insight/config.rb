@@ -67,7 +67,6 @@ module Rack::Insight
       #   end
       :panel_load_paths => [File::join('rack', 'insight', 'panels')],
       :logger => @logger,
-      :verbosity => @verbosity,
       :log_file => @log_file,
       :log_level => @log_level,
       :rails_log_copy => @rails_log_copy, # Only has effect when logger is the Rack::Insight::Logger, or a logger behaving like it
