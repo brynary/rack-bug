@@ -1,7 +1,7 @@
 module Rack
   module Insight
 
-  VERSION = '0.5.30'
+  VERSION = '0.6.0'
 
   end
 end
