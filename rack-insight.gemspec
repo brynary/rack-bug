@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.md",
     "LICENSE",
-    "CHANGELOG"
+    "CHANGELOG.md"
   ]
 
   s.files         = Dir.glob("{lib,vendor}/**/*") + %w(LICENSE README.md CHANGELOG.md Rakefile)
