@@ -11,6 +11,7 @@
     * spec improvements by Peter Boling
     * upgrade to latest version of Ruby for development by Peter Boling
     * Fixed Markdown syntax on CHANGELOG => CHANGELOG.md by Peter Boling
+    * added bin scripts, but do not include in gem package by Peter Boling
 
 ## 0.5.30 / 2015-01-07
 
