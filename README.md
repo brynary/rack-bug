@@ -83,6 +83,28 @@ Using with non-Rails Rack apps
 Just 'use Rack::Insight' as any other middleware.  See the SampleApp in the
 spec/fixtures folder for an example Sinatra app.
 
+This is a minimal setup:
+
+```
+class SinatraExample < Sinatra::Base
+  get '/' do
+    <<-HTML
+      <html>
+        <head>
+        </head>
+        <body>
+          <p>Stink o' Man</p>
+        </body>
+      </html>
+    HTML
+  end
+
+  use Rack::Insight::App
+
+end
+```
+
+
 Configure Rack::Insight
 ---------------------
 
