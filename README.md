@@ -80,8 +80,8 @@ to go somewhere more noticeable.  E.g. "position: absolute; top: 0; left: 0"
 Using with non-Rails Rack apps
 ------------------------------
 
-Just 'use Rack::Insight' as any other middleware.  See the SampleApp in the
-spec/fixtures folder for an example Sinatra app.
+Just `use Rack::Insight::App` as any other middleware.  See the `SampleApp` in the
+`spec/fixtures` folder for an example Sinatra app.
 
 This is a minimal setup:
 
