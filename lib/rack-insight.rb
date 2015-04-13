@@ -1,1 +1,1 @@
-require 'rack/insight'
+require "rack/insight"

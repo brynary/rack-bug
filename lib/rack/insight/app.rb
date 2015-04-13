@@ -86,7 +86,7 @@ module Rack::Insight
 
     def build_normal_stack
       builder = Rack::Builder.new
-      builder.use EnableButton, self
+      builder.use EnableButton
       builder.run Rack::Cascade.new([ asset_mapped(Rack::Builder.new), @base_app ])
       @normal_stack = builder.to_app
     end
