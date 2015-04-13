@@ -13,9 +13,8 @@ describe Rack::Insight::Config do
     end
     it "should use StarTrekPanel" do
       app.insight_app.panel_classes.include?(StarTrekPanel).should be_true
-      #get_via_rack "/"
-      response = get "/", :content_type => "application/xhtml+xml"
-      response.should have_selector("table#StarTrek", :content => 'Enterprise')
+      get "/"
+      last_response.should have_selector("table#StarTrek", :content => 'Enterprise')
     end
   end
 

@@ -1,6 +1,7 @@
 require "rubygems"
 require "webrat"
 require "rack/test"
+require "pry"
 
 RAILS_ENV = "test"
 

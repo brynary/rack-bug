@@ -20,26 +20,6 @@ describe Rack::Insight do
     response.should be_ok
   end
 
-  it "modifies HTML responses with a charset" do
-    response = get "/", :content_type => "application/xhtml+xml; charset=utf-8"
-    response.should have_selector("div#rack-insight")
-  end
-
-  it "does not modify XMLHttpRequest responses" do
-    response = get "/", {}, { :xhr => true }
-    response.should_not have_selector("div#rack-insight")
-  end
-
-  it "modifies XHTML responses" do
-    response = get "/", :content_type => "application/xhtml+xml"
-    response.should have_selector("div#rack-insight")
-  end
-
-  it "does not modify non-HTML responses" do
-    response = get "/", :content_type => "text/csv"
-    response.should_not have_selector("div#rack-insight")
-  end
-
   it "does not modify server errors" do
     app.disable :raise_errors
     response = get "/error"
