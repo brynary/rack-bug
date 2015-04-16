@@ -262,7 +262,7 @@ You can now create a fully functional new panel with a simple class definition:
 
 Setup the probes for the magic panel in a `before_initialize` block in your application.rb as follows:
 
-    # Assuming there is a FooBra class with instance methods: foo, bar, cheese, and ducks
+    # Assuming there is a FooBar class with instance methods: foo, bar, cheese, and ducks
     Rack::Insight::Config.configure do |config|
       # Not :foo_bar_panel or 'FooBarPanel'... :foo_bar
       config[:panel_configs][:foo_bar] = {:probes => {'FooBra' => [:instance, :foo, :bar, :cheese, :ducks]}}
