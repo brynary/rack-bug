@@ -1,17 +1,42 @@
+## HEAD
+
+## 0.6.3 / 2015-04-23
+
+  * Bug Fixes
+  
+    * Remove log output when redis isn't loaded by @garethrees
+
+  * Other
+
+    * Fix typo in Readme by @garethrees
+    * Extracted rack-toolbar to a separate gem by @pboling
+    * Implement EnableButton and Toolbar with Rack::Toolbar by @pboling
+      * Extract PathMatchFilters to mixin by @pboling
+      * Add specs for EnableButton and Toolbar by @pboling
+      * Remove specs that are pushed to Rack::Toolbar by @pboling
+
+## 0.6.2 / 2015-03-08
+
+  * Fixed Gemspec
+
+## 0.6.1 / 2015-03-08
+
+  * Broke Gemspec (OOPS!)
+
 ## 0.6 / 2015-03-08
 
   * Bug Fixes
 
-    * Complete rewrite of `EnableButton` to ensure compatibility with all other Rack apps by Peter Boling
-    * Removed duplicate config entry for `:verbosity` by Peter Boling
+    * Complete rewrite of `EnableButton` to ensure compatibility with all other Rack apps by @pboling
+    * Removed duplicate config entry for `:verbosity` by @pboling
 
   * Other
 
-    * Added Sinatra example to Readme by Peter Boling
-    * spec improvements by Peter Boling
-    * upgrade to latest version of Ruby for development by Peter Boling
-    * Fixed Markdown syntax on CHANGELOG => CHANGELOG.md by Peter Boling
-    * added bin scripts, but do not include in gem package by Peter Boling
+    * Added Sinatra example to Readme by @pboling
+    * spec improvements by @pboling
+    * upgrade to latest version of Ruby for development by @pboling
+    * Fixed Markdown syntax on CHANGELOG => CHANGELOG.md by @pboling
+    * added bin scripts, but do not include in gem package by @pboling
 
 ## 0.5.30 / 2015-01-07
 
@@ -34,41 +59,41 @@
 
     * Fixed travis build by @michaelmior
 
-    * Fixed serving of the toolbar by Peter Boling
+    * Fixed serving of the toolbar by @pboling
 
-    * All specs passing by Peter Boling
+    * All specs passing by @pboling
 
   * Other
 
-    * Improved Readme by Peter Boling
+    * Improved Readme by @pboling
 
 ## 0.5.28 / 2014-01-14
 
   * Bug Fixes
 
-    * All specs passing by Peter Boling
+    * All specs passing by @pboling
 
   * Other
 
-    * No reliance on rack's request.media_type by Peter Boling
+    * No reliance on rack's request.media_type by @pboling
 
-    * Update README.md by Peter Boling
+    * Update README.md by @pboling
 
     * Add a Bitdeli badge to README by Bitdeli Chef
 
-    * Quicker access to config by Peter Boling
+    * Quicker access to config by @pboling
 
-    * Respond to requests with text/plain mime type by Peter Boling
+    * Respond to requests with text/plain mime type by @pboling
 
-    * Implement :handle_javascript option (default true) by Peter Boling
+    * Implement :handle_javascript option (default true) by @pboling
 
-    * Remove dependency on git for gemspec by Peter Boling
+    * Remove dependency on git for gemspec by @pboling
 
-    * Fix typo in example code by Peter Boling
+    * Fix typo in example code by @pboling
 
-    * Attributions by Peter Boling
+    * Attributions by @pboling
 
-    * Improved Readme by Peter Boling
+    * Improved Readme by @pboling
 
 
 
@@ -76,23 +101,23 @@
 
   * Other
 
-    * Improved configuration of logging and verbosity by Peter Boling
+    * Improved configuration of logging and verbosity by @pboling
 
       * Moved VERBOSITY from Logging module into Config class
 
-    * gemspec email should reflect who the current contacts are for the gem by Peter Boling
+    * gemspec email should reflect who the current contacts are for the gem by @pboling
 
-    * Removed unused development dependencies by Peter Boling
+    * Removed unused development dependencies by @pboling
 
-    * All specs passing! by Peter Boling
+    * All specs passing! by @pboling
 
-    * Fixing deprecations by Peter Boling
+    * Fixing deprecations by @pboling
 
-    * Require the standard Ruby Logger by Peter Boling
+    * Require the standard Ruby Logger by @pboling
 
-    * Convert to .ruby-version by Peter Boling
+    * Convert to .ruby-version by @pboling
 
-    * Add license and platform to gemspec by Peter Boling
+    * Add license and platform to gemspec by @pboling
 
 ## 0.5.26 / 2013-08-06
 
@@ -264,7 +289,7 @@
 
   * Other
 
-    * Improving documentation by Peter Boling
+    * Improving documentation by @pboling
 
   * New Features
 
