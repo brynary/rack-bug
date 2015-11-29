@@ -1,5 +1,15 @@
 ## HEAD
 
+## 0.6.4 / 2015-11-29
+
+  * Bug Fixes
+  
+    * Fixed duplicate HTML tag id by switching to class by @pboling
+    
+  * Other
+  
+    * Added wwtd for local testing across rubies by @pboling
+
 ## 0.6.3 / 2015-04-23
 
   * Bug Fixes
