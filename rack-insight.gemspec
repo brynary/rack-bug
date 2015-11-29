@@ -33,14 +33,16 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("sqlite3", ">= 1.3.3")
   #s.add_development_dependency "redcarpet", ">= 3.0.0"
   s.add_development_dependency("rack-test")
-  s.add_development_dependency(%q<reek>, [">= 1.2.13"])
+  s.add_development_dependency("reek", ">= 1.2.13")
   #s.add_development_dependency(%q<executable-hooks>, [">= 1.3.1"])
-  s.add_development_dependency(%q<roodi>, [">= 2.2.0"])
-  s.add_development_dependency(%q<rake>, [">= 10.1.0"])
+  s.add_development_dependency("roodi", ">= 2.2.0")
+  s.add_development_dependency("rake", "~> 10.4")
   s.add_development_dependency "rspec", "~> 2.14.1"
   s.add_development_dependency "sinatra", ">= 1.4.3"
   s.add_development_dependency "webrat", ">= 0.7.3"
   #s.add_development_dependency "debugger", ">= 1.6.1"
   s.add_development_dependency "nokogiri", "1.6.3.1"
   s.add_development_dependency "pry", "~> 0.10"
+  s.add_development_dependency "appraisal"
+  s.add_development_dependency "wwtd"
 end
