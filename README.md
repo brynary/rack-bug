@@ -19,7 +19,8 @@ stores debugging info over many requests, incuding AJAX requests.
 |------------------------ | ----------------- |
 | gem name                |  rack-insight   |
 | license                 |  MIT              |
-| maintainer              |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
+| expert support          |  [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/peterboling?utm_source=github&utm_medium=button&utm_term=peterboling&utm_campaign=github) |
+| download rank               |  [![Total Downloads](https://img.shields.io/gem/rt/rack-insight.svg)](https://rubygems.org/gems/rack-insight) |
 | version                 |  [![Gem Version](https://badge.fury.io/rb/rack-insight.png)](http://badge.fury.io/rb/rack-insight) |
 | dependencies            |  [![Dependency Status](https://gemnasium.com/pboling/rack-insight.png)](https://gemnasium.com/pboling/rack-insight) |
 | code quality            |  [![Code Climate](https://codeclimate.com/github/pboling/rack-insight.png)](https://codeclimate.com/github/pboling/rack-insight) |
